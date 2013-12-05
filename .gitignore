@@ -1,0 +1,27 @@
+# ignore .svn metadata files
+.svn
+# ignore Maven generated target folders
+~
+target
+# ignore eclipse files
+.project
+.classpath
+.settings
+.metadata
+# ignore IDEA files
+*.iml
+*.ipr
+*.iws
+.idea
+# ignore NetBeans files
+nbactions.xml
+nb-configuration.xml
+catalog.xml
+# temp files
+*~
+# maven versions plugin
+pom.xml.versionsBackup
+# ignore java crashes
+hs_err_pid*.log
+# ignore mvn-rpmbuild repo
+/.m2
