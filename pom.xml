@@ -19,29 +19,181 @@
   ~ License along with this software; if not, write to the Free
   ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
-  --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- parent>
-        <groupId>org.jboss.as</groupId>
-        <artifactId>jboss-as-parent</artifactId>
-    </parent -->
+<!--    <parent>
+        <groupId>org.wildfly</groupId>
+        <artifactId>wildfly-parent</artifactId>
+        <version>8.0.0.Beta1</version>
+    </parent>-->
 
     <groupId>cz.muni.exceptions</groupId>
     <artifactId>exceptions-subsystem</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>JBoss Application Server: Subsystem Artifact</name>
+    <name>Wildfly: Exception Reporting Extension</name>
 
     <packaging>jar</packaging>
     
+    <url>https://github.com/iref/wildfly-exceptions</url>
+    
+    <scm>
+        <connection>scm:git:${extension.scm.connection}</connection>
+        <developerConnection>scm:git:${extension.scm.connection}</developerConnection>
+        <url>${extrension.scm.url}</url>
+    </scm>
+    
+    <developers>
+        <developer>
+            <name>Jan Ferko</name>              
+        </developer>
+    </developers>
+    
     <properties>
-        <version.jboss.as>7.1.1.Final</version.jboss.as>
+        <extension.scm.connection>git@github.com:iref/wildfly-exceptions.git</extension.scm.connection>
+        <extension.scm.url>https://github.com/iref/wildfly-exceptions</extension.scm.url>
+        
+        <version.wildfly>8.0.0.Beta1</version.wildfly>
         <version.junit>4.8.2</version.junit>
+        <version.shrinkwrap>1.2.2</version.shrinkwrap>
+        <version.shrinkwrap.resolver>2.0.0</version.shrinkwrap.resolver>
         <module.name>exceptions</module.name>
     </properties>
     
+    <repositories>
+        <repository>
+          <id>jboss-public-repository-group</id>
+          <name>JBoss Public Maven Repository Group</name>
+          <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+          <layout>default</layout>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </snapshots>
+        </repository>
+    </repositories>
+    
+    <dependencyManagement>
+      <dependencies>
+          <!-- JBoss AS Dependencies -->
+          <dependency>
+              <groupId>org.wildfly</groupId>
+              <artifactId>wildfly-parent</artifactId>
+              <version>${version.wildfly}</version>
+              <type>pom</type>
+              <scope>import</scope>
+              <exclusions>
+                <exclusion>
+                   <groupId>org.wildfly</groupId>
+                   <artifactId>wildfly-build-config</artifactId>                   
+                 </exclusion>
+              </exclusions>
+          </dependency>
+          <dependency>
+              <groupId>org.wildfly</groupId>
+              <artifactId>wildfly-controller</artifactId>
+              <version>${version.wildfly}</version>
+          </dependency>
+          <dependency>
+              <groupId>org.wildfly</groupId>
+              <artifactId>wildfly-server</artifactId>
+              <version>${version.wildfly}</version>
+          </dependency>
+          
+          <!-- Test Dependencies -->  
+          <dependency>
+              <groupId>org.jboss.as</groupId>
+              <artifactId>jboss-as-subsystem-test</artifactId>
+              <version>7.2.0.Final</version>
+              <scope>test</scope>
+          </dependency>
+          <dependency>
+              <groupId>junit</groupId>
+              <artifactId>junit</artifactId>
+              <scope>test</scope>
+              <version>${version.junit}</version>
+          </dependency>                            
+          <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-arquillian-container-managed</artifactId>
+            <version>${version.wildfly}</version>
+            <scope>test</scope>
+          </dependency>
+          <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-arquillian-container-remote</artifactId>
+            <version>${version.wildfly}</version>
+            <scope>test</scope>
+          </dependency>
+          <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-api</artifactId>
+            <version>${version.shrinkwrap.resolver}</version>
+            <scope>test</scope>
+          </dependency>
+          <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <version>${version.shrinkwrap.resolver}</version>
+            <scope>test</scope>
+          </dependency>
+          <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+            <version>${version.shrinkwrap.resolver}</version>
+            <scope>test</scope>
+          </dependency>            
+      </dependencies>
+    </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-controller</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-server</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.as</groupId>
+            <artifactId>jboss-as-subsystem-test</artifactId>            
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>                
+        <dependency>
+          <groupId>org.jboss.arquillian.junit</groupId>
+          <artifactId>arquillian-junit-container</artifactId>
+          <scope>test</scope>
+        </dependency>        
+        <dependency>
+          <groupId>org.jboss.shrinkwrap.resolver</groupId>
+          <artifactId>shrinkwrap-resolver-api</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.jboss.shrinkwrap.resolver</groupId>
+          <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.jboss.shrinkwrap.resolver</groupId>
+          <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+        </dependency>        
+    </dependencies>
+    
     <build>
       <!-- Maven will append the version to the finalName (which is the name 
          given to the generated war, and hence the context root) -->
@@ -122,52 +274,4 @@
             </plugin>
         </plugins>
     </build>
-    
-    <dependencyManagement>
-      <dependencies>
-          <dependency>
-              <groupId>org.jboss.as</groupId>
-              <artifactId>jboss-as-controller</artifactId>
-              <version>${version.jboss.as}</version>
-          </dependency>
-          <dependency>
-              <groupId>org.jboss.as</groupId>
-              <artifactId>jboss-as-server</artifactId>
-              <version>${version.jboss.as}</version>
-          </dependency>
-          <dependency>
-              <groupId>org.jboss.as</groupId>
-              <artifactId>jboss-as-subsystem-test</artifactId>
-              <version>${version.jboss.as}</version>
-              <scope>test</scope>
-          </dependency>
-          <dependency>
-              <groupId>junit</groupId>
-              <artifactId>junit</artifactId>
-              <scope>test</scope>
-              <version>${version.junit}</version>
-          </dependency>       
-      </dependencies>
-    </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.jboss.as</groupId>
-            <artifactId>jboss-as-controller</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.as</groupId>
-            <artifactId>jboss-as-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.as</groupId>
-            <artifactId>jboss-as-subsystem-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>       
-    </dependencies>
 </project>
