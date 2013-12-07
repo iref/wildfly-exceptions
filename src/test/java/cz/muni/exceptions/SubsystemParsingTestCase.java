@@ -1,6 +1,7 @@
-package cz.muni.exceptions.extension;
+package cz.muni.exceptions;
 
 
+import cz.muni.exceptions.SubsystemExtension;
 import junit.framework.Assert;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.PathElement;

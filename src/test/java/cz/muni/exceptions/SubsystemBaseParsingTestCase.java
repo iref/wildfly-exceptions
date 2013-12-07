@@ -1,5 +1,6 @@
-package cz.muni.exceptions.extension;
+package cz.muni.exceptions;
 
+import cz.muni.exceptions.SubsystemExtension;
 import org.jboss.as.subsystem.test.AbstractSubsystemBaseTest;
 
 import java.io.IOException;
