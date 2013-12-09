@@ -95,7 +95,7 @@ public class BasicExceptionDispatcherTest {
         return listeners;
     }
     
-    private static class MockListener implements ExceptionListener {
+    private class MockListener implements ExceptionListener {
 
         boolean wasNotified = false;
         
