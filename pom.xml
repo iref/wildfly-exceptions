@@ -223,6 +223,7 @@
                     </systemProperties>
                     <includes>
                         <include>**/*TestCase.java</include>
+                        <include>**/*Test.java</include>
                     </includes>
                     <forkMode>once</forkMode>
                 </configuration>
