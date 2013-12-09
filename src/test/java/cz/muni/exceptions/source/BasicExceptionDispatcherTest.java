@@ -14,50 +14,50 @@ import org.junit.Test;
  *
  * @author Jan Ferko 
  */
-public class BasicExceptionSourceTest {
+public class BasicExceptionDispatcherTest {
     
-    private BasicExceptionSource source;
+    private BasicExceptionDispatcher dispatcher;
     
     @Before
     public void setUp() {
-        this.source = new BasicExceptionSource();
+        this.dispatcher = new BasicExceptionDispatcher();
     }
     
     @Test
     public void testConstructorIgnoresNullAndEmptyListeners() {
-        BasicExceptionSource nullListeners = new BasicExceptionSource(null);
+        BasicExceptionDispatcher nullListeners = new BasicExceptionDispatcher(null);
         assertTrue(nullListeners.getListeners().isEmpty());
         
         final List<ExceptionListener> emptyListenersList = Collections.<ExceptionListener>emptyList();        
-        BasicExceptionSource emptyListeners = new BasicExceptionSource(emptyListenersList);
+        BasicExceptionDispatcher emptyListeners = new BasicExceptionDispatcher(emptyListenersList);
         assertTrue(emptyListeners.getListeners().isEmpty());
     }
     
     @Test
     public void testRegisterListener() {
         ExceptionListener mockListener = new MockListener();
-        assertFalse(source.getListeners().contains(mockListener));
-        source.registerListener(mockListener);
+        assertFalse(dispatcher.getListeners().contains(mockListener));
+        dispatcher.registerListener(mockListener);
         
-        final Set<ExceptionListener> actual = source.getListeners();        
+        final Set<ExceptionListener> actual = dispatcher.getListeners();        
         assertEquals(1, actual.size());
         assertTrue(actual.contains(mockListener));        
     }
     
     @Test
     public void testRegisterNullListener() {
-        source.registerListener(null);        
-        assertTrue(source.getListeners().isEmpty());
+        dispatcher.registerListener(null);        
+        assertTrue(dispatcher.getListeners().isEmpty());
     }
     
     @Test
     public void testWarnEveryListeners() {
         List<ExceptionListener> listeners = createMockListeners();
         
-        ExceptionSource newSource = new BasicExceptionSource(listeners);
+        ExceptionDispatcher newSource = new BasicExceptionDispatcher(listeners);
         newSource.warnListeners(new IllegalArgumentException());
         
-        for (ExceptionListener listener : source.getListeners()) {
+        for (ExceptionListener listener : dispatcher.getListeners()) {
             MockListener mockListener = (MockListener) listener;
             assertTrue(mockListener.wasNotified);
         }
@@ -67,10 +67,10 @@ public class BasicExceptionSourceTest {
     public void testWarnIgnoresNullThrowables() {
         List<ExceptionListener> listeners = createMockListeners();
         
-        ExceptionSource newSource = new BasicExceptionSource(listeners);
+        ExceptionDispatcher newSource = new BasicExceptionDispatcher(listeners);
         newSource.warnListeners(null);
         
-        for (ExceptionListener listener : source.getListeners()) {
+        for (ExceptionListener listener : dispatcher.getListeners()) {
             MockListener mockListener = (MockListener) listener;
             assertFalse(mockListener.wasNotified);
         }
@@ -78,12 +78,12 @@ public class BasicExceptionSourceTest {
     
     @Test
     public void testGetListeners() {
-        assertTrue(source.getListeners().isEmpty());
-        source.registerListener(new MockListener());
+        assertTrue(dispatcher.getListeners().isEmpty());
+        dispatcher.registerListener(new MockListener());
         
-        final Set<ExceptionListener> actual = source.getListeners();        
+        final Set<ExceptionListener> actual = dispatcher.getListeners();        
         assertFalse(actual.isEmpty());
-        assertNotSame(actual, source.getListeners());
+        assertNotSame(actual, dispatcher.getListeners());
     }
 
     private List<ExceptionListener> createMockListeners() {

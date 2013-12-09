@@ -7,13 +7,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Basic implementation of exception source. 
+ * Basic implementation of exception dispatcher. 
  * Class provides event dispatching to listeners and listeners registration.
- * It can be used by other sources to avoid code repetition.
+ * Class dispatches events synchronously. 
+ * This means that listeners are notified about exception in order that, 
+ * they occurred. 
  * 
  * @author Jan Ferko 
  */
-public class BasicExceptionSource implements ExceptionSource {
+public class BasicExceptionDispatcher implements ExceptionDispatcher {
     
     /** Set of registered listeners. */
     private final Set<ExceptionListener> listeners;
@@ -21,7 +23,7 @@ public class BasicExceptionSource implements ExceptionSource {
     /**
      * Constructor constructs new instance without any registered listeners.
      */
-    public BasicExceptionSource() {
+    public BasicExceptionDispatcher() {
         this(null);
     }
     
@@ -31,7 +33,7 @@ public class BasicExceptionSource implements ExceptionSource {
      * 
      * @param listeners collection of listeners, that should be registered to source
      */
-    public BasicExceptionSource(Collection<ExceptionListener> listeners) {
+    public BasicExceptionDispatcher(Collection<ExceptionListener> listeners) {
         this.listeners = new HashSet<ExceptionListener>();        
         
         if (listeners != null && !listeners.isEmpty()) {

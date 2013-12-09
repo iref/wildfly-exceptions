@@ -5,12 +5,12 @@ import cz.muni.exceptions.listener.ExceptionListener;
 import java.util.Set;
 
 /**
- * Interface provides access to exceptions, that were thrown and than handled by 
- * different sources.
+ * Interface provides communication pipeline between exception sources and 
+ * listeners, that react to new exception.
  * 
  * @author Jan Ferko 
  */
-public interface ExceptionSource {
+public interface ExceptionDispatcher {
     
     /**
      * Warns registered listeners, that new throwable was produced in exception source.
