@@ -93,16 +93,6 @@ public class BasicExceptionDispatcherTest {
         }
         
         return listeners;
-    }
-    
-    private class MockListener implements ExceptionListener {
-
-        boolean wasNotified = false;
-        
-        @Override
-        public void onThrownException(Throwable throwable) {
-            wasNotified = true;
-        }        
-    }
+    }    
 
 }
