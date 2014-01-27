@@ -1,7 +1,7 @@
 package cz.muni.exceptions;
 
 
-import cz.muni.exceptions.SubsystemExtension;
+import cz.muni.exceptions.ExceptionExtension;
 import junit.framework.Assert;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.PathElement;
@@ -30,7 +30,7 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUB
 public class SubsystemParsingTestCase extends AbstractSubsystemTest {
 
     public SubsystemParsingTestCase() {
-        super(SubsystemExtension.SUBSYSTEM_NAME, new SubsystemExtension());
+        super(ExceptionExtension.SUBSYSTEM_NAME, new ExceptionExtension());
     }
 
     /**
@@ -40,7 +40,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     public void testParseSubsystem() throws Exception {
         //Parse the subsystem xml into operations
         String subsystemXml =
-                "<subsystem xmlns=\"" + SubsystemExtension.NAMESPACE + "\">" +
+                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
                         "</subsystem>";
         List<ModelNode> operations = super.parse(subsystemXml);
 
@@ -54,7 +54,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         Assert.assertEquals(1, addr.size());
         PathElement element = addr.getElement(0);
         Assert.assertEquals(SUBSYSTEM, element.getKey());
-        Assert.assertEquals(SubsystemExtension.SUBSYSTEM_NAME, element.getValue());
+        Assert.assertEquals(ExceptionExtension.SUBSYSTEM_NAME, element.getValue());
     }
 
     /**
@@ -64,13 +64,13 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     public void testInstallIntoController() throws Exception {
         //Parse the subsystem xml and install into the controller
         String subsystemXml =
-                "<subsystem xmlns=\"" + SubsystemExtension.NAMESPACE + "\">" +
+                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
                         "</subsystem>";
         KernelServices services = super.installInController(subsystemXml);
 
         //Read the whole model and make sure it looks as expected
         ModelNode model = services.readWholeModel();
-        Assert.assertTrue(model.get(SUBSYSTEM).hasDefined(SubsystemExtension.SUBSYSTEM_NAME));
+        Assert.assertTrue(model.get(SUBSYSTEM).hasDefined(ExceptionExtension.SUBSYSTEM_NAME));
     }
 
     /**
@@ -81,7 +81,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     public void testParseAndMarshalModel() throws Exception {
         //Parse the subsystem xml and install into the first controller
         String subsystemXml =
-                "<subsystem xmlns=\"" + SubsystemExtension.NAMESPACE + "\">" +
+                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
                         "</subsystem>";
         KernelServices servicesA = super.installInController(subsystemXml);
         //Get the model and the persisted xml from the first controller
@@ -104,7 +104,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     public void testDescribeHandler() throws Exception {
         //Parse the subsystem xml and install into the first controller
         String subsystemXml =
-                "<subsystem xmlns=\"" + SubsystemExtension.NAMESPACE + "\">" +
+                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
                         "</subsystem>";
         KernelServices servicesA = super.installInController(subsystemXml);
         //Get the model and the describe operations from the first controller
@@ -113,7 +113,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         describeOp.get(OP).set(DESCRIBE);
         describeOp.get(OP_ADDR).set(
                 PathAddress.pathAddress(
-                        PathElement.pathElement(SUBSYSTEM, SubsystemExtension.SUBSYSTEM_NAME)).toModelNode());
+                        PathElement.pathElement(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME)).toModelNode());
         List<ModelNode> operations = super.checkResultAndGetContents(servicesA.executeOperation(describeOp)).asList();
 
 
@@ -132,7 +132,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     public void testSubsystemRemoval() throws Exception {
         //Parse the subsystem xml and install into the first controller
         String subsystemXml =
-                "<subsystem xmlns=\"" + SubsystemExtension.NAMESPACE + "\">" +
+                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
                         "</subsystem>";
         KernelServices services = super.installInController(subsystemXml);
         //Checks that the subsystem was removed from the model

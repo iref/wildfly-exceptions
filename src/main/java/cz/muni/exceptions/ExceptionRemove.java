@@ -12,13 +12,13 @@ import org.jboss.msc.service.ServiceName;
  *
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */
-class SubsystemRemove extends AbstractRemoveStepHandler {
+class ExceptionRemove extends AbstractRemoveStepHandler {
 
-    static final SubsystemRemove INSTANCE = new SubsystemRemove();
+    static final ExceptionRemove INSTANCE = new ExceptionRemove();
 
-    private final Logger log = Logger.getLogger(SubsystemRemove.class);
+    private final Logger log = Logger.getLogger(ExceptionRemove.class);
 
-    private SubsystemRemove() {
+    private ExceptionRemove() {
     }
 
     @Override

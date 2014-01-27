@@ -19,13 +19,13 @@ import cz.muni.exceptions.deployment.SubsystemDeploymentProcessor;
  *
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */
-class SubsystemAdd extends AbstractBoottimeAddStepHandler {
+class ExceptionAdd extends AbstractBoottimeAddStepHandler {
 
-    static final SubsystemAdd INSTANCE = new SubsystemAdd();
+    static final ExceptionAdd INSTANCE = new ExceptionAdd();
 
-    private final Logger log = Logger.getLogger(SubsystemAdd.class);
+    private final Logger log = Logger.getLogger(ExceptionAdd.class);
 
-    private SubsystemAdd() {
+    private ExceptionAdd() {
     }
 
     /** {@inheritDoc} */

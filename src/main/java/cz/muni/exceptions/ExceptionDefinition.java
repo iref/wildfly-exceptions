@@ -6,16 +6,16 @@ import org.jboss.as.controller.registry.ManagementResourceRegistration;
 /**
  * @author <a href="mailto:tcerar@redhat.com">Tomaz Cerar</a>
  */
-public class SubsystemDefinition extends SimpleResourceDefinition {
-    public static final SubsystemDefinition INSTANCE = new SubsystemDefinition();
+public class ExceptionDefinition extends SimpleResourceDefinition {
+    public static final ExceptionDefinition INSTANCE = new ExceptionDefinition();
 
-    private SubsystemDefinition() {
-        super(SubsystemExtension.SUBSYSTEM_PATH,
-                SubsystemExtension.getResourceDescriptionResolver(null),
+    private ExceptionDefinition() {
+        super(ExceptionExtension.SUBSYSTEM_PATH,
+                ExceptionExtension.getResourceDescriptionResolver(null),
                 //We always need to add an 'add' operation
-                SubsystemAdd.INSTANCE,
+                ExceptionAdd.INSTANCE,
                 //Every resource that is added, normally needs a remove operation
-                SubsystemRemove.INSTANCE);
+                ExceptionRemove.INSTANCE);
     }
 
     @Override

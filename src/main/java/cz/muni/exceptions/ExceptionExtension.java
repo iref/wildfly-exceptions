@@ -31,17 +31,17 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUB
 /**
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */
-public class SubsystemExtension implements Extension {
+public class ExceptionExtension implements Extension {
 
     /**
      * The name space used for the {@code substystem} element
      */
-    public static final String NAMESPACE = "urn:mycompany:mysubsystem:1.0";
+    public static final String NAMESPACE = "urn:cz:muni:exception:1.0";
 
     /**
      * The name of our subsystem within the model.
      */
-    public static final String SUBSYSTEM_NAME = "mysubsystem";
+    public static final String SUBSYSTEM_NAME = "exception";
 
     /**
      * The parser used for parsing our subsystem
@@ -49,11 +49,11 @@ public class SubsystemExtension implements Extension {
     private final SubsystemParser parser = new SubsystemParser();
 
     protected static final PathElement SUBSYSTEM_PATH = PathElement.pathElement(SUBSYSTEM, SUBSYSTEM_NAME);
-    private static final String RESOURCE_NAME = SubsystemExtension.class.getPackage().getName() + ".LocalDescriptions";
+    private static final String RESOURCE_NAME = ExceptionExtension.class.getPackage().getName() + ".LocalDescriptions";
 
     static StandardResourceDescriptionResolver getResourceDescriptionResolver(final String keyPrefix) {
         String prefix = SUBSYSTEM_NAME + (keyPrefix == null ? "" : "." + keyPrefix);
-        return new StandardResourceDescriptionResolver(prefix, RESOURCE_NAME, SubsystemExtension.class.getClassLoader(), true, false);
+        return new StandardResourceDescriptionResolver(prefix, RESOURCE_NAME, ExceptionExtension.class.getClassLoader(), true, false);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class SubsystemExtension implements Extension {
     @Override
     public void initialize(ExtensionContext context) {
         final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, 1, 0);
-        final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(SubsystemDefinition.INSTANCE);
+        final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(ExceptionDefinition.INSTANCE);
         registration.registerOperationHandler(DESCRIBE, GenericSubsystemDescribeHandler.INSTANCE, GenericSubsystemDescribeHandler.INSTANCE, false, OperationEntry.EntryType.PRIVATE);
 
         subsystem.registerXMLElementWriter(parser);
@@ -88,7 +88,7 @@ public class SubsystemExtension implements Extension {
          */
         @Override
         public void writeContent(XMLExtendedStreamWriter writer, SubsystemMarshallingContext context) throws XMLStreamException {
-            context.startSubsystemElement(SubsystemExtension.NAMESPACE, false);
+            context.startSubsystemElement(ExceptionExtension.NAMESPACE, false);
             writer.writeEndElement();
         }
 
