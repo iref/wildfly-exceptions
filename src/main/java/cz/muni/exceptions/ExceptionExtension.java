@@ -70,6 +70,7 @@ public class ExceptionExtension implements Extension {
         
         // add children elements
         registration.registerSubModel(LoggingResourceDefinition.INSTANCE);
+        registration.registerSubModel(DebuggerResourceDefinition.INSTANCE);
         subsystem.registerXMLElementWriter(parser);
     }
 

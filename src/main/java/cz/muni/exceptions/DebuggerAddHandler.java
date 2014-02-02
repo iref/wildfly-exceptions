@@ -13,30 +13,37 @@ import org.jboss.msc.service.ServiceController;
  *
  * @author johnny
  */
-public class LoggingAddHandler extends AbstractAddStepHandler {
+public class DebuggerAddHandler extends AbstractAddStepHandler {
     
-    public static final LoggingAddHandler INSTANCE = new LoggingAddHandler();
+    public static final DebuggerAddHandler INSTANCE = new DebuggerAddHandler();
     
-    private LoggingAddHandler() {        
+    private DebuggerAddHandler() {        
     }
 
     @Override
     protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException {
         super.populateModel(operation, model);
-        for (AttributeDefinition attribute : LoggingResourceDefinition.INSTANCE.getAttributes()) {
+        for (AttributeDefinition attribute : DebuggerResourceDefinition.INSTANCE.getAttributes()) {
             attribute.validateAndSet(operation, model);
         }
     }
 
     @Override
-    protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model, ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers) throws OperationFailedException {
+    protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model, 
+            ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers) throws OperationFailedException {
         super.performRuntime(context, operation, model, verificationHandler, newControllers);
         
-        boolean isEnabled = LoggingResourceDefinition.ENABLED.resolveModelAttribute(context, model)
+        boolean isEnabled = DebuggerResourceDefinition.ENABLED
+                .resolveModelAttribute(context, model)
                 .asBoolean();
         
-        // if service is enabled add logging source
+        //TODO get dispatcher from dispatcher service
+        
+        //TODO create debugger service
+        
+        //TODO store debugger service into newControllers
     }
+    
     
     
     
