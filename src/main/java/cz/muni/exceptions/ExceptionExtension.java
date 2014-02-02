@@ -67,7 +67,9 @@ public class ExceptionExtension implements Extension {
         final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, 1, 0);
         final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(ExceptionDefinition.INSTANCE);
         registration.registerOperationHandler(DESCRIBE, GenericSubsystemDescribeHandler.INSTANCE, GenericSubsystemDescribeHandler.INSTANCE, false, OperationEntry.EntryType.PRIVATE);
-
+        
+        // add children elements
+        registration.registerSubModel(LoggingResourceDefinition.INSTANCE);
         subsystem.registerXMLElementWriter(parser);
     }
 
