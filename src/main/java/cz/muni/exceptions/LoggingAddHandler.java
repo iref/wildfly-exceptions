@@ -25,7 +25,7 @@ public class LoggingAddHandler extends AbstractAddStepHandler {
     @Override
     protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException {
         super.populateModel(operation, model);
-        for (AttributeDefinition attribute : LoggingDefinition.INSTANCE.getAttributes()) {
+        for (AttributeDefinition attribute : LoggingResourceDefinition.INSTANCE.getAttributes()) {
             attribute.validateAndSet(operation, model);
         }
     }
@@ -34,10 +34,7 @@ public class LoggingAddHandler extends AbstractAddStepHandler {
     protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model, ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers) throws OperationFailedException {
         super.performRuntime(context, operation, model, verificationHandler, newControllers);
         
-        ModelNode enableNode = operation.get(ModelDescriptionConstants.ADDRESS);
-        String enableValue = PathAddress.pathAddress(enableNode).getLastElement()
-                .getValue();
-        boolean isEnabled = LoggingDefinition.ENABLED.resolveModelAttribute(context, model)
+        boolean isEnabled = LoggingResourceDefinition.ENABLED.resolveModelAttribute(context, model)
                 .asBoolean();
         
         // if service is enabled add logging source
