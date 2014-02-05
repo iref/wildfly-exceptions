@@ -13,6 +13,12 @@ import org.jboss.logging.Logger;
 import org.jboss.msc.service.ServiceController;
 
 import cz.muni.exceptions.deployment.SubsystemDeploymentProcessor;
+import cz.muni.exceptions.service.ExceptionDispatcherService;
+import cz.muni.exceptions.source.BasicExceptionDispatcher;
+import cz.muni.exceptions.source.ExceptionDispatcher;
+import org.jboss.as.controller.PathAddress;
+import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
+import org.jboss.msc.service.Service;
 
 /**
  * Handler responsible for adding the subsystem resource to the model
@@ -46,10 +52,27 @@ class ExceptionAdd extends AbstractBoottimeAddStepHandler {
         //see SubDeploymentProcessor for explanation of the phases
         context.addStep(new AbstractDeploymentChainStep() {
             public void execute(DeploymentProcessorTarget processorTarget) {
-                processorTarget.addDeploymentProcessor(SubsystemDeploymentProcessor.PHASE, SubsystemDeploymentProcessor.PRIORITY, new SubsystemDeploymentProcessor());
+                processorTarget.addDeploymentProcessor(SubsystemDeploymentProcessor.PHASE, 
+                        SubsystemDeploymentProcessor.PRIORITY, 
+                        new SubsystemDeploymentProcessor());
 
             }
         }, OperationContext.Stage.RUNTIME);
-
+        
+        
+        // Add exception dispatcher service
+        PathAddress pathAddress = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.OP_ADDR));
+        String alias = pathAddress.getLastElement().getValue();
+        
+        Service<ExceptionDispatcher> dispatcherService = new ExceptionDispatcherService(
+                new BasicExceptionDispatcher());
+        ServiceController<ExceptionDispatcher> serviceController = context.getServiceTarget()
+                .addService(ExceptionDispatcherService.createServiceName(alias), dispatcherService)
+                .addListener(verificationHandler)
+                .setInitialMode(ServiceController.Mode.ACTIVE).install();
+        
+        if (newControllers != null) {
+            newControllers.add(serviceController);
+        }        
     }
 }
