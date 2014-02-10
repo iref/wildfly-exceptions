@@ -1,5 +1,5 @@
 
-package cz.muni.exceptions.source;
+package cz.muni.exceptions.dispatcher;
 
 import cz.muni.exceptions.listener.ExceptionListener;
 import java.util.Collection;

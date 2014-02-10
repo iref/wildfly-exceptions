@@ -14,8 +14,8 @@ import org.jboss.msc.service.ServiceController;
 
 import cz.muni.exceptions.deployment.SubsystemDeploymentProcessor;
 import cz.muni.exceptions.service.ExceptionDispatcherService;
-import cz.muni.exceptions.source.BasicExceptionDispatcher;
-import cz.muni.exceptions.source.ExceptionDispatcher;
+import cz.muni.exceptions.dispatcher.BasicExceptionDispatcher;
+import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
 import org.jboss.msc.service.Service;

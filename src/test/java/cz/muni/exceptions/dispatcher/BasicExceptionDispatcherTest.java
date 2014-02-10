@@ -1,6 +1,9 @@
 
-package cz.muni.exceptions.source;
+package cz.muni.exceptions.dispatcher;
 
+import cz.muni.exceptions.MockListener;
+import cz.muni.exceptions.dispatcher.BasicExceptionDispatcher;
+import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
 import cz.muni.exceptions.listener.ExceptionListener;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +62,7 @@ public class BasicExceptionDispatcherTest {
         
         for (ExceptionListener listener : dispatcher.getListeners()) {
             MockListener mockListener = (MockListener) listener;
-            assertTrue(mockListener.wasNotified);
+            assertTrue(mockListener.isNotified());
         }
     }
     
@@ -72,7 +75,7 @@ public class BasicExceptionDispatcherTest {
         
         for (ExceptionListener listener : dispatcher.getListeners()) {
             MockListener mockListener = (MockListener) listener;
-            assertFalse(mockListener.wasNotified);
+            assertFalse(mockListener.isNotified());
         }
     }
     

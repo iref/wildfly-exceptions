@@ -1,6 +1,7 @@
 
 package cz.muni.exceptions.source;
 
+import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;

@@ -1,5 +1,5 @@
 
-package cz.muni.exceptions.source;
+package cz.muni.exceptions;
 
 import cz.muni.exceptions.listener.ExceptionListener;
 
@@ -8,10 +8,14 @@ import cz.muni.exceptions.listener.ExceptionListener;
  * @author Jan Ferko 
  */
 public class MockListener implements ExceptionListener {
-    boolean wasNotified = false;
+    private boolean wasNotified = false;
     
     @Override
     public void onThrownException(Throwable throwable) {
         wasNotified = true;
+    }
+    
+    public boolean isNotified() {
+        return wasNotified;
     }
 }

@@ -1,6 +1,6 @@
 package cz.muni.exceptions.service;
 
-import cz.muni.exceptions.source.ExceptionDispatcher;
+import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
 import org.jboss.logging.Logger;
 import org.jboss.msc.service.Service;
 import org.jboss.msc.service.ServiceName;
