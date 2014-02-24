@@ -14,13 +14,13 @@ import org.jboss.logging.Logger;
  *
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */
-class ExceptionRemove extends AbstractRemoveStepHandler {
+class ExceptionSubsystemRemoveHandler extends AbstractRemoveStepHandler {
 
-    static final ExceptionRemove INSTANCE = new ExceptionRemove();
+    static final ExceptionSubsystemRemoveHandler INSTANCE = new ExceptionSubsystemRemoveHandler();
 
-    private final Logger log = Logger.getLogger(ExceptionRemove.class);
+    private final Logger log = Logger.getLogger(ExceptionSubsystemRemoveHandler.class);
 
-    private ExceptionRemove() {
+    private ExceptionSubsystemRemoveHandler() {
     }
 
     @Override

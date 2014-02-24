@@ -13,9 +13,10 @@ import org.jboss.logging.Logger;
 import org.jboss.msc.service.ServiceController;
 
 import cz.muni.exceptions.deployment.SubsystemDeploymentProcessor;
+import cz.muni.exceptions.dispatcher.AsyncExceptionDispatcher;
 import cz.muni.exceptions.service.ExceptionDispatcherService;
-import cz.muni.exceptions.dispatcher.BasicExceptionDispatcher;
 import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
+import java.util.concurrent.Executors;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
 import org.jboss.msc.service.Service;
@@ -25,13 +26,13 @@ import org.jboss.msc.service.Service;
  *
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */
-class ExceptionAdd extends AbstractBoottimeAddStepHandler {
+class ExceptionSubsystemAddHandler extends AbstractBoottimeAddStepHandler {
 
-    static final ExceptionAdd INSTANCE = new ExceptionAdd();
+    static final ExceptionSubsystemAddHandler INSTANCE = new ExceptionSubsystemAddHandler();
 
-    private final Logger log = Logger.getLogger(ExceptionAdd.class);
+    private final Logger log = Logger.getLogger(ExceptionSubsystemAddHandler.class);
 
-    private ExceptionAdd() {
+    private ExceptionSubsystemAddHandler() {
     }
 
     /** {@inheritDoc} */
@@ -65,7 +66,7 @@ class ExceptionAdd extends AbstractBoottimeAddStepHandler {
         String alias = pathAddress.getLastElement().getValue();
         
         Service<ExceptionDispatcher> dispatcherService = new ExceptionDispatcherService(
-                new BasicExceptionDispatcher());
+                new AsyncExceptionDispatcher(Executors.defaultThreadFactory()));
         ServiceController<ExceptionDispatcher> serviceController = context.getServiceTarget()
                 .addService(ExceptionDispatcherService.createServiceName(alias), dispatcherService)
                 .addListener(verificationHandler)
