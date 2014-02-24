@@ -73,21 +73,24 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
         
         if (warningThread == null) {
             throw new IllegalArgumentException("[ThreadFactory] did not create thread.");
-        }
-        
-        this.warningThread.start();
-        this.isRunning.set(true);
+        }                        
     }
 
     @Override
-    public void warnListeners(Throwable throwable) {                        
-        if (throwable != null && isRunning.get()) {
-            try {
-                exceptionQueue.put(throwable);
-            } catch (InterruptedException ex) {
-                LOG.error("Throwable was not added to queue because of interruption", ex);
-            }                        
+    public void warnListeners(Throwable throwable) {
+        if (throwable == null) {
+            return;
         }
+        if (!isRunning.get()) {
+            isRunning.compareAndSet(false, true);
+            this.warningThread.start();            
+        }
+        
+        try {
+            exceptionQueue.put(throwable);
+        } catch (InterruptedException ex) {
+            LOG.error("Throwable was not added to queue because of interruption", ex);
+        }        
     }
 
     @Override
