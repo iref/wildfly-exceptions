@@ -19,7 +19,7 @@ public class SubsystemBaseParsingTestCase extends AbstractSubsystemBaseTest {
 
     @Override
     protected String getSubsystemXml() throws IOException {
-        return "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
+        return "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\"><sources />" +
                 "</subsystem>";
     }
 

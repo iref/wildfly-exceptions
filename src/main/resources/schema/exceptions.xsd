@@ -10,12 +10,12 @@
 
     <xs:complexType name="subsystemType">
         <xs:all>
-            <xs:element name="logging" type="xs:boolean"/>
-            <xs:element name="debugger" type="xs:boolean" />
+            <xs:element name="sources" type="sourcesType">
+            <!--<xs:element name="listeners" type="listenersType" />-->
         </xs:all>
     </xs:complexType>
     
-    <xs:complexType name="sources">
+    <xs:complexType name="sourcesType">
         <xs:sequence>
             <xs:element name="logging" type="loggingType"/>
             <xs:element name="debugger" type="loggingType" />            
@@ -30,7 +30,7 @@
         <xs:attribute name="enabled" type="xs:boolean" use="required" default="false" />
     </xs:complexType>
     
-    <xs:complexType name="listeners">
+    <xs:complexType name="listenersType">
         <xs:sequence>
             <xs:element name="mail-listener" type="mailListenerType" minOccurs="0" maxOccurs="1" />
             <xs:element name="abrt-listener" type="abrtListenerType" minOccurs="0" maxOccurs="1" />
