@@ -2,6 +2,7 @@ package cz.muni.exceptions;
 
 
 import cz.muni.exceptions.ExceptionExtension;
+import cz.muni.exceptions.service.ExceptionDispatcherService;
 import junit.framework.Assert;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.PathElement;
@@ -11,12 +12,16 @@ import org.jboss.dmr.ModelNode;
 import org.junit.Test;
 
 import java.util.List;
+import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
 
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.DESCRIBE;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
+import org.jboss.msc.service.ServiceController;
+import org.jboss.msc.service.ServiceName;
+import org.jboss.msc.service.ServiceNotFoundException;
 
 
 /**
@@ -39,13 +44,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     @Test
     public void testParseSubsystem() throws Exception {
         //Parse the subsystem xml into operations
-        String subsystemXml =
-                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
-                "<sources>"
-                + "<logging-source enabled='true' />"
-                + "<debugger-source enabled='false' />"
-                + "</sources>" 
-                + "</subsystem>";
+        String subsystemXml = getSubsystemXml();
         List<ModelNode> operations = super.parse(subsystemXml);
 
         ///Check that we have the expected number of operations
@@ -96,13 +95,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     public void testInstallIntoController() throws Exception {
         //Parse the subsystem xml and install into the controller
         //Parse the subsystem xml into operations
-        String subsystemXml =
-                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
-                "<sources>"
-                + "<logging-source enabled='true' />"
-                + "<debugger-source enabled='false' />"
-                + "</sources>" +
-                        "</subsystem>";
+        String subsystemXml = getSubsystemXml();
         KernelServices services = super.installInController(subsystemXml);
         
         //Read the whole model and make sure it looks as expected
@@ -127,13 +120,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     @Test
     public void testParseAndMarshalModel() throws Exception {
         //Parse the subsystem xml and install into the first controller
-        String subsystemXml =
-                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
-                "<sources>"
-                + "<logging-source enabled='true' />"
-                + "<debugger-source enabled='false' />"
-                + "</sources>" +
-                        "</subsystem>";
+        String subsystemXml = getSubsystemXml();
         KernelServices servicesA = super.installInController(subsystemXml);
         
         //Get the model and the persisted xml from the first controller
@@ -155,9 +142,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     @Test
     public void testDescribeHandler() throws Exception {
         //Parse the subsystem xml and install into the first controller
-        String subsystemXml =
-                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
-                        "</subsystem>";
+        String subsystemXml = getSubsystemXml();
         KernelServices servicesA = super.installInController(subsystemXml);
         //Get the model and the describe operations from the first controller
         ModelNode modelA = servicesA.readWholeModel();
@@ -166,7 +151,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         describeOp.get(OP_ADDR).set(
                 PathAddress.pathAddress(
                         PathElement.pathElement(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME)).toModelNode());
-        List<ModelNode> operations = super.checkResultAndGetContents(servicesA.executeOperation(describeOp)).asList();
+        List<ModelNode> operations = checkResultAndGetContents(servicesA.executeOperation(describeOp)).asList();
 
 
         //Install the describe options from the first controller into a second controller
@@ -182,14 +167,34 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
      */
     @Test
     public void testSubsystemRemoval() throws Exception {
-        //Parse the subsystem xml and install into the first controller
-        String subsystemXml =
-                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
-                        "</subsystem>";
+        String subsystemXml = getSubsystemXml();
         KernelServices services = super.installInController(subsystemXml);
+        final ServiceName serviceName = ExceptionDispatcherService.createServiceName("exception");
+        ServiceController<?> dispatcherService = services.getContainer()
+                .getRequiredService(serviceName);
+        Assert.assertNotNull(dispatcherService);
+        
         //Checks that the subsystem was removed from the model
         super.assertRemoveSubsystemResources(services);
 
-        //TODO Chek that any services that were installed were removed here
+        //Check that any services that were installed were removed here
+        try {
+            services.getContainer().getRequiredService(serviceName);
+            Assert.fail("Dispatcher service was not removed.");
+        } catch (ServiceNotFoundException ex) {            
+            // this is ok
+        }
+    }
+        
+    private String getSubsystemXml() {
+        //Parse the subsystem xml and install into the first controller
+        String subsystemXml =
+                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
+                "<sources>"
+                + "<logging-source enabled='true' />"
+                + "<debugger-source enabled='false' />"
+                + "</sources>" +
+                "</subsystem>";
+        return subsystemXml;
     }
 }
