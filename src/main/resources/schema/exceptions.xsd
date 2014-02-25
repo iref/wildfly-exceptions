@@ -1,6 +1,6 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="urn:mycompany:mysubsystem:1.0"
-            xmlns="urn:mycompany:mysubsystem:1.0"
+            targetNamespace="urn:cz:muni:exception:1.0"
+            xmlns="urn:cz:muni:exception:1.0"
             elementFormDefault="qualified"
             attributeFormDefault="unqualified"
             version="1.0">
@@ -9,5 +9,39 @@
     <xs:element name="subsystem" type="subsystemType"/>
 
     <xs:complexType name="subsystemType">
+        <xs:all>
+            <xs:element name="sources" type="sourcesType">
+            <!--<xs:element name="listeners" type="listenersType" />-->
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="sourcesType">
+        <xs:sequence>
+            <xs:element name="logging" type="loggingType"/>
+            <xs:element name="debugger" type="loggingType" />            
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="loggingType">
+        <xs:attribute name="enabled" type="xs:boolean" use="required" default="true" />        
+    </xs:complexType>
+    
+    <xs:complexType name="debuggerType">
+        <xs:attribute name="enabled" type="xs:boolean" use="required" default="false" />
+    </xs:complexType>
+    
+    <xs:complexType name="listenersType">
+        <xs:sequence>
+            <xs:element name="mail-listener" type="mailListenerType" minOccurs="0" maxOccurs="1" />
+            <xs:element name="abrt-listener" type="abrtListenerType" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="mailListenerType">        
+        <xs:attribute name="mail-provider" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="abrtListenerType">
+        <xs:attribute name="data-source" use="required" />
     </xs:complexType>
 </xs:schema>

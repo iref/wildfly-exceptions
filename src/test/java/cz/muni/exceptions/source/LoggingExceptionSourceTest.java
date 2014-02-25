@@ -1,6 +1,8 @@
 
 package cz.muni.exceptions.source;
 
+import cz.muni.exceptions.MockListener;
+import cz.muni.exceptions.dispatcher.BasicExceptionDispatcher;
 import com.google.common.collect.Lists;
 import cz.muni.exceptions.listener.ExceptionListener;
 import java.util.logging.Level;
@@ -67,7 +69,7 @@ public class LoggingExceptionSourceTest {
     private void assertReported(boolean shouldBeReported) {
         for (ExceptionListener listener : mockDispatcher.getListeners()) {
             MockListener mockListener = (MockListener) listener;
-            Assert.assertEquals(shouldBeReported, mockListener.wasNotified);
+            Assert.assertEquals(shouldBeReported, mockListener.isNotified());
         }
     }
 

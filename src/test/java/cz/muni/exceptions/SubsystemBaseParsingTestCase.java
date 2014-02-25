@@ -1,6 +1,5 @@
 package cz.muni.exceptions;
 
-import cz.muni.exceptions.SubsystemExtension;
 import org.jboss.as.subsystem.test.AbstractSubsystemBaseTest;
 
 import java.io.IOException;
@@ -14,13 +13,13 @@ import java.io.IOException;
 public class SubsystemBaseParsingTestCase extends AbstractSubsystemBaseTest {
 
     public SubsystemBaseParsingTestCase() {
-        super(SubsystemExtension.SUBSYSTEM_NAME, new SubsystemExtension());
+        super(ExceptionExtension.SUBSYSTEM_NAME, new ExceptionExtension());
     }
 
 
     @Override
     protected String getSubsystemXml() throws IOException {
-        return "<subsystem xmlns=\"" + SubsystemExtension.NAMESPACE + "\">" +
+        return "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\"><sources />" +
                 "</subsystem>";
     }
 
