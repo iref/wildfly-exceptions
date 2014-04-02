@@ -1,6 +1,7 @@
 package cz.muni.exceptions.dispatcher;
 
 import cz.muni.exceptions.listener.ExceptionListener;
+import cz.muni.exceptions.source.ExceptionReport;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
     private static final Logger LOG = Logger.getLogger(AsyncExceptionDispatcher.class);
     
     /** Queue, where throwable are stored to be processed in future. */
-    private final BlockingQueue<Throwable> exceptionQueue;
+    private final BlockingQueue<ExceptionReport> exceptionQueue;
     
     /** Set of listeners, that are notified where throwable is processed. */
     private final Set<ExceptionListener> listeners;
@@ -77,8 +78,8 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
     }
 
     @Override
-    public void warnListeners(Throwable throwable) {
-        if (throwable == null) {
+    public void warnListeners(ExceptionReport exceptionReport) {
+        if (exceptionReport == null) {
             return;
         }
         if (!isRunning.get()) {
@@ -87,7 +88,7 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
         }
         
         try {
-            exceptionQueue.put(throwable);
+            exceptionQueue.put(exceptionReport);
         } catch (InterruptedException ex) {
             LOG.error("Throwable was not added to queue because of interruption", ex);
         }        
@@ -117,11 +118,11 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
 
         @Override
         public void run() {
-            final BlockingQueue<Throwable> processingQueue = AsyncExceptionDispatcher.this.exceptionQueue;
+            final BlockingQueue<ExceptionReport> processingQueue = AsyncExceptionDispatcher.this.exceptionQueue;
             final Set<ExceptionListener> listeners = AsyncExceptionDispatcher.this.listeners;
             
             while(isRunning.get()) {
-                Throwable toProcess = null;
+                ExceptionReport toProcess = null;
                 try {
                     toProcess = processingQueue.take();
                 } catch (InterruptedException ex) {

@@ -2,9 +2,8 @@
 package cz.muni.exceptions.dispatcher;
 
 import cz.muni.exceptions.MockListener;
-import cz.muni.exceptions.dispatcher.BasicExceptionDispatcher;
-import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
 import cz.muni.exceptions.listener.ExceptionListener;
+import cz.muni.exceptions.source.ExceptionReport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +19,9 @@ import org.junit.Test;
 public class BasicExceptionDispatcherTest {
     
     private BasicExceptionDispatcher dispatcher;
+    
+    private ExceptionReport mockReport = new ExceptionReport(
+            "Something terrible happened", Collections.<StackTraceElement>emptyList(), null);
     
     @Before
     public void setUp() {
@@ -58,7 +60,8 @@ public class BasicExceptionDispatcherTest {
         List<ExceptionListener> listeners = createMockListeners();
         
         ExceptionDispatcher newSource = new BasicExceptionDispatcher(listeners);
-        newSource.warnListeners(new IllegalArgumentException());
+        
+        newSource.warnListeners(mockReport);
         
         for (ExceptionListener listener : dispatcher.getListeners()) {
             MockListener mockListener = (MockListener) listener;

@@ -2,6 +2,7 @@
 package cz.muni.exceptions.dispatcher;
 
 import cz.muni.exceptions.listener.ExceptionListener;
+import cz.muni.exceptions.source.ExceptionReport;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,13 +43,13 @@ public class BasicExceptionDispatcher implements ExceptionDispatcher {
     }
 
     @Override
-    public void warnListeners(Throwable throwable) {
-        if (throwable == null) {
+    public void warnListeners(ExceptionReport report) {
+        if (report == null) {
             return;
         }
         
         for (ExceptionListener listener : this.listeners) {
-            listener.onThrownException(throwable);
+            listener.onThrownException(report);
         }
     }
 

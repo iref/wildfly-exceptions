@@ -2,6 +2,7 @@ package cz.muni.exceptions.dispatcher;
 
 import cz.muni.exceptions.MockListener;
 import cz.muni.exceptions.listener.ExceptionListener;
+import cz.muni.exceptions.source.ExceptionReport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,6 +23,9 @@ public class AsyncExceptionDispatcherTest {
     private ThreadFactory threadFactory;
     
     private AsyncExceptionDispatcher dispatcher;
+    
+    private ExceptionReport mockReport = new ExceptionReport(
+            "Something terrible happened", Collections.<StackTraceElement>emptyList(), null);
     
     @Before
     public void setUp() {
@@ -80,8 +84,8 @@ public class AsyncExceptionDispatcherTest {
     @Test
     public void testWarnListenersOnNullException() throws InterruptedException {
         MockListener listener = new MockListener();
-        dispatcher.registerListener(null);
-        dispatcher.warnListeners(new IllegalArgumentException());
+        dispatcher.registerListener(listener);        
+        dispatcher.warnListeners(null);
         
         Thread.sleep(TimeUnit.SECONDS.toSeconds(1));
         
@@ -97,7 +101,7 @@ public class AsyncExceptionDispatcherTest {
             dispatcher.registerListener(mockListener);
         }
         
-        dispatcher.warnListeners(new IllegalArgumentException());
+        dispatcher.warnListeners(mockReport);
         
         Thread.sleep(TimeUnit.SECONDS.toSeconds(10));
         

@@ -2,6 +2,7 @@
 package cz.muni.exceptions.dispatcher;
 
 import cz.muni.exceptions.listener.ExceptionListener;
+import cz.muni.exceptions.source.ExceptionReport;
 import java.util.Set;
 
 /**
@@ -13,13 +14,13 @@ import java.util.Set;
 public interface ExceptionDispatcher {
     
     /**
-     * Warns registered listeners, that new throwable was produced in exception source.
+     * Warns registered listeners, that new report was produced in exception source.
      * If throwable is {@code null}, implementation should ignore it and doesn't
      * warn listeners about new throwable.
      * 
-     * @param throwable throwable that was produced by source and should be sent to listeners     
+     * @param report report that was produced by source and should be sent to listeners     
      */
-    void warnListeners(Throwable throwable);
+    void warnListeners(ExceptionReport report);
     
     /**
      * Adds new listener to source. 

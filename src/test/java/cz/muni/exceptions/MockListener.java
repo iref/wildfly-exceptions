@@ -2,6 +2,7 @@
 package cz.muni.exceptions;
 
 import cz.muni.exceptions.listener.ExceptionListener;
+import cz.muni.exceptions.source.ExceptionReport;
 
 /**
  *
@@ -11,7 +12,7 @@ public class MockListener implements ExceptionListener {
     private boolean wasNotified = false;
     
     @Override
-    public void onThrownException(Throwable throwable) {
+    public void onThrownException(ExceptionReport report) {
         wasNotified = true;
     }
     

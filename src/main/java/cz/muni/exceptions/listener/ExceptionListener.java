@@ -1,6 +1,8 @@
 
 package cz.muni.exceptions.listener;
 
+import cz.muni.exceptions.source.ExceptionReport;
+
 /**
  * Interface provides method, that process thrown exception.
  * 
@@ -9,10 +11,10 @@ package cz.muni.exceptions.listener;
 public interface ExceptionListener {
     
     /**
-     * Processes throwable, that caused ExceptionSource to fire event.
+     * Processes report about exception, which caused ExceptionSource to fire event.
      * 
-     * @param throwable throwable, that caused source to fire event.
+     * @param report report about exception, that caused source to fire event.
      */
-    void onThrownException(Throwable throwable);
+    void onThrownException(ExceptionReport report);
 
 }
