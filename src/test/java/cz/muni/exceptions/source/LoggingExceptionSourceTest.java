@@ -66,6 +66,19 @@ public class LoggingExceptionSourceTest {
         assertReported(false);
     }
     
+    @Test
+    public void testPublishRecordWithCause() {
+        IllegalArgumentException nested = new IllegalArgumentException();
+        RuntimeException actual = new RuntimeException("Something terrible happened", nested);
+        
+        LogRecord finerRecord = new LogRecord(Level.FINER, "Runtime test error");
+        finerRecord.setThrown(actual);
+        
+        this.loggingSource.publish(finerRecord);
+        
+        assertReported(true);
+    }
+    
     private void assertReported(boolean shouldBeReported) {
         for (ExceptionListener listener : mockDispatcher.getListeners()) {
             MockListener mockListener = (MockListener) listener;
