@@ -169,7 +169,13 @@
             <artifactId>shrinkwrap-resolver-api-maven</artifactId>
             <version>${version.shrinkwrap.resolver}</version>
             <scope>test</scope>
-          </dependency>            
+          </dependency>
+          <dependency>
+              <groupId>org.mockito</groupId>
+              <artifactId>mockito-core</artifactId>
+              <version>1.9.5</version>
+              <scope>test</scope>
+          </dependency>
       </dependencies>
     </dependencyManagement>
 
@@ -182,10 +188,6 @@
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-server</artifactId>
         </dependency>
-<!--        <dependency>
-            <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-logging</artifactId>
-        </dependency>-->
         <dependency>
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging</artifactId>
@@ -213,15 +215,23 @@
         <dependency>
           <groupId>org.jboss.shrinkwrap.resolver</groupId>
           <artifactId>shrinkwrap-resolver-api</artifactId>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.jboss.shrinkwrap.resolver</groupId>
           <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.jboss.shrinkwrap.resolver</groupId>
           <artifactId>shrinkwrap-resolver-api-maven</artifactId>
-        </dependency>        
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     
     <build>
@@ -244,7 +254,7 @@
                 <configuration>                            
                     <!--<redirectTestOutputToFile>false</redirectTestOutputToFile>-->
                     <enableAssertions>true</enableAssertions>                    
-                    <!--<argLine>-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n</argLine>-->
+                    <argLine>-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n</argLine>
                     <systemProperties>
                         <property>
                           <name>jboss.home</name>
