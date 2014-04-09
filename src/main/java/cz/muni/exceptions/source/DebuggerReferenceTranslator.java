@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class DebuggerReferenceTranslator {
     
-    private static final Logger LOGGER = Logger.getLogger(DebuggerExceptionSource.class.getSimpleName());
+    private static final Logger LOGGER = Logger.getLogger(DebuggerReferenceTranslator.class.getSimpleName());
     
     public ExceptionReport processExceptionEvent(ExceptionEvent exceptionEvent) {
         if (exceptionEvent == null) {
