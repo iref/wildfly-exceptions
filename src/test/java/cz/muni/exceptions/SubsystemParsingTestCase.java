@@ -85,7 +85,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         PathElement debuggerSourceElement = debuggerSourceAddress.getElement(1);
         Assert.assertEquals("debugger-source", debuggerSourceElement.getKey());
         Assert.assertEquals("debugger-source", debuggerSourceElement.getValue());
-        Assert.assertFalse(addDebuggerSource.get("enabled").asBoolean());
+        Assert.assertTrue(addDebuggerSource.get("enabled").asBoolean());
     }
 
     /**
@@ -110,7 +110,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME).hasDefined("debugger-source"));        
         final ModelNode debuggerSource = model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "debugger-source", "debugger-source");
         Assert.assertTrue(debuggerSource.hasDefined("enabled"));
-        Assert.assertFalse(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "debugger-source", "debugger-source", "enabled").asBoolean());
+        Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "debugger-source", "debugger-source", "enabled").asBoolean());
     }
 
     /**
@@ -192,7 +192,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
                 "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
                 "<sources>"
                 + "<logging-source enabled='true' />"
-                + "<debugger-source enabled='false' />"
+                + "<debugger-source enabled='true' />"
                 + "</sources>" +
                 "</subsystem>";
         return subsystemXml;

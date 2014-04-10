@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
 import org.jboss.msc.service.Service;
+import org.jboss.msc.service.ServiceName;
 
 /**
  * Handler responsible for adding the subsystem resource to the model
@@ -64,11 +65,12 @@ class ExceptionSubsystemAddHandler extends AbstractBoottimeAddStepHandler {
         // Add exception dispatcher service
         PathAddress pathAddress = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.OP_ADDR));
         String alias = pathAddress.getLastElement().getValue();
-        
+        ServiceName serviceName = ExceptionDispatcherService.createServiceName(alias);
+
         Service<ExceptionDispatcher> dispatcherService = new ExceptionDispatcherService(
                 new AsyncExceptionDispatcher(Executors.defaultThreadFactory()));
         ServiceController<ExceptionDispatcher> serviceController = context.getServiceTarget()
-                .addService(ExceptionDispatcherService.createServiceName(alias), dispatcherService)
+                .addService(serviceName, dispatcherService)
                 .addListener(verificationHandler)
                 .setInitialMode(ServiceController.Mode.ACTIVE).install();
         
