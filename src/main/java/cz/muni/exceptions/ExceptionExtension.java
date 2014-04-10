@@ -142,6 +142,7 @@ public class ExceptionExtension implements Extension {
         private void writeDebuggerSource(XMLExtendedStreamWriter writer, String name, ModelNode source) throws XMLStreamException {
             writer.writeStartElement(name);
             DebuggerResourceDefinition.ENABLED.marshallAsAttribute(source, true, writer);
+            DebuggerResourceDefinition.PORT.marshallAsAttribute(source, true, writer);
             writer.writeEndElement();
         }                
 
@@ -205,8 +206,8 @@ public class ExceptionExtension implements Extension {
         }
 
         private void createDebuggerAddOperation(XMLExtendedStreamReader reader, List<ModelNode> list) throws XMLStreamException {
-            ModelNode addLoggingOperation = new ModelNode();
-            addLoggingOperation.get(OP).set(ModelDescriptionConstants.ADD);            
+            ModelNode addDebuggerOperation = new ModelNode();
+            addDebuggerOperation.get(OP).set(ModelDescriptionConstants.ADD);
             
             String elementName = reader.getLocalName();
             for (int i = 0; i < reader.getAttributeCount(); i++) {
@@ -214,7 +215,10 @@ public class ExceptionExtension implements Extension {
                 String attributeValue = reader.getAttributeValue(i);
                 if (ModelElement.DEBUGGER_SOURCE_ENABLED.getName().equals(attributeName)) {
                     DebuggerResourceDefinition.ENABLED.parseAndSetParameter(//
-                            attributeValue, addLoggingOperation, reader);
+                            attributeValue, addDebuggerOperation, reader);
+                } else if (ModelElement.DEBUGGER_SOURCE_PORT.getName().equals(attributeName)) {
+                    DebuggerResourceDefinition.PORT.parseAndSetParameter(//
+                            attributeValue, addDebuggerOperation, reader);
                 } else {
                     throw ParseUtils.unexpectedElement(reader);
                 }
@@ -223,8 +227,8 @@ public class ExceptionExtension implements Extension {
             
             PathAddress address = PathAddress.pathAddress(SUBSYSTEM_PATH, 
                     PathElement.pathElement(elementName, elementName));
-            addLoggingOperation.get(OP_ADDR).set(address.toModelNode());
-            list.add(addLoggingOperation);
+            addDebuggerOperation.get(OP_ADDR).set(address.toModelNode());
+            list.add(addDebuggerOperation);
         }
     }
 
