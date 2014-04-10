@@ -31,18 +31,35 @@ import java.util.logging.Level;
  * @author Jan Ferko 
  */
 public class DebuggerExceptionSource {
-    
-    private static final Logger LOGGER = Logger.getLogger(DebuggerExceptionSource.class.getSimpleName());
-    
-    private final ExecutorService executor;
-    
-    private final ExceptionDispatcher dispatcher;
-    
-    private final DebuggerReferenceTranslator translator;
-    
-    private final AtomicBoolean stopDebuggerFlag = new AtomicBoolean(false);        
 
-    public DebuggerExceptionSource(ExceptionDispatcher dispatcher, DebuggerReferenceTranslator translator) {
+    /** Wow Logger */
+    private static final Logger LOGGER = Logger.getLogger(DebuggerExceptionSource.class.getSimpleName());
+
+    /** Executor to run debugger threads. */
+    private final ExecutorService executor;
+
+    /** Dispatcher for sending exception reports */
+    private final ExceptionDispatcher dispatcher;
+
+    /** Translator, that translate debugger API objects to ExceptionReport. */
+    private final DebuggerReferenceTranslator translator;
+
+    /** Flag, for shutting down debugger thread. */
+    private final AtomicBoolean stopDebuggerFlag = new AtomicBoolean(false);
+
+    /** Port, where debugger agent is running. */
+    private final int port;
+
+    /**
+     * Constructor, that constructs new instance of  debugger source.
+     *
+     * @param dispatcher dispatcher for sending exception reports.
+     * @param translator translator, that translate debugger API objects to ExceptionReport
+     * @param port port, where debugger agent is running
+     * @throws java.lang.IllegalArgumentException if {@code dispatcher == null || translator == null}
+     * or port is negative integer
+     */
+    public DebuggerExceptionSource(ExceptionDispatcher dispatcher, DebuggerReferenceTranslator translator, int port) {
         if (dispatcher == null) {
             throw new IllegalArgumentException("[Dispatcher] is required and should not be null.");
         }
@@ -53,8 +70,12 @@ public class DebuggerExceptionSource {
         this.dispatcher = dispatcher;
         this.executor = Executors.newSingleThreadExecutor();
         this.translator = translator;
-    }        
-    
+        this.port = port;
+    }
+
+    /**
+     * Starts to listen for exceptions.
+     */
     public void start() {
         if (LOGGER.isLoggable(Level.INFO)) {
             LOGGER.info("Starting DebuggerExceptionSource.");
@@ -70,7 +91,10 @@ public class DebuggerExceptionSource {
         };                
         executor.submit(listeningTask);        
     }
-    
+
+    /**
+     * Stops listening for exceptions.
+     */
     public void stop() {
         LOGGER.log(Level.INFO, "Stopping debugger source");
         stopDebuggerFlag.set(true);
@@ -81,7 +105,12 @@ public class DebuggerExceptionSource {
             LOGGER.log(Level.SEVERE, "Listening task was not stopped before termination timeout", ex);
         }
     }
-    
+
+    /**
+     * Launches mirror of VM, that runs on {@code port}.
+     *
+     * @return mirror of VM
+     */
     private VirtualMachine launchVirtualMachine() {
         AttachingConnector connector = findConnector();
         
@@ -99,18 +128,28 @@ public class DebuggerExceptionSource {
         }
     }
 
+    /**
+     * Prepares configuration of VM connector.
+     *
+     * @param connector connector, that is supposed to be configured
+     * @return map representing connector configuration
+     */
     private Map<String, Connector.Argument> prepareConectorArguments(AttachingConnector connector) {
         Map<String, Connector.Argument> arguments = connector.defaultArguments();
         Connector.Argument portArgument = arguments.get("port");
-        portArgument.setValue("8000");
+        portArgument.setValue(String.valueOf(this.port));
         return arguments;
     }
-    
+
+    /**
+     * Listens to events on targeted VM.
+     *
+     * @param vm targeted VM
+     */
     private void listen(VirtualMachine vm) {        
         EventRequestManager requestManager = vm.eventRequestManager();
         LOGGER.info("RequestManager instanciated.");                
 
-        
         ExceptionRequest exceptionRequest = createExceptionRequest(requestManager);        
         
         EventQueue eventQueue = vm.eventQueue();
@@ -133,23 +172,41 @@ public class DebuggerExceptionSource {
             
             LOGGER.log(Level.INFO, "Size of event set is {0}.", eventSet.size());
             
-            for (Event event : eventSet) {
-                if (event instanceof VMDeathEvent) {
-                    //deathRequest.disable();
-                    stopDebuggerFlag.set(true);
-                } else if ( event instanceof VMDisconnectEvent) {
-                    stopDebuggerFlag.set(true);
-                } else if (event instanceof ExceptionEvent) {  
-                    LOGGER.log(Level.INFO, "Exception event was caught.");
-                    ExceptionEvent exceptionEvent = (ExceptionEvent) event;                    
-                    ExceptionReport report = translator.processExceptionEvent(exceptionEvent);                    
-                    dispatcher.warnListeners(report);
-                }
-            }            
+            processEventSet(eventSet);
+
             eventSet.resume();
         }                
-    }                
-    
+    }
+
+    /**
+     * Processes given event set.
+     *
+     * @param eventSet event set to be processed
+     */
+    private void processEventSet(EventSet eventSet) {
+        for (Event event : eventSet) {
+            if (event instanceof VMDeathEvent) {
+                //deathRequest.disable();
+                stopDebuggerFlag.set(true);
+            } else if ( event instanceof VMDisconnectEvent) {
+                stopDebuggerFlag.set(true);
+            } else if (event instanceof ExceptionEvent) {
+                LOGGER.log(Level.INFO, "Exception event was caught.");
+                ExceptionEvent exceptionEvent = (ExceptionEvent) event;
+                ExceptionReport report = translator.processExceptionEvent(exceptionEvent);
+                dispatcher.warnListeners(report);
+            }
+        }
+    }
+
+    /**
+     * Creates and send exception request to given request manager.
+     * Request asks for every caught and uncaught exception, excepts
+     * debugger api exceptions.
+     *
+     * @param requestManager request manager where request is sent to
+     * @return created exception request
+     */
     private ExceptionRequest createExceptionRequest(EventRequestManager requestManager) {
         ExceptionRequest exceptionRequest = requestManager.createExceptionRequest(null, true, true);
         exceptionRequest.setSuspendPolicy(ExceptionRequest.SUSPEND_NONE);
@@ -160,8 +217,13 @@ public class DebuggerExceptionSource {
         LOGGER.info("ExceptionRequest sent..");
         
         return exceptionRequest;
-    }        
+    }
 
+    /**
+     * Finds attaching connector, that can be used to connect to VM
+     *
+     * @return attaching connector for connecting to target VM
+     */
     private AttachingConnector findConnector() {
         VirtualMachineManager vmManager = Bootstrap.virtualMachineManager();
         

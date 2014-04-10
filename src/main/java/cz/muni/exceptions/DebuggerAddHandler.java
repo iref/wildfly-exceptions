@@ -37,11 +37,17 @@ public class DebuggerAddHandler extends AbstractAddStepHandler {
     protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model, 
             ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers) throws OperationFailedException {
         super.performRuntime(context, operation, model, verificationHandler, newControllers);
-        
+
+        // load debugger attributes
         boolean isEnabled = DebuggerResourceDefinition.ENABLED
                 .resolveModelAttribute(context, model)
                 .asBoolean();
 
+        int port = DebuggerResourceDefinition.PORT
+                .resolveModelAttribute(context, model)
+                .asInt();
+
+        // if debugger is enabled start DebuggerSource on given port
         if (isEnabled) {
             PathAddress operationAddress = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.OP_ADDR));
             String dispatcherAlias = operation.get(ModelDescriptionConstants.ADDRESS).asPropertyList().get(0)
@@ -49,7 +55,7 @@ public class DebuggerAddHandler extends AbstractAddStepHandler {
             ServiceName dispatcherService = ExceptionDispatcherService.createServiceName(dispatcherAlias);
 
             String serviceAlias = operationAddress.getLastElement().getValue();
-            DebuggerService debuggerService = new DebuggerService(new DebuggerReferenceTranslator());
+            DebuggerService debuggerService = new DebuggerService(new DebuggerReferenceTranslator(), port);
 
             ServiceController<DebuggerExceptionSource> serviceController = context.getServiceTarget()
                     .addService(DebuggerService.createServiceName(serviceAlias), debuggerService)

@@ -4,13 +4,13 @@ import cz.muni.exceptions.MockListener;
 import cz.muni.exceptions.dispatcher.BasicExceptionDispatcher;
 import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
 import cz.muni.exceptions.listener.ExceptionListener;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,7 +28,7 @@ public class DebuggerExceptionSourceTest {
         mockDispatcher = new BasicExceptionDispatcher();        
         mockDispatcher.registerListener(new MockListener());
         
-        source = new DebuggerExceptionSource(mockDispatcher, new DebuggerReferenceTranslator());
+        source = new DebuggerExceptionSource(mockDispatcher, new DebuggerReferenceTranslator(), 8000);
         source.start();
         
         Thread.sleep(1000L);        

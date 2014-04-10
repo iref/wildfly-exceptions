@@ -13,7 +13,8 @@ public enum ModelElement {
     
     /** Debugger source model elements */
     DEBUGGER_SOURCE("debugger-source"),
-    DEBUGGER_SOURCE_ENABLED("enabled");
+    DEBUGGER_SOURCE_ENABLED("enabled"),
+    DEBUGGER_SOURCE_PORT("port");
     
     /** Name of element */
     private final String name;

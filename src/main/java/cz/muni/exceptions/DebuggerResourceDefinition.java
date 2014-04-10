@@ -31,6 +31,15 @@ public class DebuggerResourceDefinition extends SimpleResourceDefinition {
             .setXmlName("enabled")
             .build();
 
+    public static final SimpleAttributeDefinition PORT =
+            new SimpleAttributeDefinitionBuilder("port", ModelType.INT)
+            .setAllowExpression(true)
+            .setAllowNull(false)
+            .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
+            .setDefaultValue(new ModelNode(8787))
+            .setXmlName("port")
+            .build();
+
     private DebuggerResourceDefinition() {
         super(PathElement.pathElement("debugger-source"), 
                 ExceptionExtension.getResourceDescriptionResolver("debugger-source"), 
@@ -40,12 +49,15 @@ public class DebuggerResourceDefinition extends SimpleResourceDefinition {
     @Override
     public void registerAttributes(ManagementResourceRegistration resourceRegistration) {
         super.registerAttributes(resourceRegistration);
-        OperationStepHandler writeHandler = new ReloadRequiredWriteAttributeHandler(ENABLED);
-        resourceRegistration.registerReadWriteAttribute(ENABLED, null, writeHandler);
+        OperationStepHandler enabledWriteHandler = new ReloadRequiredWriteAttributeHandler(ENABLED);
+        resourceRegistration.registerReadWriteAttribute(ENABLED, null, enabledWriteHandler);
+
+        OperationStepHandler portWriteHandler = new ReloadRequiredWriteAttributeHandler(PORT);
+        resourceRegistration.registerReadWriteAttribute(PORT, null, portWriteHandler);
     }
-    
+
     public Collection<AttributeDefinition> getAttributes() {
-        return Arrays.<AttributeDefinition>asList(ENABLED);
+        return Arrays.<AttributeDefinition>asList(ENABLED, PORT);
     }
     
 }

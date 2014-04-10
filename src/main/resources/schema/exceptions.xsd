@@ -28,6 +28,7 @@
     
     <xs:complexType name="debuggerType">
         <xs:attribute name="enabled" type="xs:boolean" use="required" default="false" />
+        <xs:attribute name="port" type="xs:int" use="optional" default="8787" />
     </xs:complexType>
     
     <xs:complexType name="listenersType">

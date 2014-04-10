@@ -2,6 +2,7 @@ package cz.muni.exceptions;
 
 
 import cz.muni.exceptions.ExceptionExtension;
+import cz.muni.exceptions.service.DebuggerService;
 import cz.muni.exceptions.service.ExceptionDispatcherService;
 import junit.framework.Assert;
 import org.jboss.as.controller.PathAddress;
@@ -86,6 +87,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         Assert.assertEquals("debugger-source", debuggerSourceElement.getKey());
         Assert.assertEquals("debugger-source", debuggerSourceElement.getValue());
         Assert.assertTrue(addDebuggerSource.get("enabled").asBoolean());
+        Assert.assertEquals(addDebuggerSource.get("port").asInt(), 8787);
     }
 
     /**
@@ -111,6 +113,8 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         final ModelNode debuggerSource = model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "debugger-source", "debugger-source");
         Assert.assertTrue(debuggerSource.hasDefined("enabled"));
         Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "debugger-source", "debugger-source", "enabled").asBoolean());
+        Assert.assertTrue(debuggerSource.hasDefined("port"));
+        Assert.assertEquals(8787, model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "debugger-source", "debugger-source", "port").asInt());
     }
 
     /**
@@ -173,6 +177,11 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         ServiceController<?> dispatcherService = services.getContainer()
                 .getRequiredService(serviceName);
         Assert.assertNotNull(dispatcherService);
+
+        final ServiceName debuggerServiceName = DebuggerService.createServiceName("debugger-source");
+        ServiceController<?> debuggerService = services.getContainer()
+                .getRequiredService(debuggerServiceName);
+        Assert.assertNotNull(debuggerService);
         
         //Checks that the subsystem was removed from the model
         super.assertRemoveSubsystemResources(services);
@@ -184,6 +193,13 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         } catch (ServiceNotFoundException ex) {            
             // this is ok
         }
+
+        try {
+            services.getContainer().getRequiredService(debuggerServiceName);
+            Assert.fail("Debugger source was not removed.");
+        } catch (ServiceNotFoundException ex) {
+            // this is ok
+        }
     }
         
     private String getSubsystemXml() {
@@ -192,7 +208,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
                 "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
                 "<sources>"
                 + "<logging-source enabled='true' />"
-                + "<debugger-source enabled='true' />"
+                + "<debugger-source enabled='true' port='8787' />"
                 + "</sources>" +
                 "</subsystem>";
         return subsystemXml;
