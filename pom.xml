@@ -57,14 +57,16 @@
     <properties>
         <extension.scm.connection>git@github.com:iref/wildfly-exceptions.git</extension.scm.connection>
         <extension.scm.url>https://github.com/iref/wildfly-exceptions</extension.scm.url>
-        
-        <version.wildfly>8.0.0.Beta1</version.wildfly>
+                
+        <version.wildfly>8.0.0.Final</version.wildfly>
         <version.junit>4.8.2</version.junit>
         <version.shrinkwrap>1.2.2</version.shrinkwrap>
         <version.shrinkwrap.resolver>2.0.0</version.shrinkwrap.resolver>
         <module.name>exceptions</module.name>
         
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+        
+        <jboss.home>/home/ferko/Applications/wildfly</jboss.home>
     </properties>
     
     <repositories>
@@ -105,11 +107,6 @@
               <artifactId>wildfly-controller</artifactId>
               <version>${version.wildfly}</version>
           </dependency>
-<!--          <dependency>
-              <groupId>org.wildfly</groupId>
-              <artifactId>wildfly-logging</artifactId>
-              <version>${version.wildfly}</version>
-          </dependency>-->
           <dependency>
               <groupId>org.wildfly</groupId>
               <artifactId>wildfly-server</artifactId>
@@ -196,6 +193,16 @@
             <groupId>org.jboss.logmanager</groupId>
             <artifactId>jboss-logmanager</artifactId>
         </dependency>
+                
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
         
         <dependency>
             <groupId>org.jboss.as</groupId>
@@ -211,7 +218,12 @@
           <groupId>org.jboss.arquillian.junit</groupId>
           <artifactId>arquillian-junit-container</artifactId>
           <scope>test</scope>
-        </dependency>        
+        </dependency> 
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-arquillian-container-remote</artifactId>            
+            <scope>test</scope>
+        </dependency>      
         <dependency>
           <groupId>org.jboss.shrinkwrap.resolver</groupId>
           <artifactId>shrinkwrap-resolver-api</artifactId>
