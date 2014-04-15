@@ -64,9 +64,7 @@
         <version.shrinkwrap.resolver>2.0.0</version.shrinkwrap.resolver>
         <module.name>exceptions</module.name>
         
-        <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
-        
-        <jboss.home>/home/ferko/Applications/wildfly</jboss.home>
+        <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>                
     </properties>
     
     <repositories>
