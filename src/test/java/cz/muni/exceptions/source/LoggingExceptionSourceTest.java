@@ -3,8 +3,8 @@ package cz.muni.exceptions.source;
 
 import cz.muni.exceptions.MockListener;
 import cz.muni.exceptions.dispatcher.BasicExceptionDispatcher;
-import com.google.common.collect.Lists;
 import cz.muni.exceptions.listener.ExceptionListener;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import org.junit.Assert;
@@ -24,7 +24,7 @@ public class LoggingExceptionSourceTest {
     public void setUp() {
         MockListener listener = new MockListener();
         this.mockDispatcher = new BasicExceptionDispatcher(
-                Lists.<ExceptionListener>newArrayList(listener));
+                Arrays.<ExceptionListener>asList(listener));
         this.loggingSource = new LoggingExceptionSource(mockDispatcher);
     }
     
