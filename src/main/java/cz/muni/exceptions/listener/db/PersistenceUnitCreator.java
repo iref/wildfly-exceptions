@@ -53,7 +53,7 @@ public class PersistenceUnitCreator {
                 properties.put("javax.persistence.transactionType", "JTA");
             } else {
                 properties.put("javax.persistence.nonJtaDataSource", dataSourceJNDIName);
-                properties.put("javax.persistence.transactionType", "RESOURCE-LOCAL");
+                properties.put("javax.persistence.transactionType", "RESOURCE_LOCAL");
             }
 
             return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, properties);
