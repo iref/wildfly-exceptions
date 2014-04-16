@@ -20,10 +20,10 @@
   ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    
+
     <modelVersion>4.0.0</modelVersion>
 
 <!--    <parent>
@@ -39,34 +39,34 @@
     <name>Wildfly: Exception Reporting Extension</name>
 
     <packaging>jar</packaging>
-    
+
     <url>https://github.com/iref/wildfly-exceptions</url>
-    
+
     <scm>
         <connection>scm:git:${extension.scm.connection}</connection>
         <developerConnection>scm:git:${extension.scm.connection}</developerConnection>
         <url>${extrension.scm.url}</url>
     </scm>
-    
+
     <developers>
         <developer>
-            <name>Jan Ferko</name>              
+            <name>Jan Ferko</name>
         </developer>
     </developers>
-    
+
     <properties>
         <extension.scm.connection>git@github.com:iref/wildfly-exceptions.git</extension.scm.connection>
         <extension.scm.url>https://github.com/iref/wildfly-exceptions</extension.scm.url>
-                
+
         <version.wildfly>8.0.0.Final</version.wildfly>
         <version.junit>4.8.2</version.junit>
         <version.shrinkwrap>1.2.2</version.shrinkwrap>
         <version.shrinkwrap.resolver>2.0.0</version.shrinkwrap.resolver>
         <module.name>exceptions</module.name>
-        
-        <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>                
+
+        <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
     </properties>
-    
+
     <repositories>
         <repository>
           <id>jboss-public-repository-group</id>
@@ -83,7 +83,7 @@
           </snapshots>
         </repository>
     </repositories>
-    
+
     <dependencyManagement>
       <dependencies>
           <!-- JBoss AS Dependencies -->
@@ -96,7 +96,7 @@
               <exclusions>
                 <exclusion>
                    <groupId>org.wildfly</groupId>
-                   <artifactId>wildfly-build-config</artifactId>                   
+                   <artifactId>wildfly-build-config</artifactId>
                  </exclusion>
               </exclusions>
           </dependency>
@@ -121,8 +121,8 @@
               <artifactId>jboss-logmanager</artifactId>
               <version>1.5.1.Final</version>
           </dependency>
-          
-          <!-- Test Dependencies -->  
+
+          <!-- Test Dependencies -->
           <dependency>
               <groupId>org.jboss.as</groupId>
               <artifactId>jboss-as-subsystem-test</artifactId>
@@ -134,7 +134,7 @@
               <artifactId>junit</artifactId>
               <scope>test</scope>
               <version>${version.junit}</version>
-          </dependency>                            
+          </dependency>
           <dependency>
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-arquillian-container-managed</artifactId>
@@ -191,7 +191,12 @@
             <groupId>org.jboss.logmanager</groupId>
             <artifactId>jboss-logmanager</artifactId>
         </dependency>
-                
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
@@ -201,27 +206,27 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.jboss.as</groupId>
-            <artifactId>jboss-as-subsystem-test</artifactId>            
+            <artifactId>jboss-as-subsystem-test</artifactId>
             <scope>test</scope>
-        </dependency>                
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-        </dependency>                
+        </dependency>
         <dependency>
           <groupId>org.jboss.arquillian.junit</groupId>
           <artifactId>arquillian-junit-container</artifactId>
           <scope>test</scope>
-        </dependency> 
+        </dependency>
         <dependency>
             <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-arquillian-container-remote</artifactId>            
+            <artifactId>wildfly-arquillian-container-remote</artifactId>
             <scope>test</scope>
-        </dependency>      
+        </dependency>
         <dependency>
           <groupId>org.jboss.shrinkwrap.resolver</groupId>
           <artifactId>shrinkwrap-resolver-api</artifactId>
@@ -243,9 +248,9 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
-      <!-- Maven will append the version to the finalName (which is the name 
+      <!-- Maven will append the version to the finalName (which is the name
          given to the generated war, and hence the context root) -->
       <finalName>${project.artifactId}</finalName>
       <plugins>
@@ -260,10 +265,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.8.1</version>                
-                <configuration>                            
+                <version>2.8.1</version>
+                <configuration>
                     <!--<redirectTestOutputToFile>false</redirectTestOutputToFile>-->
-                    <enableAssertions>true</enableAssertions>                    
+                    <enableAssertions>true</enableAssertions>
                     <argLine>-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n</argLine>
                     <systemProperties>
                         <property>
@@ -310,13 +315,13 @@
                                <replace file="${temp.file}" token="." value="/" />
                                <loadfile srcfile="${temp.file}" property="module.path" />
                                <delete file="${temp.file}" />
-                               
+
                                <delete dir="target/module" />
                                <property name="module.dir" value="target/module/${module.path}/main" />
-                               
+
                                <copy file="src/main/resources/module/main/module.xml" tofile="${module.dir}/module.xml" />
                                <copy file="target/${project.artifactId}.jar" todir="${module.dir}" />
-                               
+
                                <echo>Module ${module.name} has been created in the target/module directory. Copy to your JBoss AS 7 installation.</echo>
                             </target>
                         </configuration>
