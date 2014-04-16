@@ -48,7 +48,7 @@ public interface TicketRepository {
     /**
      * Retrieves all tickets, that are stored in data store.
      * 
-     * @return immutable set of all tickets in data store or empty set if 
+     * @return set of all tickets in data store or empty set if 
      * there isn't any ticket in data store.
      */
     Set<Ticket> all();
