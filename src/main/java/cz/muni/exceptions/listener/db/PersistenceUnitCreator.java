@@ -50,8 +50,10 @@ public class PersistenceUnitCreator {
         try {
             if (isJtaManaged) {
                 properties.put("javax.persistence.jtaDataSource", dataSourceJNDIName);
+                properties.put("javax.persistence.transactionType", "JTA");
             } else {
                 properties.put("javax.persistence.nonJtaDataSource", dataSourceJNDIName);
+                properties.put("javax.persistence.transactionType", "RESOURCE-LOCAL");
             }
 
             return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, properties);
