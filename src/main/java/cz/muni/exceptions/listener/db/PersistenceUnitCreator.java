@@ -18,19 +18,23 @@ public class PersistenceUnitCreator {
     private static final String PERSISTENCE_UNIT_NAME = "exceptionsPU";
     
     /** JNDI name of datasource. */
-    private final String dataSourceJNDIName;        
+    private final String dataSourceJNDIName;
+
+    private final boolean isJtaManaged;
     
     /**
      * Constructor creates new instance of creator for given datasource name.
      * 
      * @param dataSourceJNDIName JNDI identifier of datasource.
+     * @param isJtaManaged indicator if transaction on datasource are managed by jta
      * @throws IllegalArgumentException if {@code dataSourceJNDIName} is {@code null} or empty
      */
-    public PersistenceUnitCreator(String dataSourceJNDIName) {
+    public PersistenceUnitCreator(String dataSourceJNDIName, boolean isJtaManaged) {
         if (dataSourceJNDIName == null || dataSourceJNDIName.isEmpty()) {
             throw new IllegalArgumentException("[DataSourceJndiName] is required and should not be null.");
         } 
-        this.dataSourceJNDIName = dataSourceJNDIName;        
+        this.dataSourceJNDIName = dataSourceJNDIName;
+        this.isJtaManaged = isJtaManaged;
     }
     
     /**
@@ -44,7 +48,12 @@ public class PersistenceUnitCreator {
         Map<String, Object> properties = new HashMap<>();
         
         try {
-            properties.put("javax.persistence.jtaDataSource", dataSourceJNDIName);                       
+            if (isJtaManaged) {
+                properties.put("javax.persistence.jtaDataSource", dataSourceJNDIName);
+            } else {
+                properties.put("javax.persistence.nonJtaDataSource", dataSourceJNDIName);
+            }
+
             return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, properties);
         } catch (Exception e) {
             throw new SecurityException("It was not possible to create EntityManagerFactory", e);

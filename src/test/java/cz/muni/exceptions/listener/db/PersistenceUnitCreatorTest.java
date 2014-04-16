@@ -1,5 +1,6 @@
 package cz.muni.exceptions.listener.db;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -29,24 +30,27 @@ public class PersistenceUnitCreatorTest {
     
     @Test(expected = IllegalArgumentException.class)
     public void testConstructForNullDataSource() {
-        new PersistenceUnitCreator(null);
+        new PersistenceUnitCreator(null, false);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testConstructForEmptyDataSource() {
-        new PersistenceUnitCreator("");
+        new PersistenceUnitCreator("", false);
     }
     
     @Test
     public void testCreateEntityManagerFactory() {
-        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jboss/datasources/ExampleDS");
+        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jboss/datasources/ExampleDS", false);
         EntityManagerFactory emf = creator.createEntityManagerFactory();
         Assert.assertNotNull(emf);
+
+        EntityManager entityManager = emf.createEntityManager();
+        Assert.assertNotNull(entityManager);
     }
     
     @Test(expected = SecurityException.class)
     public void testCreateEntityManagerFactoryForNonexistingDataSource() {
-        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jboss/missingDS");
+        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jboss/missingDS", false);
         EntityManagerFactory emf = creator.createEntityManagerFactory();
     }
 
