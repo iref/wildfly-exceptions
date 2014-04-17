@@ -38,7 +38,13 @@ public class JPATicketRepository implements TicketRepository {
 
     @Override
     public Optional<Ticket> get(Long ticketId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (ticketId == null) {
+            throw new IllegalArgumentException("[TicketId] should not be null.");
+        }
+
+        EntityManager em = creator.createEntityManager();
+        Ticket ticket = em.find(Ticket.class, ticketId);
+        return Optional.fromNullable(ticket);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package cz.muni.exceptions.listener.db;
 
+import com.google.common.base.Optional;
 import cz.muni.exceptions.listener.db.model.Ticket;
 import cz.muni.exceptions.listener.db.model.TicketClass;
 import cz.muni.exceptions.listener.db.model.TicketOccurence;
@@ -89,6 +90,37 @@ public class JPATicketRepositoryTest {
         Set<Ticket> all = repository.all();
         Assert.assertNotNull(all);
         Assert.assertEquals(1, all.size());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetTicketWithNullId() {
+        repository.get(null);
+    }
+
+    @Test
+    public void testGetMissingTicket() {
+        Optional<Ticket> actual = repository.get(mockTicket.getId() + 1);
+        Assert.assertFalse(actual.isPresent());
+    }
+
+    @Test
+    public void testGetTicket() {
+        Optional<Ticket> actual = repository.get(mockTicket.getId());
+        Assert.assertTrue(actual.isPresent());
+
+        Ticket actualTicket = actual.get();
+        Assert.assertEquals(mockTicket, actualTicket);
+        Assert.assertEquals(mockTicket.getDetailMessage(), actualTicket.getDetailMessage());
+        Assert.assertEquals(mockTicket.getStackTrace(), actualTicket.getStackTrace());
+        Assert.assertEquals(mockTicket.getTicketClass(), actualTicket.getTicketClass());
+        Assert.assertEquals(mockTicket.getOccurences().size(), actualTicket.getOccurences().size());
+
+        for (int i = 0; i < mockTicket.getOccurences().size(); i++) {
+            TicketOccurence actualOccurence = actualTicket.getOccurences().get(i);
+            TicketOccurence expectedOccurence = mockTicket.getOccurences().get(i);
+            Assert.assertEquals(expectedOccurence.getId(), actualOccurence.getId());
+            Assert.assertEquals(expectedOccurence.getTimestamp(), actualOccurence.getTimestamp());
+        }
     }
     
     private void insertTestData() {
