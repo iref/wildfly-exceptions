@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.swing.text.html.parser.Entity;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -46,33 +48,25 @@ public class PersistenceUnitCreatorTest {
     }
     
     @Test
-    public void testCreateEntityManagerFactory() {
+    public void testCreateEntityManagerWithoutJTA() {
         PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jdbc/arquillian", false);
         EntityManager em = creator.createEntityManager();
         Assert.assertNotNull(em);
 
-        
         TicketOccurence ticketOccurence = new TicketOccurence();
         ticketOccurence.setTimestamp(new Timestamp(new Date().getTime()));
-        
-        Ticket ticket = new Ticket("Something went terribly wrong", 
+
+        Ticket ticket = new Ticket("Something went terribly wrong",
                 "Some awefull stacktrace", TicketClass.DATABASE, Arrays.asList(ticketOccurence));
-        
+
         em.getTransaction().begin();
         em.persist(ticket);
         em.getTransaction().commit();
-        
+
         EntityManager entityManager2 = creator.createEntityManager();
         Ticket actual = entityManager2.find(Ticket.class, ticket.getId());
         Assert.assertNotNull(actual);
-        
-    }
-    
-    @Test(expected = SecurityException.class)
-    public void testCreateEntityManagerFactoryForNonexistingDataSource() {
-        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jboss/missingDS", false);
-        EntityManager em = creator.createEntityManager();
-        em.createQuery("SELECT t FROM Ticket t").getResultList();
+
     }
 
 }

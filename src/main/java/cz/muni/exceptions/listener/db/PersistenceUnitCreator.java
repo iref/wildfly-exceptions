@@ -1,5 +1,8 @@
 package cz.muni.exceptions.listener.db;
 
+import org.hibernate.cfg.AvailableSettings;
+import org.hibernate.engine.transaction.jta.platform.internal.JBossAppServerJtaPlatform;
+
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -19,6 +22,8 @@ public class PersistenceUnitCreator {
     private static final String PERSISTENCE_UNIT_NAME = "exceptionsPU";
 
     private EntityManagerFactory emf;
+
+    private boolean jtaManaged;
     
     /**
      * Constructor creates new instance of creator for given datasource name.
@@ -32,10 +37,15 @@ public class PersistenceUnitCreator {
             throw new IllegalArgumentException("[DataSourceJndiName] is required and should not be null.");
         } 
         this.emf = createEntityManagerFactory(dataSourceJNDIName, isJtaManaged);
+        this.jtaManaged = isJtaManaged;
     }
 
     public EntityManager createEntityManager() {
         return emf.createEntityManager();
+    }
+
+    public boolean isJtaManaged() {
+        return this.jtaManaged;
     }
     
     /**
@@ -52,6 +62,7 @@ public class PersistenceUnitCreator {
             if (isJtaManaged) {
                 properties.put("javax.persistence.jtaDataSource", dataSourceJNDIName);
                 properties.put("javax.persistence.transactionType", "JTA");
+                properties.put(AvailableSettings.JTA_PLATFORM, new JBossAppServerJtaPlatform());
             } else {
                 properties.put("javax.persistence.nonJtaDataSource", dataSourceJNDIName);
                 properties.put("javax.persistence.transactionType", "RESOURCE_LOCAL");
