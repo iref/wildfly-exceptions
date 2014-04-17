@@ -1,16 +1,9 @@
 package cz.muni.exceptions.listener.db.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 
 /**
  *
@@ -30,7 +23,7 @@ public class Ticket implements Serializable {
         
     private int ticketClassId;
     
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "ticket_id", referencedColumnName = "id")
     private List<TicketOccurence> occurences;
 
