@@ -10,14 +10,9 @@ Supported exception sources:
 
 Supported exception listeners:
 
-* Mail Listener
 * ABRT Listener (with local data storage)
 
-Mail Listener attributes:
-
-* Mail Provider - JNDI name of mail provider
-
-ABRT Listener attributes:
+DataSource Listener attributes:
 
 * Data Source - JNDI name of relational data source, where exceptions are stored
 
@@ -30,9 +25,11 @@ Example of Configuration
 		<logging-source enabled="true" />
 		<debugger-source enabled="false" />
 	</sources>
+	<filters>
+	    <class name="com.sun.jdi.*" />
+	</filters>
 	<listeners>
-		<mail-listener mail-provider="mail/mymail" />
-		<abrt-listener data-source="jdbc/sample" />
+		<database-listener dataSource="jboss/ExampleDS" />
 	</listeners>
 </subsystem>
 ```
