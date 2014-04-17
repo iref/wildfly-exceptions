@@ -2,6 +2,7 @@ package cz.muni.exceptions.listener.db;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -16,11 +17,8 @@ public class PersistenceUnitCreator {
     
     /** Name of persistence unit. */
     private static final String PERSISTENCE_UNIT_NAME = "exceptionsPU";
-    
-    /** JNDI name of datasource. */
-    private final String dataSourceJNDIName;
 
-    private final boolean isJtaManaged;
+    private EntityManagerFactory emf;
     
     /**
      * Constructor creates new instance of creator for given datasource name.
@@ -33,8 +31,11 @@ public class PersistenceUnitCreator {
         if (dataSourceJNDIName == null || dataSourceJNDIName.isEmpty()) {
             throw new IllegalArgumentException("[DataSourceJndiName] is required and should not be null.");
         } 
-        this.dataSourceJNDIName = dataSourceJNDIName;
-        this.isJtaManaged = isJtaManaged;
+        this.emf = createEntityManagerFactory(dataSourceJNDIName, isJtaManaged);
+    }
+
+    public EntityManager createEntityManager() {
+        return emf.createEntityManager();
     }
     
     /**
@@ -44,7 +45,7 @@ public class PersistenceUnitCreator {
      * 
      * @return new EntityManagerFactory for given datasource.
      */
-    public EntityManagerFactory createEntityManagerFactory() {        
+    private EntityManagerFactory createEntityManagerFactory(String dataSourceJNDIName, boolean isJtaManaged) {
         Map<String, Object> properties = new HashMap<>();
         
         try {
@@ -61,6 +62,6 @@ public class PersistenceUnitCreator {
             throw new SecurityException("It was not possible to create EntityManagerFactory", e);
         }
         
-    }        
+    }
 
 }

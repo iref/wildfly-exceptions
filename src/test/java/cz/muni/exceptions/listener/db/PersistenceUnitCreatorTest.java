@@ -28,8 +28,9 @@ public class PersistenceUnitCreatorTest {
     public static WebArchive createDeployment() {
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "persistenceTest.war")
                 .addClass(PersistenceUnitCreator.class)
-                .addPackage(Ticket.class.getPackage())
-                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
+                .addPackage(Ticket.class.getPackage())                
+                .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
+                .addAsWebInfResource("jbossas-ds.xml");
                 
         return archive;
     }
@@ -46,12 +47,10 @@ public class PersistenceUnitCreatorTest {
     
     @Test
     public void testCreateEntityManagerFactory() {
-        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jboss/datasources/ExampleDS", false);
-        EntityManagerFactory emf = creator.createEntityManagerFactory();
-        Assert.assertNotNull(emf);
+        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jdbc/arquillian", false);
+        EntityManager em = creator.createEntityManager();
+        Assert.assertNotNull(em);
 
-        EntityManager entityManager = emf.createEntityManager();
-        Assert.assertNotNull(entityManager);
         
         TicketOccurence ticketOccurence = new TicketOccurence();
         ticketOccurence.setTimestamp(new Timestamp(new Date().getTime()));
@@ -59,11 +58,11 @@ public class PersistenceUnitCreatorTest {
         Ticket ticket = new Ticket("Something went terribly wrong", 
                 "Some awefull stacktrace", TicketClass.DATABASE, Arrays.asList(ticketOccurence));
         
-        entityManager.getTransaction().begin();
-        entityManager.persist(ticket);
-        entityManager.getTransaction().commit();
+        em.getTransaction().begin();
+        em.persist(ticket);
+        em.getTransaction().commit();
         
-        EntityManager entityManager2 = emf.createEntityManager();
+        EntityManager entityManager2 = creator.createEntityManager();
         Ticket actual = entityManager2.find(Ticket.class, ticket.getId());
         Assert.assertNotNull(actual);
         
@@ -72,7 +71,8 @@ public class PersistenceUnitCreatorTest {
     @Test(expected = SecurityException.class)
     public void testCreateEntityManagerFactoryForNonexistingDataSource() {
         PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jboss/missingDS", false);
-        EntityManagerFactory emf = creator.createEntityManagerFactory();
+        EntityManager em = creator.createEntityManager();
+        em.createQuery("SELECT t FROM Ticket t").getResultList();
     }
 
 }

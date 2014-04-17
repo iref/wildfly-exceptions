@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 /**
  *
  * @author Jan Ferko
- * @sa.date 2014-04-16T03:56:45+0100
+ * @date 2014-04-16T03:56:45+0100
  */
 public class JPATicketRepository implements TicketRepository {
     
@@ -43,7 +43,7 @@ public class JPATicketRepository implements TicketRepository {
 
     @Override
     public Set<Ticket> all() {
-        EntityManager em = creator.createEntityManagerFactory().createEntityManager();
+        EntityManager em = creator.createEntityManager();
         List<Ticket> tickets = em.createQuery("SELECT t FROM Ticket t", Ticket.class).getResultList();
         em.close();
         

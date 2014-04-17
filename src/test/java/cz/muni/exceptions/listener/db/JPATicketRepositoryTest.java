@@ -3,22 +3,20 @@ package cz.muni.exceptions.listener.db;
 import cz.muni.exceptions.listener.db.model.Ticket;
 import cz.muni.exceptions.listener.db.model.TicketClass;
 import cz.muni.exceptions.listener.db.model.TicketOccurence;
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Set;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Set;
 
 /**
  * 
@@ -29,30 +27,34 @@ import org.junit.runner.RunWith;
 public class JPATicketRepositoryTest {
     
     @Deployment
-    public static Archive<?> getDeployment() {        
-        return ShrinkWrap.create(WebArchive.class, "ticketRepositoryTest.war")
+    public static Archive<?> getDeployment() {
+        WebArchive archive = ShrinkWrap.create(WebArchive.class, "jpaTicketRepositoryTest.war")
                 .addPackage(JPATicketRepository.class.getPackage())
-                .addPackage(Ticket.class.getPackage())                
+                .addPackage(Ticket.class.getPackage())
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource("jbossas-ds.xml");
-                
+
+        return archive;
     }
     
     private TicketRepository repository;
     
-    private final PersistenceUnitCreator persistenceUnitCreator = new PersistenceUnitCreator(
-            "jdbc/arquillian", false);
+    private PersistenceUnitCreator persistenceUnitCreator;
     
     private EntityManager entityManager;
     
     private EntityTransaction entityTx;
     
     private Ticket mockTicket;
-    
+
     @Before
     public void before() {
+        if (persistenceUnitCreator == null) {
+            persistenceUnitCreator = new PersistenceUnitCreator("jdbc/arquillian", false);
+        }
+
         repository = new JPATicketRepository(persistenceUnitCreator);
-        entityManager = persistenceUnitCreator.createEntityManagerFactory().createEntityManager();
+        entityManager = persistenceUnitCreator.createEntityManager();
         
         // clean database
         cleanDatabase();
@@ -70,7 +72,7 @@ public class JPATicketRepositoryTest {
         // commit / rollback transaction
         entityTx.commit();
         
-        // clean databasae
+        // clean database
         cleanDatabase();
         
         // close em
