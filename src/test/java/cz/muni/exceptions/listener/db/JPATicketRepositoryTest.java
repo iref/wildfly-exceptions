@@ -10,11 +10,15 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -33,6 +37,7 @@ public class JPATicketRepositoryTest {
     public static Archive<?> getDeployment() {
         File[] libs = Maven.resolver().loadPomFromFile("pom.xml")
                 .resolve("com.google.guava:guava:16.0.1").withTransitivity().asFile();
+
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "jpaTicketRepositoryTest.war")
                 .addAsLibraries(libs)
                 .addPackage(JPATicketRepository.class.getPackage())
@@ -122,7 +127,30 @@ public class JPATicketRepositoryTest {
             Assert.assertEquals(expectedOccurence.getTimestamp(), actualOccurence.getTimestamp());
         }
     }
-    
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRemoveWithNullId() {
+        repository.remove(null);
+    }
+
+    @Test
+    public void testRemoveMissingTicket() {
+        TypedQuery<Ticket> selectQuery = entityManager.createQuery("SELECT t FROM Ticket t", Ticket.class);
+
+        int ticketCount = selectQuery.getResultList().size();
+        repository.remove(mockTicket.getId() + 1);
+        int afterRemoveCount = selectQuery.getResultList().size();
+
+        Assert.assertEquals(ticketCount, afterRemoveCount);
+    }
+
+    @Test
+    public void testRemoveMockTicket() {
+        repository.remove(mockTicket.getId());
+
+        entityManager.find(Ticket.class, mockTicket.getId());
+    }
+
     private void insertTestData() {
         TicketOccurence ticketOccurence = new TicketOccurence();
         ticketOccurence.setTimestamp(new Timestamp(new Date().getTime()));

@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 /**
  *
@@ -32,8 +35,22 @@ public class JPATicketRepository implements TicketRepository {
     }
 
     @Override
-    public void remove(Long ticketId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void remove(final Long ticketId) {
+        if (ticketId == null) {
+            throw new IllegalArgumentException("[TicketId] should not be null.");
+        }
+
+        runInTransaction(new TransactionTemplate<Void>() {
+            @Override
+            public Void executeInTransaction(EntityManager em) {
+                Ticket ticket = em.find(Ticket.class, ticketId);
+                if (ticket != null) {
+                    em.remove(ticket);
+                }
+
+                return null;
+            }
+        });
     }
 
     @Override
@@ -44,7 +61,10 @@ public class JPATicketRepository implements TicketRepository {
 
         EntityManager em = creator.createEntityManager();
         Ticket ticket = em.find(Ticket.class, ticketId);
-        return Optional.fromNullable(ticket);
+        Optional<Ticket> result = Optional.fromNullable(ticket);
+        em.close();
+
+        return result;
     }
 
     @Override
@@ -54,6 +74,28 @@ public class JPATicketRepository implements TicketRepository {
         em.close();
         
         return ImmutableSet.copyOf(tickets);
+    }
+
+    private <T> T runInTransaction(TransactionTemplate<T> transactionQuery) {
+        EntityManager em = creator.createEntityManager();
+        EntityTransaction tx = null;
+
+        try {
+            tx = em.getTransaction();
+            tx.begin();
+
+            return transactionQuery.executeInTransaction(em);
+        } catch (Exception ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw new RuntimeException("Error while executing transaction", ex);
+        } finally {
+            if (tx != null && tx.isActive()) {
+                tx.commit();
+            }
+            em.close();
+        }
     }
 
 }
