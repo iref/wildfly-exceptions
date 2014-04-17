@@ -12,6 +12,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 /**
+ * Implementation of {@link cz.muni.exceptions.listener.db.TicketRepository}, that uses JPA
+ * to access database.
  *
  * @author Jan Ferko
  * @date 2014-04-16T03:56:45+0100
@@ -25,13 +27,39 @@ public class JPATicketRepository implements TicketRepository {
     }
 
     @Override
-    public void add(Ticket ticket) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void add(final Ticket ticket) {
+        if (ticket == null) {
+            throw new IllegalArgumentException("[Ticket] should not be null.");
+        }
+        if (ticket.getId() != null) {
+            throw new IllegalArgumentException("[Ticket] should have id.");
+        }
+
+        runInTransaction(new TransactionTemplate<Void>() {
+            @Override
+            public Void executeInTransaction(EntityManager em) {
+                em.persist(ticket);
+                return null;
+            }
+        });
     }
 
     @Override
-    public void update(Ticket ticket) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void update(final Ticket ticket) {
+        if (ticket == null) {
+            throw new IllegalArgumentException("[Ticket] should not be null.");
+        }
+        if (ticket.getId() == null) {
+            throw new IllegalArgumentException("[Ticket] should have id.");
+        }
+
+        runInTransaction(new TransactionTemplate<Void>() {
+            @Override
+            public Void executeInTransaction(EntityManager em) {
+                em.merge(ticket);
+                return null;
+            }
+        });
     }
 
     @Override

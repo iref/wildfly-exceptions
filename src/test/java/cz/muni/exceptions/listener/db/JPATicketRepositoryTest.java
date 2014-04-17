@@ -151,6 +151,53 @@ public class JPATicketRepositoryTest {
         entityManager.find(Ticket.class, mockTicket.getId());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateNullTicket() {
+        repository.update(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateTicketWithoutId() {
+        Ticket withoutId = new Ticket();
+        repository.update(withoutId);
+    }
+
+    @Test
+    public void testUpdateMockTicket() {
+        mockTicket.setDetailMessage("Hello from OctoCat!!");
+
+        repository.update(mockTicket);
+
+        Ticket actual = entityManager.find(Ticket.class, mockTicket.getId());
+        Assert.assertEquals(mockTicket, actual);
+        Assert.assertEquals(mockTicket.getDetailMessage(), actual.getDetailMessage());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddNullTicket() {
+        repository.add(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddTicketWithId() {
+        repository.add(mockTicket);
+    }
+
+    @Test
+    public void testAddNewTicket() {
+        TicketOccurence to = new TicketOccurence();
+        to.setTimestamp(new Timestamp(new Date().getTime()));
+        Ticket ticket = new Ticket("Hello From Octocat!!", "OctoCat stack", TicketClass.FILE, Arrays.asList(to));
+
+        repository.add(ticket);
+
+        Ticket actual = entityManager.find(Ticket.class, ticket.getId());
+        Assert.assertEquals(ticket.getDetailMessage(), actual.getDetailMessage());
+        Assert.assertEquals(ticket.getStackTrace(), actual.getStackTrace());
+        Assert.assertEquals(ticket.getTicketClass(), ticket.getTicketClass());
+        Assert.assertEquals(ticket.getOccurences().size(), actual.getOccurences().size());
+    }
+
     private void insertTestData() {
         TicketOccurence ticketOccurence = new TicketOccurence();
         ticketOccurence.setTimestamp(new Timestamp(new Date().getTime()));
