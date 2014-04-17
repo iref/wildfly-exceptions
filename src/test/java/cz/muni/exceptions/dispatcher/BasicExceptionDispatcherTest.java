@@ -20,7 +20,7 @@ public class BasicExceptionDispatcherTest {
     
     private BasicExceptionDispatcher dispatcher;
     
-    private ExceptionReport mockReport = new ExceptionReport(
+    private ExceptionReport mockReport = new ExceptionReport("java.lang.IllegalArgumentException",
             "Something terrible happened", Collections.<StackTraceElement>emptyList(), null);
     
     @Before

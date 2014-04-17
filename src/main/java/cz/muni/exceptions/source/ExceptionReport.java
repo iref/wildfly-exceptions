@@ -10,15 +10,22 @@ import java.util.Objects;
 public class ExceptionReport {
     
     private final String message;
+
+    private final String exceptionClass;
     
     private final List<StackTraceElement> stackTrace;
     
     private final ExceptionReport cause;
     
-    public ExceptionReport(String message, List<StackTraceElement> stackTrace, ExceptionReport cause) {
+    public ExceptionReport(String exceptionClass, String message, List<StackTraceElement> stackTrace, ExceptionReport cause) {
         this.message = message;
         this.stackTrace = stackTrace;
         this.cause = cause;
+        this.exceptionClass = exceptionClass;
+    }
+
+    public String getExceptionClass() {
+        return exceptionClass;
     }
 
     public String getMessage() {
@@ -40,7 +47,8 @@ public class ExceptionReport {
         }
         
         ExceptionReport other = (ExceptionReport) obj;
-        return Objects.equals(message, other.message) 
+        return Objects.equals(exceptionClass, other.exceptionClass)
+                && Objects.equals(message, other.message)
                 && Objects.equals(stackTrace, other.stackTrace)
                 && Objects.equals(cause, other.cause);
     }
@@ -48,6 +56,7 @@ public class ExceptionReport {
     @Override
     public int hashCode() {
         int hash = 5;
+        hash = 11 * hash + Objects.hashCode(this.exceptionClass);
         hash = 11 * hash + Objects.hashCode(this.message);
         hash = 11 * hash + Objects.hashCode(this.stackTrace);
         hash = 11 * hash + Objects.hashCode(this.cause);

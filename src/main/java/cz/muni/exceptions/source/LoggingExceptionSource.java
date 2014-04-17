@@ -61,7 +61,7 @@ public class LoggingExceptionSource extends Handler {
         
         ExceptionReport cause = createReport(throwable.getCause());
         List<StackTraceElement> stackTrace = Arrays.asList(throwable.getStackTrace());
-        ExceptionReport report = new ExceptionReport(throwable.getMessage(), stackTrace, cause);
+        ExceptionReport report = new ExceptionReport(throwable.getClass().getCanonicalName(), throwable.getMessage(), stackTrace, cause);
         
         return report;
     }
