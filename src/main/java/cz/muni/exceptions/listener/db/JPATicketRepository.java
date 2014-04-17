@@ -47,7 +47,7 @@ public class JPATicketRepository implements TicketRepository {
         List<Ticket> tickets = em.createQuery("SELECT t FROM Ticket t", Ticket.class).getResultList();
         em.close();
         
-        return new HashSet<>(tickets);
+        return ImmutableSet.copyOf(tickets);
     }
 
 }

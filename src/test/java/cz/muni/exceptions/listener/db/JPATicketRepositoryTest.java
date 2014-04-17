@@ -8,11 +8,13 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.*;
 import org.junit.runner.RunWith;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
@@ -28,7 +30,10 @@ public class JPATicketRepositoryTest {
     
     @Deployment
     public static Archive<?> getDeployment() {
+        File[] libs = Maven.resolver().loadPomFromFile("pom.xml")
+                .resolve("com.google.guava:guava:16.0.1").withTransitivity().asFile();
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "jpaTicketRepositoryTest.war")
+                .addAsLibraries(libs)
                 .addPackage(JPATicketRepository.class.getPackage())
                 .addPackage(Ticket.class.getPackage())
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
