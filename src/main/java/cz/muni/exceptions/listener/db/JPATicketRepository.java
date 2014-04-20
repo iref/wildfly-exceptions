@@ -19,10 +19,20 @@ import javax.persistence.Query;
  * @date 2014-04-16T03:56:45+0100
  */
 public class JPATicketRepository implements TicketRepository {
-    
+
+    /** PersistenceUnitCreator, that provides EntityManager for accessing database. */
     private final PersistenceUnitCreator creator;
-    
+
+    /**
+     * Constructor creates new JPATicketRepository with given PersistenceUnitCreator.
+     *
+     * @param creator creator, that provides entity manager for accessing database
+     * @throws java.lang.IllegalArgumentException if creator is {@code null}.
+     */
     public JPATicketRepository(PersistenceUnitCreator creator) {
+        if (creator == null) {
+            throw new IllegalArgumentException("[Creator] is required and must not be null.");
+        }
         this.creator = creator;
     }
 
@@ -104,13 +114,24 @@ public class JPATicketRepository implements TicketRepository {
         return ImmutableSet.copyOf(tickets);
     }
 
+    /**
+     * Method, that provides generic layout for running queries in transaction.
+     *
+     * @param transactionQuery query, that should be executed in transaction
+     * @param <T> return type of query
+     * @return result of {@code transactionQuery}
+     * @throws java.lang.RuntimeException if any error occurs while query is running
+     */
     private <T> T runInTransaction(TransactionTemplate<T> transactionQuery) {
         EntityManager em = creator.createEntityManager();
         EntityTransaction tx = null;
 
         try {
-            tx = em.getTransaction();
-            tx.begin();
+            // manage transactions only if entity manager isn't JTA managed
+            if (!creator.isJtaManaged()) {
+                tx = em.getTransaction();
+                tx.begin();
+            }
 
             return transactionQuery.executeInTransaction(em);
         } catch (Exception ex) {

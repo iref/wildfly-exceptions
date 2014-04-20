@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
+import javax.transaction.TransactionManager;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -61,7 +62,7 @@ public class JPATicketRepositoryTest {
     @Before
     public void before() {
         if (persistenceUnitCreator == null) {
-            persistenceUnitCreator = new PersistenceUnitCreator("jdbc/arquillian", false);
+            persistenceUnitCreator = new PersistenceUnitCreator("jdbc/arquillian", Optional.<TransactionManager>absent());
         }
 
         repository = new JPATicketRepository(persistenceUnitCreator);
