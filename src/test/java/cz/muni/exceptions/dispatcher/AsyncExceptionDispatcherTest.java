@@ -80,6 +80,34 @@ public class AsyncExceptionDispatcherTest {
         dispatcher.registerListener(listener);
         Assert.assertEquals(1, dispatcher.getListeners().size());
     }
+
+    @Test
+    public void testUnregisterNullListener() {
+        dispatcher.registerListener(new MockListener());
+        int size = dispatcher.getListeners().size();
+        dispatcher.unregisterListener(null);
+        Assert.assertEquals(size, dispatcher.getListeners().size());
+    }
+
+    @Test
+    public void testUnregisterListener() {
+        MockListener listener = new MockListener();
+        dispatcher.registerListener(listener);
+
+        dispatcher.unregisterListener(listener);
+        Assert.assertFalse(dispatcher.getListeners().contains(listener));
+    }
+
+    @Test
+    public void testUnregisterNonExistingListener() {
+        dispatcher.registerListener(new MockListener());
+
+        int size = dispatcher.getListeners().size();
+
+        MockListener nonRegisteredListener = new MockListener();
+        dispatcher.unregisterListener(nonRegisteredListener);
+        Assert.assertEquals(size, dispatcher.getListeners().size());
+    }
     
     @Test
     public void testWarnListenersOnNullException() throws InterruptedException {

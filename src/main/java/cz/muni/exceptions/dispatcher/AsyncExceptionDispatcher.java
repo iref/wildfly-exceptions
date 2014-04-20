@@ -105,6 +105,16 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
     }
 
     @Override
+    public void unregisterListener(ExceptionListener listener) {
+        if (listener == null) {
+            return;
+        }
+        synchronized (listeners) {
+            listeners.remove(listener);
+        }
+    }
+
+    @Override
     public Set<ExceptionListener> getListeners() {
         synchronized (listeners) {
             return new HashSet(listeners);
