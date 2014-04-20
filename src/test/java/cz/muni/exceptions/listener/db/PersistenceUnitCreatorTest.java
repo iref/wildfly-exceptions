@@ -1,22 +1,29 @@
 package cz.muni.exceptions.listener.db;
 
+import com.google.common.base.Optional;
 import cz.muni.exceptions.listener.db.model.Ticket;
 import cz.muni.exceptions.listener.db.model.TicketClass;
 import cz.muni.exceptions.listener.db.model.TicketOccurence;
+
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.swing.text.html.parser.Entity;
+import javax.transaction.TransactionManager;
 
+import org.hibernate.engine.transaction.jta.platform.internal.JBossAppServerJtaPlatform;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
 /**
  *
@@ -28,9 +35,14 @@ public class PersistenceUnitCreatorTest {
     
     @Deployment
     public static WebArchive createDeployment() {
+        File[] libs = Maven.resolver().loadPomFromFile("pom.xml")
+                .resolve("com.google.guava:guava:16.0.1", "org.mockito:mockito-core:1.9.5")
+                .withTransitivity().asFile();
+
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "persistenceTest.war")
                 .addClass(PersistenceUnitCreator.class)
-                .addPackage(Ticket.class.getPackage())                
+                .addPackage(Ticket.class.getPackage())
+                .addAsLibraries(libs)
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource("jbossas-ds.xml");
                 
@@ -39,17 +51,32 @@ public class PersistenceUnitCreatorTest {
     
     @Test(expected = IllegalArgumentException.class)
     public void testConstructForNullDataSource() {
-        new PersistenceUnitCreator(null, false);
+        new PersistenceUnitCreator(null, Optional.<TransactionManager>absent());
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testConstructForEmptyDataSource() {
-        new PersistenceUnitCreator("", false);
+        new PersistenceUnitCreator("", Optional.<TransactionManager>absent());
+    }
+
+    @Test
+    public void isJtaManaged() {
+        TransactionManager mockTransactionManager = Mockito.mock(TransactionManager.class);
+        PersistenceUnitCreator managedCreator = new PersistenceUnitCreator("java:jboss/datasources/ExampleDS",
+                Optional.of(mockTransactionManager));
+        Assert.assertTrue(managedCreator.isJtaManaged());
+    }
+
+    @Test
+    public void isNotJtaManaged() {
+        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jdbc/arquillian", Optional.<TransactionManager>absent());
+        Assert.assertFalse(creator.isJtaManaged());
     }
     
     @Test
     public void testCreateEntityManagerWithoutJTA() {
-        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jdbc/arquillian", false);
+        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jdbc/arquillian",
+                Optional.<TransactionManager>absent());
         EntityManager em = creator.createEntityManager();
         Assert.assertNotNull(em);
 
