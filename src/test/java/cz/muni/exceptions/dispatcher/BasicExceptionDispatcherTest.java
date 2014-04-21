@@ -27,7 +27,7 @@ public class BasicExceptionDispatcherTest {
     
     @Before
     public void setUp() {
-        this.dispatcher = new BasicExceptionDispatcher();
+        this.dispatcher = new BasicExceptionDispatcher(null);
     }
     
     @Test
@@ -36,7 +36,7 @@ public class BasicExceptionDispatcherTest {
         assertTrue(nullListeners.getListeners().isEmpty());
         
         final List<ExceptionListener> emptyListenersList = Collections.<ExceptionListener>emptyList();        
-        BasicExceptionDispatcher emptyListeners = new BasicExceptionDispatcher(emptyListenersList);
+        BasicExceptionDispatcher emptyListeners = new BasicExceptionDispatcher(null, emptyListenersList);
         assertTrue(emptyListeners.getListeners().isEmpty());
     }
     
@@ -89,7 +89,7 @@ public class BasicExceptionDispatcherTest {
     public void testWarnEveryListeners() {
         List<ExceptionListener> listeners = createMockListeners();
         
-        ExceptionDispatcher newSource = new BasicExceptionDispatcher(listeners);
+        ExceptionDispatcher newSource = new BasicExceptionDispatcher(null, listeners);
         
         newSource.warnListeners(mockReport);
         
@@ -103,9 +103,28 @@ public class BasicExceptionDispatcherTest {
     public void testWarnIgnoresNullThrowables() {
         List<ExceptionListener> listeners = createMockListeners();
         
-        ExceptionDispatcher newSource = new BasicExceptionDispatcher(listeners);
+        ExceptionDispatcher newSource = new BasicExceptionDispatcher(null, listeners);
         newSource.warnListeners(null);
         
+        for (ExceptionListener listener : dispatcher.getListeners()) {
+            MockListener mockListener = (MockListener) listener;
+            assertFalse(mockListener.isNotified());
+        }
+    }
+
+    @Test
+    public void testWarnIgnoresFilteredExceptions() {
+        List<ExceptionListener> listeners = createMockListeners();
+
+        ExceptionFilter exceptionFilter = new ExceptionFilter() {
+            @Override
+            public boolean apply(ExceptionReport exceptionReport) {
+                return false;
+            }
+        };
+
+        ExceptionDispatcher newDispatcher = new BasicExceptionDispatcher(exceptionFilter, listeners);
+        newDispatcher.warnListeners(mockReport);
         for (ExceptionListener listener : dispatcher.getListeners()) {
             MockListener mockListener = (MockListener) listener;
             assertFalse(mockListener.isNotified());

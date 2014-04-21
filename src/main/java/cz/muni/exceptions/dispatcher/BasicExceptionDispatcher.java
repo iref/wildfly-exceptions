@@ -3,6 +3,8 @@ package cz.muni.exceptions.dispatcher;
 
 import cz.muni.exceptions.listener.ExceptionListener;
 import cz.muni.exceptions.source.ExceptionReport;
+
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,12 +22,17 @@ public class BasicExceptionDispatcher implements ExceptionDispatcher {
     
     /** Set of registered listeners. */
     private final Set<ExceptionListener> listeners;
+
+    /** Filter, for filtering exception, that should not be reported. */
+    private final ExceptionFilter filter;
     
     /**
      * Constructor constructs new instance without any registered listeners.
+     *
+     * @param filter filter for exception filtering.
      */
-    public BasicExceptionDispatcher() {
-        this(null);
+    public BasicExceptionDispatcher(ExceptionFilter filter) {
+        this(filter, null);
     }
     
     /**
@@ -34,8 +41,10 @@ public class BasicExceptionDispatcher implements ExceptionDispatcher {
      * 
      * @param listeners collection of listeners, that should be registered to source
      */
-    public BasicExceptionDispatcher(Collection<ExceptionListener> listeners) {
-        this.listeners = new HashSet<ExceptionListener>();        
+    public BasicExceptionDispatcher(ExceptionFilter filter, Collection<ExceptionListener> listeners) {
+        this.filter = filter == null ? new BlacklistFilter(Arrays.<String>asList()) : filter;
+
+        this.listeners = new HashSet<ExceptionListener>();
         
         if (listeners != null && !listeners.isEmpty()) {
             this.listeners.addAll(listeners);
@@ -44,7 +53,7 @@ public class BasicExceptionDispatcher implements ExceptionDispatcher {
 
     @Override
     public void warnListeners(ExceptionReport report) {
-        if (report == null) {
+        if (report == null || filter.apply(report)) {
             return;
         }
         

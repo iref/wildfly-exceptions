@@ -23,7 +23,7 @@ public class LoggingExceptionSourceTest {
     @Before
     public void setUp() {
         MockListener listener = new MockListener();
-        this.mockDispatcher = new BasicExceptionDispatcher(
+        this.mockDispatcher = new BasicExceptionDispatcher(null,
                 Arrays.<ExceptionListener>asList(listener));
         this.loggingSource = new LoggingExceptionSource(mockDispatcher);
     }
