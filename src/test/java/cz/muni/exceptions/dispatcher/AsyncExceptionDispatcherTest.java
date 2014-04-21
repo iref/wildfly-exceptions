@@ -14,6 +14,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
+
 /**
  *
  * @author Jan Ferko
@@ -30,29 +32,29 @@ public class AsyncExceptionDispatcherTest {
     @Before
     public void setUp() {
         threadFactory = Executors.defaultThreadFactory();
-        dispatcher = new AsyncExceptionDispatcher(threadFactory);
+        dispatcher = new AsyncExceptionDispatcher(threadFactory, ExceptionFilters.ALWAYS_PASSES);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorWithNullThreadFactory() {
-        new AsyncExceptionDispatcher(null);
+        new AsyncExceptionDispatcher(null, ExceptionFilters.ALWAYS_PASSES);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorWithListenersAndNullFactory() {
-        new AsyncExceptionDispatcher(Collections.<ExceptionListener>emptyList(), null);
+        new AsyncExceptionDispatcher(null, ExceptionFilters.ALWAYS_PASSES, Collections.<ExceptionListener>emptyList());
     }
     
     @Test
     public void testConstructorIgnoreNullListeners() {
-        AsyncExceptionDispatcher dispatcher = new AsyncExceptionDispatcher(null, threadFactory);
+        AsyncExceptionDispatcher dispatcher = new AsyncExceptionDispatcher(threadFactory, null);
         Assert.assertTrue(dispatcher.getListeners().isEmpty());
     }
     
     @Test
     public void testConstructorIgnoreEmptyListeners() {
         final List<ExceptionListener> noListeners = Collections.<ExceptionListener>emptyList();
-        AsyncExceptionDispatcher dispatcher = new AsyncExceptionDispatcher(noListeners, threadFactory);
+        AsyncExceptionDispatcher dispatcher = new AsyncExceptionDispatcher(threadFactory, ExceptionFilters.ALWAYS_PASSES, noListeners);
         Assert.assertTrue(dispatcher.getListeners().isEmpty());
     }
     
@@ -60,8 +62,8 @@ public class AsyncExceptionDispatcherTest {
     public void testConstructorIgnoreNullListener() {
         final List<ExceptionListener> listenersWithNullElement = 
                 Arrays.<ExceptionListener>asList(new MockListener(), null);
-        AsyncExceptionDispatcher dispatcher = new AsyncExceptionDispatcher(
-                listenersWithNullElement, threadFactory);
+        AsyncExceptionDispatcher dispatcher = new AsyncExceptionDispatcher(threadFactory, ExceptionFilters.ALWAYS_PASSES,
+                listenersWithNullElement);
         
         Assert.assertEquals(1, dispatcher.getListeners().size());
         ExceptionListener listener = dispatcher.getListeners().iterator().next();
@@ -118,6 +120,24 @@ public class AsyncExceptionDispatcherTest {
         Thread.sleep(TimeUnit.SECONDS.toSeconds(1));
         
         Assert.assertFalse(listener.isNotified());
+    }
+
+    @Test
+    public void testWarnIgnoresFilteredExceptions() {
+        List<ExceptionListener> listeners = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            final MockListener mockListener = new MockListener();
+            listeners.add(mockListener);
+        }
+
+        ExceptionFilter exceptionFilter = ExceptionFilters.ALWAYS_FILTERED;
+        AsyncExceptionDispatcher newDispatcher = new AsyncExceptionDispatcher(threadFactory, exceptionFilter, listeners);
+
+        newDispatcher.warnListeners(mockReport);
+        for (ExceptionListener listener : listeners) {
+            MockListener mockListener = (MockListener) listener;
+            assertFalse(mockListener.isNotified());
+        }
     }
     
     @Test

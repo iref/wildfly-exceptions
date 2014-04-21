@@ -7,8 +7,9 @@ import cz.muni.exceptions.source.ExceptionReport;
  *
  * @author Jan Ferko
  */
-public enum ExceptionFilters implements ExceptionFilter{
+public enum ExceptionFilters implements ExceptionFilter {
 
+    /** Filter, that filters every report. */
     ALWAYS_FILTERED("alwaysFiltered") {
         @Override
         public boolean apply(ExceptionReport exceptionReport) {
@@ -16,6 +17,7 @@ public enum ExceptionFilters implements ExceptionFilter{
         }
     },
 
+    /** Dummy filter, that does not filter any report */
     ALWAYS_PASSES("alwaysPasses") {
         @Override
         public boolean apply(ExceptionReport exceptionReport) {
@@ -23,12 +25,18 @@ public enum ExceptionFilters implements ExceptionFilter{
         }
     };
 
+    /** Key of enum element */
     private String key;
 
     private ExceptionFilters(String key) {
         this.key = key;
     }
 
+    /**
+     * Returns key of enum element.
+     *
+     * @return key of enum element
+     */
     public String getKey() {
         return this.key;
     }

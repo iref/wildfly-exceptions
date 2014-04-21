@@ -27,12 +27,12 @@ public class BasicExceptionDispatcherTest {
     
     @Before
     public void setUp() {
-        this.dispatcher = new BasicExceptionDispatcher(null);
+        this.dispatcher = new BasicExceptionDispatcher(ExceptionFilters.ALWAYS_PASSES);
     }
     
     @Test
     public void testConstructorIgnoresNullAndEmptyListeners() {
-        BasicExceptionDispatcher nullListeners = new BasicExceptionDispatcher(null);
+        BasicExceptionDispatcher nullListeners = new BasicExceptionDispatcher(ExceptionFilters.ALWAYS_PASSES);
         assertTrue(nullListeners.getListeners().isEmpty());
         
         final List<ExceptionListener> emptyListenersList = Collections.<ExceptionListener>emptyList();        
@@ -89,7 +89,7 @@ public class BasicExceptionDispatcherTest {
     public void testWarnEveryListeners() {
         List<ExceptionListener> listeners = createMockListeners();
         
-        ExceptionDispatcher newSource = new BasicExceptionDispatcher(null, listeners);
+        ExceptionDispatcher newSource = new BasicExceptionDispatcher(ExceptionFilters.ALWAYS_PASSES, listeners);
         
         newSource.warnListeners(mockReport);
         
@@ -103,7 +103,7 @@ public class BasicExceptionDispatcherTest {
     public void testWarnIgnoresNullThrowables() {
         List<ExceptionListener> listeners = createMockListeners();
         
-        ExceptionDispatcher newSource = new BasicExceptionDispatcher(null, listeners);
+        ExceptionDispatcher newSource = new BasicExceptionDispatcher(ExceptionFilters.ALWAYS_PASSES, listeners);
         newSource.warnListeners(null);
         
         for (ExceptionListener listener : dispatcher.getListeners()) {

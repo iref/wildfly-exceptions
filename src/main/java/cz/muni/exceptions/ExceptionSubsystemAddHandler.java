@@ -2,6 +2,8 @@ package cz.muni.exceptions;
 
 import java.util.List;
 
+import cz.muni.exceptions.dispatcher.ExceptionFilter;
+import cz.muni.exceptions.dispatcher.ExceptionFilters;
 import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
@@ -67,8 +69,10 @@ class ExceptionSubsystemAddHandler extends AbstractBoottimeAddStepHandler {
         String alias = pathAddress.getLastElement().getValue();
         ServiceName serviceName = ExceptionDispatcherService.createServiceName(alias);
 
+        //TODO create blacklist filter instead
+        ExceptionFilter exceptionFilter = ExceptionFilters.ALWAYS_PASSES;
         Service<ExceptionDispatcher> dispatcherService = new ExceptionDispatcherService(
-                new AsyncExceptionDispatcher(Executors.defaultThreadFactory()));
+                new AsyncExceptionDispatcher(Executors.defaultThreadFactory(), exceptionFilter));
         ServiceController<ExceptionDispatcher> serviceController = context.getServiceTarget()
                 .addService(serviceName, dispatcherService)
                 .addListener(verificationHandler)

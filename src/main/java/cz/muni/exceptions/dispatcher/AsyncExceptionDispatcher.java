@@ -3,6 +3,7 @@ package cz.muni.exceptions.dispatcher;
 import cz.muni.exceptions.listener.ExceptionListener;
 import cz.muni.exceptions.source.ExceptionReport;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -24,6 +25,9 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
     
     /** Queue, where throwable are stored to be processed in future. */
     private final BlockingQueue<ExceptionReport> exceptionQueue;
+
+    /** Filter for skipping exception reports.  */
+    private final ExceptionFilter filter;
     
     /** Set of listeners, that are notified where throwable is processed. */
     private final Set<ExceptionListener> listeners;
@@ -41,8 +45,8 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
      * @throws IllegalArgumentException if thread factory is {@code null} or cannot
      *  create new thread
      */
-    public AsyncExceptionDispatcher(ThreadFactory threadFactory) {
-        this(null, threadFactory);
+    public AsyncExceptionDispatcher(ThreadFactory threadFactory, ExceptionFilter filter) {
+        this(threadFactory, filter, Collections.EMPTY_LIST);
     }
     
     /**
@@ -54,11 +58,12 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
      * @throws IllegalArgumentException if threadFactory is {@code null} or 
      *  cannot create new threads.
      */
-    public AsyncExceptionDispatcher(Collection<ExceptionListener> listeners, ThreadFactory threadFactory) {
+    public AsyncExceptionDispatcher(ThreadFactory threadFactory, ExceptionFilter filter,
+                                    Collection<ExceptionListener> listeners) {
         if (threadFactory == null) {
             throw new IllegalArgumentException("[ThreadFactory] is required and must not be null.");
         }
-        
+        this.filter = filter == null ? ExceptionFilters.ALWAYS_PASSES : filter;
         this.listeners = new HashSet<>();
         if (listeners != null && !listeners.isEmpty()) {
             for (ExceptionListener listener : listeners) {
@@ -79,7 +84,7 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
 
     @Override
     public void warnListeners(ExceptionReport exceptionReport) {
-        if (exceptionReport == null) {
+        if (exceptionReport == null || filter.apply(exceptionReport)) {
             return;
         }
         if (!isRunning.get()) {
