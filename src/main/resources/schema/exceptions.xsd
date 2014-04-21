@@ -10,7 +10,8 @@
 
     <xs:complexType name="subsystemType">
         <xs:all>
-            <xs:element name="sources" type="sourcesType">
+            <xs:element name="dispatcher" type="dispatcherType" />
+            <xs:element name="sources" type="sourcesType" />
             <xs:element name="listeners" type="listenersType" />
         </xs:all>
     </xs:complexType>
@@ -40,5 +41,18 @@
     <xs:complexType name="databaseListenerType">
         <xs:attribute name="dataSource" use="required" type="xs:string"/>
         <xs:attribute name="isJta" type="xs:boolean" use="required" default="true" />
+    </xs:complexType>
+
+    <xs:complexType name="dispatcherType">
+        <xs:attribute name="async" type="xs:boolean" use="required" default="true" />
+        <xs:all>
+            <xs:element name="blacklist" type="blacklistType" minOccurs="0" />
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="blacklistType">
+        <xs:sequence>
+            <xs:element name="class" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
     </xs:complexType>
 </xs:schema>

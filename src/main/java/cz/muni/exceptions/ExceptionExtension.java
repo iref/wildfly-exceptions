@@ -67,6 +67,7 @@ public class ExceptionExtension implements Extension {
         registration.registerSubModel(LoggingResourceDefinition.INSTANCE);
         registration.registerSubModel(DebuggerResourceDefinition.INSTANCE);
         registration.registerSubModel(DatabaseListenerResourceDefinition.INSTANCE);
+        registration.registerSubModel(ExceptionDispatcherResourceDefinition.INSTANCE);
         subsystem.registerXMLElementWriter(parser);
     }
 
@@ -89,10 +90,23 @@ public class ExceptionExtension implements Extension {
         @Override
         public void writeContent(XMLExtendedStreamWriter writer, SubsystemMarshallingContext context) throws XMLStreamException {
             context.startSubsystemElement(ExceptionExtension.NAMESPACE, false);
+
+            ModelNode node = context.getModelNode();
+
+            // marshall dispatcher model
+            if (node.hasDefined(ModelElement.DISPATCHER.getName())) {
+                ModelNode dispatchers = node.get(ModelElement.DISPATCHER.getName());
+
+                for (Property property : dispatchers.asPropertyList()) {
+                    final String name = property.getName();
+                    final ModelNode dispatcher = property.getValue();
+                    if (dispatcher.isDefined()) {
+                        writeDispatcher(writer, name, dispatcher);
+                    }
+                }
+            }
             
             writer.writeStartElement("sources");
-            
-            ModelNode node = context.getModelNode();
             
             // marshall logging source model
             if (node.hasDefined(ModelElement.LOGGING_SOURCE.getName())) {
@@ -141,7 +155,15 @@ public class ExceptionExtension implements Extension {
             // end of subsystem
             writer.writeEndElement();
         }
-        
+
+        private void writeDispatcher(XMLExtendedStreamWriter writer, String name, ModelNode dispatcher) throws XMLStreamException {
+            writer.writeStartElement(ModelElement.DISPATCHER.getName());
+
+            ExceptionDispatcherResourceDefinition.ASYNC.marshallAsAttribute(dispatcher, true, writer);
+            ExceptionDispatcherResourceDefinition.BLACKLIST.marshallAsElement(dispatcher, false, writer);
+            writer.writeEndElement();
+        }
+
         private void writeLoggingSource(XMLExtendedStreamWriter writer, String name, ModelNode source) throws XMLStreamException {
             writer.writeStartElement(name);            
             LoggingResourceDefinition.ENABLED.marshallAsAttribute(source, true, writer);            
@@ -173,11 +195,60 @@ public class ExceptionExtension implements Extension {
             list.add(root);
             
             while(reader.hasNext() && reader.nextTag() != END_DOCUMENT) {
+                String localName = reader.getLocalName();
+                if (reader.getLocalName().equals(ModelElement.DISPATCHER)) {
+                    readDispatcher(reader, list, root);
+                }
                 if (reader.getLocalName().equals("sources")) {
                     readSources(reader, list, root);
                 }
                 if (reader.getLocalName().equals("listeners")) {
                     readListeners(reader, list, root);
+                }
+            }
+        }
+
+        private void readDispatcher(XMLExtendedStreamReader reader, List<ModelNode> list, ModelNode root) throws XMLStreamException {
+            while(reader.hasNext() && reader.nextTag() != END_ELEMENT) {
+                ModelNode addDispatcherOperation = new ModelNode();
+                addDispatcherOperation.get(OP_ADDR).set(ModelDescriptionConstants.ADD);
+
+                String elementName = reader.getLocalName();
+                for (int i = 0; i < reader.getAttributeCount(); i++) {
+                    String attributeName = reader.getAttributeLocalName(i);
+                    String attributeValue = reader.getAttributeValue(i);
+
+                    if (ModelElement.DISPATCHER_ASYNC.getName().equals(attributeName)) {
+                        ExceptionDispatcherResourceDefinition.ASYNC
+                                .parseAndSetParameter(attributeValue, addDispatcherOperation, reader);
+                    } else if (ModelElement.DISPATCHER_BLACKLIST.getName().equals(attributeName)) {
+
+                    }
+                }
+
+                parseBlacklist(reader, addDispatcherOperation);
+
+                PathAddress address = PathAddress.pathAddress(SUBSYSTEM_PATH,
+                        PathElement.pathElement(elementName, elementName));
+                addDispatcherOperation.get(OP_ADDR).set(address.toModelNode());
+                list.add(addDispatcherOperation);
+
+            }
+
+        }
+
+        private void parseBlacklist(XMLExtendedStreamReader reader, ModelNode addDispatcherOperation) throws XMLStreamException {
+            while (reader.hasNext() && reader.next() != END_ELEMENT) {
+                String elementName = reader.getLocalName();
+                if (ModelElement.DISPATCHER_BLACKLIST_CLASS.equals(elementName)) {
+                    String content = reader.getElementText();
+                    addDispatcherOperation.get(ExceptionDispatcherResourceDefinition.BLACKLIST.getName()).add(new ModelNode(content));
+
+                    if (reader.next() != END_ELEMENT) {
+                        throw ParseUtils.unexpectedElement(reader);
+                    }
+                } else {
+                    throw ParseUtils.unexpectedElement(reader);
                 }
             }
         }
