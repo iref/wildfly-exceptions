@@ -1,6 +1,7 @@
 
 package cz.muni.exceptions.dispatcher;
 
+import cz.muni.exceptions.listener.DatabaseExceptionListener;
 import cz.muni.exceptions.listener.ExceptionListener;
 import cz.muni.exceptions.source.ExceptionReport;
 import java.util.Set;
@@ -31,6 +32,13 @@ public interface ExceptionDispatcher {
      * @param listener listener, that is registered to source     
      */
     void registerListener(ExceptionListener listener);
+
+    /**
+     * Removes listener from dispatcher.
+     *
+     * @param listener listener, that should be removed
+     */
+    void unregisterListener(ExceptionListener listener);
     
     /**
      * Returns set of listeners, that are registered to source.     
@@ -38,4 +46,6 @@ public interface ExceptionDispatcher {
      * @return set of registered listeners
      */
     Set<ExceptionListener> getListeners();
+
+
 }

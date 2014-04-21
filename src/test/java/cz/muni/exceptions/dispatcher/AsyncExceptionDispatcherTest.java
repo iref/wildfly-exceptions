@@ -24,7 +24,7 @@ public class AsyncExceptionDispatcherTest {
     
     private AsyncExceptionDispatcher dispatcher;
     
-    private ExceptionReport mockReport = new ExceptionReport(
+    private ExceptionReport mockReport = new ExceptionReport("java.lang.IllegalArgumentException",
             "Something terrible happened", Collections.<StackTraceElement>emptyList(), null);
     
     @Before
@@ -79,6 +79,34 @@ public class AsyncExceptionDispatcherTest {
         MockListener listener = new MockListener();
         dispatcher.registerListener(listener);
         Assert.assertEquals(1, dispatcher.getListeners().size());
+    }
+
+    @Test
+    public void testUnregisterNullListener() {
+        dispatcher.registerListener(new MockListener());
+        int size = dispatcher.getListeners().size();
+        dispatcher.unregisterListener(null);
+        Assert.assertEquals(size, dispatcher.getListeners().size());
+    }
+
+    @Test
+    public void testUnregisterListener() {
+        MockListener listener = new MockListener();
+        dispatcher.registerListener(listener);
+
+        dispatcher.unregisterListener(listener);
+        Assert.assertFalse(dispatcher.getListeners().contains(listener));
+    }
+
+    @Test
+    public void testUnregisterNonExistingListener() {
+        dispatcher.registerListener(new MockListener());
+
+        int size = dispatcher.getListeners().size();
+
+        MockListener nonRegisteredListener = new MockListener();
+        dispatcher.unregisterListener(nonRegisteredListener);
+        Assert.assertEquals(size, dispatcher.getListeners().size());
     }
     
     @Test

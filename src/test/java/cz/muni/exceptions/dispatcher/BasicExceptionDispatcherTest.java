@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import static org.junit.Assert.*;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +22,7 @@ public class BasicExceptionDispatcherTest {
     
     private BasicExceptionDispatcher dispatcher;
     
-    private ExceptionReport mockReport = new ExceptionReport(
+    private ExceptionReport mockReport = new ExceptionReport("java.lang.IllegalArgumentException",
             "Something terrible happened", Collections.<StackTraceElement>emptyList(), null);
     
     @Before
@@ -53,6 +55,34 @@ public class BasicExceptionDispatcherTest {
     public void testRegisterNullListener() {
         dispatcher.registerListener(null);        
         assertTrue(dispatcher.getListeners().isEmpty());
+    }
+
+    @Test
+    public void testUnregisterNullListener() {
+        dispatcher.registerListener(new MockListener());
+        int size = dispatcher.getListeners().size();
+        dispatcher.unregisterListener(null);
+        Assert.assertEquals(size, dispatcher.getListeners().size());
+    }
+
+    @Test
+    public void testUnregisterListener() {
+        MockListener listener = new MockListener();
+        dispatcher.registerListener(listener);
+
+        dispatcher.unregisterListener(listener);
+        Assert.assertFalse(dispatcher.getListeners().contains(listener));
+    }
+
+    @Test
+    public void testUnregisterNonExistingListener() {
+        dispatcher.registerListener(new MockListener());
+
+        int size = dispatcher.getListeners().size();
+
+        MockListener nonRegisteredListener = new MockListener();
+        dispatcher.unregisterListener(nonRegisteredListener);
+        Assert.assertEquals(size, dispatcher.getListeners().size());
     }
     
     @Test

@@ -11,7 +11,7 @@
     <xs:complexType name="subsystemType">
         <xs:all>
             <xs:element name="sources" type="sourcesType">
-            <!--<xs:element name="listeners" type="listenersType" />-->
+            <xs:element name="listeners" type="listenersType" />
         </xs:all>
     </xs:complexType>
     
@@ -33,16 +33,12 @@
     
     <xs:complexType name="listenersType">
         <xs:sequence>
-            <xs:element name="mail-listener" type="mailListenerType" minOccurs="0" maxOccurs="1" />
-            <xs:element name="abrt-listener" type="abrtListenerType" minOccurs="0" maxOccurs="1" />
+            <xs:element name="database-listener" type="databaseListenerType" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
     </xs:complexType>
     
-    <xs:complexType name="mailListenerType">        
-        <xs:attribute name="mail-provider" use="required" />
-    </xs:complexType>
-    
-    <xs:complexType name="abrtListenerType">
-        <xs:attribute name="data-source" use="required" />
+    <xs:complexType name="databaseListenerType">
+        <xs:attribute name="dataSource" use="required" type="xs:string"/>
+        <xs:attribute name="isJta" type="xs:boolean" use="required" default="true" />
     </xs:complexType>
 </xs:schema>

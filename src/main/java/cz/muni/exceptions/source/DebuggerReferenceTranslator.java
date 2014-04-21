@@ -37,9 +37,10 @@ public class DebuggerReferenceTranslator {
     private ExceptionReport processObjectReference(ObjectReference exception) {
         String detailMessage = getDetailMessage(exception);
         List<StackTraceElement> stackTrace = getStackTrace(exception);
+        String exceptionClass = exception.referenceType().name();
         ExceptionReport cause = getCause(exception);
         
-        return new ExceptionReport(detailMessage, stackTrace, cause);
+        return new ExceptionReport(exceptionClass, detailMessage, stackTrace, cause);
     }
 
     private ExceptionReport getCause(ObjectReference exception) {

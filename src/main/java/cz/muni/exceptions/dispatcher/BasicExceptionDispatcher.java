@@ -61,6 +61,13 @@ public class BasicExceptionDispatcher implements ExceptionDispatcher {
     }
 
     @Override
+    public void unregisterListener(ExceptionListener listener) {
+        if (listener != null) {
+            this.listeners.remove(listener);
+        }
+    }
+
+    @Override
     public Set<ExceptionListener> getListeners() {
         return new HashSet<ExceptionListener>(this.listeners);
     }
