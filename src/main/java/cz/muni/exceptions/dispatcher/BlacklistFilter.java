@@ -1,6 +1,7 @@
 package cz.muni.exceptions.dispatcher;
 
 import com.google.common.collect.ImmutableSet;
+import cz.muni.exceptions.source.ExceptionReport;
 
 import java.util.Collection;
 import java.util.Set;
@@ -12,7 +13,7 @@ import java.util.regex.Pattern;
  *
  * @author Jan Ferko
  */
-public class BlacklistFilter {
+public class BlacklistFilter implements ExceptionFilter {
 
     /** Set of compiled blacklist, representing blacklist. */
     private final Set<Pattern> blacklist;
@@ -99,5 +100,10 @@ public class BlacklistFilter {
         }
 
         return onBlacklist;
+    }
+
+    @Override
+    public boolean apply(ExceptionReport exceptionReport) {
+        return isOnBlacklist(exceptionReport.getExceptionClass());
     }
 }
