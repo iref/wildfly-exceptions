@@ -110,6 +110,11 @@
               <artifactId>wildfly-server</artifactId>
               <version>${version.wildfly}</version>
           </dependency>
+          <dependency>
+              <groupId>org.wildfly</groupId>
+              <artifactId>wildfly-jpa</artifactId>
+              <version>${version.wildfly}</version>
+          </dependency>
           <!-- Explicit JBoss Logging dependencies -->
           <dependency>
               <groupId>org.jboss.logging</groupId>
@@ -208,6 +213,10 @@
         <dependency>
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>

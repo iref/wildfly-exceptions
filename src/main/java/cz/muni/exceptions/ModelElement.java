@@ -14,7 +14,12 @@ public enum ModelElement {
     /** Debugger source model elements */
     DEBUGGER_SOURCE("debugger-source"),
     DEBUGGER_SOURCE_ENABLED("enabled"),
-    DEBUGGER_SOURCE_PORT("port");
+    DEBUGGER_SOURCE_PORT("port"),
+
+    /** Database listener model elements */
+    DATABASE_LISTENER("database-listener"),
+    DATABASE_LISTENER_DATA_SOURCE("dataSource"),
+    DATABASE_LISTENER_JTA("isJta");
     
     /** Name of element */
     private final String name;

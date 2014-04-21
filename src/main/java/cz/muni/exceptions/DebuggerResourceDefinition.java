@@ -16,14 +16,14 @@ import org.jboss.dmr.ModelType;
 
 /**
  *
- * @author johnny
+ * @author Jan Ferko
  */
 public class DebuggerResourceDefinition extends SimpleResourceDefinition {
     
     public static final DebuggerResourceDefinition INSTANCE = new DebuggerResourceDefinition();
     
     public static final SimpleAttributeDefinition ENABLED = 
-            new SimpleAttributeDefinitionBuilder("enabled", ModelType.BOOLEAN)
+            new SimpleAttributeDefinitionBuilder(ModelElement.DEBUGGER_SOURCE_ENABLED.getName(), ModelType.BOOLEAN)
             .setAllowExpression(true)
             .setAllowNull(false)
             .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
@@ -32,7 +32,7 @@ public class DebuggerResourceDefinition extends SimpleResourceDefinition {
             .build();
 
     public static final SimpleAttributeDefinition PORT =
-            new SimpleAttributeDefinitionBuilder("port", ModelType.INT)
+            new SimpleAttributeDefinitionBuilder(ModelElement.DEBUGGER_SOURCE_PORT.getName(), ModelType.INT)
             .setAllowExpression(true)
             .setAllowNull(false)
             .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
@@ -41,8 +41,8 @@ public class DebuggerResourceDefinition extends SimpleResourceDefinition {
             .build();
 
     private DebuggerResourceDefinition() {
-        super(PathElement.pathElement("debugger-source"), 
-                ExceptionExtension.getResourceDescriptionResolver("debugger-source"), 
+        super(PathElement.pathElement(ModelElement.DEBUGGER_SOURCE.getName()),
+                ExceptionExtension.getResourceDescriptionResolver(ModelElement.DEBUGGER_SOURCE.getName()),
                 DebuggerAddHandler.INSTANCE, DebuggerRemoveHandler.INSTANCE);
     }
 

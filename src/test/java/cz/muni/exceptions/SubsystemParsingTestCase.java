@@ -2,6 +2,7 @@ package cz.muni.exceptions;
 
 
 import cz.muni.exceptions.ExceptionExtension;
+import cz.muni.exceptions.service.DatabaseListenerService;
 import cz.muni.exceptions.service.DebuggerService;
 import cz.muni.exceptions.service.ExceptionDispatcherService;
 import junit.framework.Assert;
@@ -60,22 +61,23 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         Assert.assertEquals(SUBSYSTEM, element.getKey());
         Assert.assertEquals(ExceptionExtension.SUBSYSTEM_NAME, element.getValue());
         
-        // Check that logging-source was set
-        ModelNode addLoggingSource = operations.get(1);
-        Assert.assertEquals(ADD, addLoggingSource.get(OP).asString());
-        PathAddress loggingSourceAddress = PathAddress.pathAddress(addLoggingSource.get(OP_ADDR));
-        Assert.assertEquals(2, loggingSourceAddress.size());
-        element = loggingSourceAddress.getElement(0);
+        // Check that database-listener was set
+        ModelNode addDatabaseListener = operations.get(2);
+        Assert.assertEquals(ADD, addDatabaseListener.get(OP).asString());
+        PathAddress databaseListenerAddress = PathAddress.pathAddress(addDatabaseListener.get(OP_ADDR));
+        Assert.assertEquals(2, databaseListenerAddress.size());
+        element = databaseListenerAddress.getElement(0);
         Assert.assertEquals(SUBSYSTEM, element.getKey());
         Assert.assertEquals(ExceptionExtension.SUBSYSTEM_NAME, element.getValue());
         
-        PathElement loggingSourceElement = loggingSourceAddress.getElement(1);
-        Assert.assertEquals("logging-source", loggingSourceElement.getKey());
-        Assert.assertEquals("logging-source", loggingSourceElement.getValue());
-        Assert.assertTrue(addLoggingSource.get("enabled").asBoolean());
+        PathElement databaseListener = databaseListenerAddress.getElement(1);
+        Assert.assertEquals("database-listener", databaseListener.getKey());
+        Assert.assertEquals("database-listener", databaseListener.getValue());
+        Assert.assertTrue(addDatabaseListener.get("isJta").asBoolean());
+        Assert.assertEquals("java:jboss/datasources/ExampleDS", addDatabaseListener.get("dataSource").asString());
         
         // check that debugger-source was set
-        ModelNode addDebuggerSource = operations.get(2);
+        ModelNode addDebuggerSource = operations.get(1);
         Assert.assertEquals(ADD, addDebuggerSource.get(OP).asString());
         PathAddress debuggerSourceAddress = PathAddress.pathAddress(addDebuggerSource.get(OP_ADDR));
         Assert.assertEquals(2, debuggerSourceAddress.size());
@@ -104,10 +106,15 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         ModelNode model = services.readWholeModel();
         Assert.assertTrue(model.get(SUBSYSTEM).hasDefined(ExceptionExtension.SUBSYSTEM_NAME));
         
-        Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME).hasDefined("logging-source"));                
-        final ModelNode loggingSource = model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "logging-source", "logging-source");
-        Assert.assertTrue(loggingSource.hasDefined("enabled"));
-        Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "logging-source", "logging-source", "enabled").asBoolean());
+        Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME).hasDefined("database-listener"));
+        final ModelNode databaseListener = model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "database-listener", "database-listener");
+        Assert.assertTrue(databaseListener.hasDefined("isJta"));
+        Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "database-listener",
+                "database-listener", "isJta").asBoolean());
+        Assert.assertTrue(databaseListener.hasDefined("dataSource"));
+        Assert.assertEquals("java:jboss/datasources/ExampleDS",
+                model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "database-listener",
+                       "database-listener", "dataSource").asString());
         
         Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME).hasDefined("debugger-source"));        
         final ModelNode debuggerSource = model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "debugger-source", "debugger-source");
@@ -182,6 +189,11 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         ServiceController<?> debuggerService = services.getContainer()
                 .getRequiredService(debuggerServiceName);
         Assert.assertNotNull(debuggerService);
+
+        final ServiceName databaseServiceName = DatabaseListenerService.createServiceName("database-listener");
+        ServiceController<?> databaseService = services.getContainer()
+                .getRequiredService(databaseServiceName);
+        Assert.assertNotNull(databaseService);
         
         //Checks that the subsystem was removed from the model
         super.assertRemoveSubsystemResources(services);
@@ -200,6 +212,13 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         } catch (ServiceNotFoundException ex) {
             // this is ok
         }
+
+        try {
+            services.getContainer().getRequiredService(databaseServiceName);
+            Assert.fail("Database listener was not removed.");
+        } catch (ServiceNotFoundException ex) {
+            // this is ok
+        }
     }
         
     private String getSubsystemXml() {
@@ -207,10 +226,12 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         String subsystemXml =
                 "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
                 "<sources>"
-                + "<logging-source enabled='true' />"
                 + "<debugger-source enabled='true' port='8787' />"
-                + "</sources>" +
-                "</subsystem>";
+                + "</sources>"
+                + "<listeners>"
+                + "<database-listener dataSource='java:jboss/datasources/ExampleDS' isJta='true' />"
+                + "</listeners>"
+                + "</subsystem>";
         return subsystemXml;
     }
 }
