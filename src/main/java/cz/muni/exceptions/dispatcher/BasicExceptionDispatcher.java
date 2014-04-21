@@ -42,7 +42,7 @@ public class BasicExceptionDispatcher implements ExceptionDispatcher {
      * @param listeners collection of listeners, that should be registered to source
      */
     public BasicExceptionDispatcher(ExceptionFilter filter, Collection<ExceptionListener> listeners) {
-        this.filter = filter == null ? new BlacklistFilter(Arrays.<String>asList()) : filter;
+        this.filter = filter == null ? ExceptionFilters.ALWAYS_PASSES : filter;
 
         this.listeners = new HashSet<ExceptionListener>();
         

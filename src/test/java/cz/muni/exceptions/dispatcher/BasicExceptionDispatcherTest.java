@@ -116,16 +116,11 @@ public class BasicExceptionDispatcherTest {
     public void testWarnIgnoresFilteredExceptions() {
         List<ExceptionListener> listeners = createMockListeners();
 
-        ExceptionFilter exceptionFilter = new ExceptionFilter() {
-            @Override
-            public boolean apply(ExceptionReport exceptionReport) {
-                return false;
-            }
-        };
+        ExceptionFilter exceptionFilter = ExceptionFilters.ALWAYS_FILTERED;
 
         ExceptionDispatcher newDispatcher = new BasicExceptionDispatcher(exceptionFilter, listeners);
         newDispatcher.warnListeners(mockReport);
-        for (ExceptionListener listener : dispatcher.getListeners()) {
+        for (ExceptionListener listener : listeners) {
             MockListener mockListener = (MockListener) listener;
             assertFalse(mockListener.isNotified());
         }
