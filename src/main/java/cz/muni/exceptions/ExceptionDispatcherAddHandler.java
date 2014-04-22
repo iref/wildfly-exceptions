@@ -26,7 +26,7 @@ public class ExceptionDispatcherAddHandler extends AbstractAddStepHandler {
     @Override
     protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException {
         super.populateModel(operation, model);
-        for (AttributeDefinition attribute : DebuggerResourceDefinition.INSTANCE.getAttributes()) {
+        for (AttributeDefinition attribute : ExceptionDispatcherResourceDefinition.INSTANCE.getAttributes()) {
             attribute.validateAndSet(operation, model);
         }
     }

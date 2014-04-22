@@ -11,6 +11,7 @@ import org.jboss.as.controller.PathElement;
 import org.jboss.as.subsystem.test.AbstractSubsystemTest;
 import org.jboss.as.subsystem.test.KernelServices;
 import org.jboss.dmr.ModelNode;
+import org.jgroups.tests.bla;
 import org.junit.Test;
 
 import java.io.*;
@@ -51,7 +52,7 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         List<ModelNode> operations = super.parse(subsystemXml);
 
         ///Check that we have the expected number of operations
-        Assert.assertEquals(3, operations.size());
+        Assert.assertEquals(4, operations.size());
 
         //Check that each operation has the correct content
         ModelNode addSubsystem = operations.get(0);
@@ -61,24 +62,28 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         PathElement element = addr.getElement(0);
         Assert.assertEquals(SUBSYSTEM, element.getKey());
         Assert.assertEquals(ExceptionExtension.SUBSYSTEM_NAME, element.getValue());
-        
-        // Check that database-listener was set
-        ModelNode addDatabaseListener = operations.get(2);
-        Assert.assertEquals(ADD, addDatabaseListener.get(OP).asString());
-        PathAddress databaseListenerAddress = PathAddress.pathAddress(addDatabaseListener.get(OP_ADDR));
-        Assert.assertEquals(2, databaseListenerAddress.size());
-        element = databaseListenerAddress.getElement(0);
+
+        // check that dispatcher was set
+        ModelNode addDispatcher = operations.get(1);
+        Assert.assertEquals(ADD, addDispatcher.get(OP).asString());
+        PathAddress dispatcherAddress = PathAddress.pathAddress(addDispatcher.get(OP_ADDR));
+        Assert.assertEquals(2, dispatcherAddress.size());
+        element = dispatcherAddress.getElement(0);
         Assert.assertEquals(SUBSYSTEM, element.getKey());
         Assert.assertEquals(ExceptionExtension.SUBSYSTEM_NAME, element.getValue());
-        
-        PathElement databaseListener = databaseListenerAddress.getElement(1);
-        Assert.assertEquals("database-listener", databaseListener.getKey());
-        Assert.assertEquals("database-listener", databaseListener.getValue());
-        Assert.assertTrue(addDatabaseListener.get("isJta").asBoolean());
-        Assert.assertEquals("java:jboss/datasources/ExampleDS", addDatabaseListener.get("dataSource").asString());
+
+        PathElement dispatcherElement = dispatcherAddress.getElement(1);
+        Assert.assertEquals("dispatcher", dispatcherElement.getKey());
+        Assert.assertEquals("dispatcher", dispatcherElement.getValue());
+        Assert.assertTrue(addDispatcher.get("async").asBoolean());
+
+        List<ModelNode> blacklist = addDispatcher.get("blacklist").asList();
+        Assert.assertEquals(2, blacklist.size());
+        Assert.assertEquals("java.util.SecurityException", blacklist.get(0).asString());
+        Assert.assertEquals("java.lang.*", blacklist.get(1).asString());
         
         // check that debugger-source was set
-        ModelNode addDebuggerSource = operations.get(1);
+        ModelNode addDebuggerSource = operations.get(2);
         Assert.assertEquals(ADD, addDebuggerSource.get(OP).asString());
         PathAddress debuggerSourceAddress = PathAddress.pathAddress(addDebuggerSource.get(OP_ADDR));
         Assert.assertEquals(2, debuggerSourceAddress.size());
@@ -91,6 +96,21 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         Assert.assertEquals("debugger-source", debuggerSourceElement.getValue());
         Assert.assertTrue(addDebuggerSource.get("enabled").asBoolean());
         Assert.assertEquals(addDebuggerSource.get("port").asInt(), 8787);
+
+        // Check that database-listener was set
+        ModelNode addDatabaseListener = operations.get(3);
+        Assert.assertEquals(ADD, addDatabaseListener.get(OP).asString());
+        PathAddress databaseListenerAddress = PathAddress.pathAddress(addDatabaseListener.get(OP_ADDR));
+        Assert.assertEquals(2, databaseListenerAddress.size());
+        element = databaseListenerAddress.getElement(0);
+        Assert.assertEquals(SUBSYSTEM, element.getKey());
+        Assert.assertEquals(ExceptionExtension.SUBSYSTEM_NAME, element.getValue());
+
+        PathElement databaseListener = databaseListenerAddress.getElement(1);
+        Assert.assertEquals("database-listener", databaseListener.getKey());
+        Assert.assertEquals("database-listener", databaseListener.getValue());
+        Assert.assertTrue(addDatabaseListener.get("isJta").asBoolean());
+        Assert.assertEquals("java:jboss/datasources/ExampleDS", addDatabaseListener.get("dataSource").asString());
     }
 
     /**
@@ -110,19 +130,27 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME).hasDefined("database-listener"));
         final ModelNode databaseListener = model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "database-listener", "database-listener");
         Assert.assertTrue(databaseListener.hasDefined("isJta"));
-        Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "database-listener",
-                "database-listener", "isJta").asBoolean());
+        Assert.assertTrue(databaseListener.get("isJta").asBoolean());
         Assert.assertTrue(databaseListener.hasDefined("dataSource"));
-        Assert.assertEquals("java:jboss/datasources/ExampleDS",
-                model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "database-listener",
-                       "database-listener", "dataSource").asString());
+        Assert.assertEquals("java:jboss/datasources/ExampleDS", databaseListener.get("dataSource").asString());
         
         Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME).hasDefined("debugger-source"));        
         final ModelNode debuggerSource = model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "debugger-source", "debugger-source");
         Assert.assertTrue(debuggerSource.hasDefined("enabled"));
-        Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "debugger-source", "debugger-source", "enabled").asBoolean());
+        Assert.assertTrue(debuggerSource.get("enabled").asBoolean());
         Assert.assertTrue(debuggerSource.hasDefined("port"));
-        Assert.assertEquals(8787, model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "debugger-source", "debugger-source", "port").asInt());
+        Assert.assertEquals(8787, debuggerSource.get("port").asInt());
+
+        Assert.assertTrue(model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME).hasDefined("dispatcher"));
+        final ModelNode dispatcher = model.get(SUBSYSTEM, ExceptionExtension.SUBSYSTEM_NAME, "dispatcher", "dispatcher");
+        Assert.assertTrue(dispatcher.hasDefined("async"));
+        Assert.assertTrue(dispatcher.get("async").asBoolean());
+        Assert.assertTrue(dispatcher.hasDefined("blacklist"));
+        List<ModelNode> blacklist = dispatcher.get("blacklist").asList();
+        Assert.assertEquals(2, blacklist.size());
+        Assert.assertEquals("java.util.SecurityException", blacklist.get(0).asString());
+        Assert.assertEquals("java.lang.*", blacklist.get(1).asString());
+
     }
 
     /**

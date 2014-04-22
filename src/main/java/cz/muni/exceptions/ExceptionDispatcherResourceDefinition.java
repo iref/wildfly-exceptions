@@ -25,7 +25,7 @@ public class ExceptionDispatcherResourceDefinition extends SimpleResourceDefinit
             .setXmlName(ModelElement.DISPATCHER_ASYNC.getName())
             .build();
 
-    private static final SimpleAttributeDefinition SKIPPED_CLASS =
+    private static final SimpleAttributeDefinition BLACKLIST_CLASS =
             new SimpleAttributeDefinitionBuilder(ModelElement.DISPATCHER_BLACKLIST_CLASS.getName(), ModelType.STRING)
             .addFlag(AttributeAccess.Flag.RESTART_ALL_SERVICES)
             .setAllowExpression(true)
@@ -34,7 +34,7 @@ public class ExceptionDispatcherResourceDefinition extends SimpleResourceDefinit
             .build();
 
     public static final SimpleListAttributeDefinition BLACKLIST =
-            new SimpleListAttributeDefinition.Builder(ModelElement.DISPATCHER_BLACKLIST.getName(), SKIPPED_CLASS)
+            new SimpleListAttributeDefinition.Builder(ModelElement.DISPATCHER_BLACKLIST.getName(), BLACKLIST_CLASS)
             .setAllowNull(false)
             .setAllowExpression(true)
             .setWrapXmlList(true)
@@ -45,8 +45,8 @@ public class ExceptionDispatcherResourceDefinition extends SimpleResourceDefinit
                     if (resourceModel.isDefined()) {
                         writer.writeStartElement(attribute.getName());
                         for (ModelNode item : resourceModel.asList()) {
-                            writer.writeStartElement(item.asProperty().getName());
-                            writer.writeCData(item.asProperty().getValue().asString());
+                            writer.writeStartElement(BLACKLIST_CLASS.getXmlName());
+                            writer.writeCData(item.asString());
                             writer.writeEndElement();
                         }
                         writer.writeEndElement();
