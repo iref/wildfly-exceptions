@@ -7,10 +7,6 @@ package cz.muni.exceptions;
  */
 public enum ModelElement {
     
-    /** Logging source model elements */
-    LOGGING_SOURCE("logging-source"),
-    LOGGING_SOURCE_ENABLED("enabled"),
-    
     /** Debugger source model elements */
     DEBUGGER_SOURCE("debugger-source"),
     DEBUGGER_SOURCE_ENABLED("enabled"),
