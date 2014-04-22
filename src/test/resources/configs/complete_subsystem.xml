@@ -2,6 +2,7 @@
     <dispatcher async='true' >
         <blacklist>
             <class>java.util.SecurityException</class>
+            <class>java.lang.*</class>
         </blacklist>
     </dispatcher>
     <sources>

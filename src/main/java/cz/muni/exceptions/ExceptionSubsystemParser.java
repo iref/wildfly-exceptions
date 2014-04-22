@@ -14,6 +14,8 @@ import org.jboss.staxmapper.XMLExtendedStreamWriter;
 
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.*;
@@ -132,7 +134,7 @@ public class ExceptionSubsystemParser implements XMLStreamConstants,
             DatabaseListenerResourceDefinition.IS_JTA.marshallAsAttribute(listener, true, writer);
             writer.writeEndElement();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -144,71 +146,100 @@ public class ExceptionSubsystemParser implements XMLStreamConstants,
 
         list.add(root);
 
-        while(reader.hasNext() && reader.nextTag() != END_DOCUMENT) {
-            String localName = reader.getLocalName();
-            if (!reader.isStartElement()) {
-                continue;
+        EnumSet<ModelElement> required = EnumSet.of(ModelElement.SOURCES, ModelElement.DISPATCHER, ModelElement.LISTENERS);
+        EnumSet<ModelElement> encountered = EnumSet.noneOf(ModelElement.class);
+
+        while(reader.hasNext() && reader.nextTag() != END_ELEMENT) {
+            ModelElement element = ModelElement.forName(reader.getLocalName());
+
+            required.remove(element);
+            if (!encountered.add(element)) {
+                throw ParseUtils.duplicateNamedElement(reader, element.getName());
             }
 
-            if (reader.getLocalName().equals(ModelElement.DISPATCHER.getName())) {
-                readDispatcher(reader, list, root);
+            switch(element) {
+                case DISPATCHER: readDispatcher(reader, list, root); break;
+                case SOURCES: readSources(reader, list, root); break;
+                case LISTENERS: readListeners(reader, list, root); break;
+                default: throw ParseUtils.unexpectedElement(reader);
             }
-            if (reader.getLocalName().equals("sources")) {
-                readSources(reader, list, root);
-            }
-            if (reader.getLocalName().equals("listeners")) {
-                readListeners(reader, list, root);
-            }
+        }
+
+        if (!required.isEmpty()) {
+            throw ParseUtils.missingRequired(reader, required);
         }
     }
 
     private void readDispatcher(XMLExtendedStreamReader reader, List<ModelNode> list, ModelNode root) throws XMLStreamException {
         ModelNode addDispatcherOperation = new ModelNode();
-        addDispatcherOperation.get(OP).set(ModelDescriptionConstants.ADD);
+        addDispatcherOperation.get(OP).set(ADD);
 
-        String elementName = reader.getLocalName();
-        for (int i = 0; i < reader.getAttributeCount(); i++) {
-            String attributeName = reader.getAttributeLocalName(i);
-            String attributeValue = reader.getAttributeValue(i);
-
-            if (ModelElement.DISPATCHER_ASYNC.getName().equals(attributeName)) {
-                ExceptionDispatcherResourceDefinition.ASYNC
-                    .parseAndSetParameter(attributeValue, addDispatcherOperation, reader);
-            } else {
-                throw ParseUtils.unexpectedAttribute(reader, i);
-            }
-        }
-
-        if (reader.next() != END_ELEMENT) {
-            String nestedElementName = reader.getLocalName();
-            if (ModelElement.DISPATCHER_BLACKLIST.getName().equals(nestedElementName)) {
-                parseBlacklist(reader, addDispatcherOperation);
-            } else {
-                throw ParseUtils.unexpectedElement(reader);
-            }
-        }
-
-
+        // add ADD operation address
         PathAddress address = PathAddress.pathAddress(ExceptionExtension.SUBSYSTEM_PATH,
-            PathElement.pathElement(elementName, elementName));
-        addDispatcherOperation.get(ModelDescriptionConstants.OP_ADDR).set(address.toModelNode());
+                PathElement.pathElement(reader.getLocalName(), reader.getLocalName()));
+        addDispatcherOperation.get(OP_ADDR).set(address.toModelNode());
+
+        // parse attributes
+        for (int i = 0; i < reader.getAttributeCount(); i++) {
+            ModelElement attribute = ModelElement.forName(reader.getAttributeLocalName(i));
+
+            switch (attribute) {
+                case DISPATCHER_ASYNC: {
+                    ExceptionDispatcherResourceDefinition.ASYNC
+                            .parseAndSetParameter(reader.getAttributeValue(i), addDispatcherOperation, reader);
+                    break;
+                }
+
+                default: throw ParseUtils.unexpectedAttribute(reader, i);
+            }
+        }
+
+        // parse elements
+        EnumSet<ModelElement> encountered = EnumSet.noneOf(ModelElement.class);
+        while (reader.nextTag() != END_ELEMENT) {
+            ModelElement element = ModelElement.forName(reader.getLocalName());
+            if (!encountered.add(element)) {
+                throw ParseUtils.duplicateNamedElement(reader, element.getName());
+            }
+
+            switch (element) {
+                case DISPATCHER_BLACKLIST: readClasses(reader, addDispatcherOperation); break;
+                default: throw ParseUtils.unexpectedElement(reader);
+            }
+        }
+
         list.add(addDispatcherOperation);
     }
 
-    private void parseBlacklist(XMLExtendedStreamReader reader, ModelNode addDispatcherOperation) throws XMLStreamException {
-        while (reader.hasNext() && reader.next() != END_ELEMENT) {
-            String elementName = reader.getLocalName();
-            if (ModelElement.DISPATCHER_BLACKLIST_CLASS.getName().equals(elementName)) {
-                String content = reader.getElementText();
-                addDispatcherOperation.get(ExceptionDispatcherResourceDefinition.BLACKLIST.getName())
-                    .add(new ModelNode(content));
-            } else {
-                throw ParseUtils.unexpectedElement(reader);
+    private void readBlacklist(XMLExtendedStreamReader reader, ModelNode addDispatcherOperation) throws XMLStreamException {
+        while (reader.nextTag() != END_ELEMENT) {
+            ModelElement element = ModelElement.forName(reader.getLocalName());
+
+            switch (element) {
+                case DISPATCHER_BLACKLIST: readClasses(reader, addDispatcherOperation); break;
+                default: throw ParseUtils.unexpectedElement(reader);
+            }
+        }
+    }
+
+    private void readClasses(XMLExtendedStreamReader reader, ModelNode addDispatcherOperation) throws XMLStreamException {
+        while (reader.nextTag() != END_ELEMENT) {
+            ModelElement element = ModelElement.forName(reader.getLocalName());
+            String content = null;
+            switch(element) {
+                case DISPATCHER_BLACKLIST_CLASS: {
+                    content = reader.getElementText();
+                    break;
+                }
+                default: throw ParseUtils.unexpectedElement(reader);
             }
 
-            if (!reader.hasNext() || reader.next() != END_ELEMENT) {
-                throw ParseUtils.unexpectedElement(reader);
+            if (content == null) {
+                throw ParseUtils.missingRequired(reader, Collections.singleton("text"));
             }
+
+            addDispatcherOperation.get(ExceptionDispatcherResourceDefinition.BLACKLIST.getName())
+                    .add(new ModelNode(content));
         }
     }
 
@@ -297,15 +328,19 @@ public class ExceptionSubsystemParser implements XMLStreamConstants,
         ModelNode addDatabaseListenerOperation = new ModelNode();
         addDatabaseListenerOperation.get(OP).set(ModelDescriptionConstants.ADD);
 
+        EnumSet<ModelElement> required = EnumSet.of(ModelElement.DATABASE_LISTENER_DATA_SOURCE);
+
         String elementName = reader.getLocalName();
         for (int i = 0; i < reader.getAttributeCount(); i++) {
-            String attributeName = reader.getAttributeLocalName(i);
+            ModelElement attribute = ModelElement.forName(reader.getAttributeLocalName(i));
+            required.remove(attribute);
+
             String attributeValue = reader.getAttributeValue(i);
 
-            if (ModelElement.DATABASE_LISTENER_DATA_SOURCE.getName().equals(attributeName)) {
+            if (ModelElement.DATABASE_LISTENER_DATA_SOURCE.equals(attribute)) {
                 DatabaseListenerResourceDefinition.DATA_SOURCE.parseAndSetParameter(attributeValue,
                     addDatabaseListenerOperation, reader);
-            } else if (ModelElement.DATABASE_LISTENER_JTA.getName().equals(attributeName)) {
+            } else if (ModelElement.DATABASE_LISTENER_JTA.equals(attribute)) {
                 DatabaseListenerResourceDefinition.IS_JTA.parseAndSetParameter(attributeValue,
                     addDatabaseListenerOperation, reader);
             } else {
@@ -314,6 +349,10 @@ public class ExceptionSubsystemParser implements XMLStreamConstants,
         }
 
         ParseUtils.requireNoContent(reader);
+
+        if (!required.isEmpty()) {
+            throw ParseUtils.missingRequired(reader, required);
+        }
 
         PathAddress address = PathAddress.pathAddress(ExceptionExtension.SUBSYSTEM_PATH,
             PathElement.pathElement(elementName, elementName));
