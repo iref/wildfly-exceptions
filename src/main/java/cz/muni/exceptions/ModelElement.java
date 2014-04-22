@@ -6,6 +6,12 @@ package cz.muni.exceptions;
  * @author Jan Ferko
  */
 public enum ModelElement {
+
+    /** Grouping element for all sources */
+    SOURCES("sources"),
+
+    /** Grouping element for all listeners. */
+    LISTENERS("listeners"),
     
     /** Logging source model elements */
     LOGGING_SOURCE("logging-source"),
