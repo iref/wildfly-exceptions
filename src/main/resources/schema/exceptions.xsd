@@ -17,10 +17,10 @@
     </xs:complexType>
     
     <xs:complexType name="sourcesType">
-        <xs:sequence>
-            <xs:element name="logging" type="loggingType"/>
-            <xs:element name="debugger" type="loggingType" />            
-        </xs:sequence>
+        <xs:all>
+            <xs:element name="logging" type="loggingType" minOccurs="0"/>
+            <xs:element name="debugger-source" type="debuggerType" minOccurs="0"/>
+        </xs:all>
     </xs:complexType>
     
     <xs:complexType name="loggingType">
@@ -44,10 +44,10 @@
     </xs:complexType>
 
     <xs:complexType name="dispatcherType">
-        <xs:attribute name="async" type="xs:boolean" use="required" default="true" />
-        <xs:all>
+        <xs:sequence>
             <xs:element name="blacklist" type="blacklistType" minOccurs="0" />
-        </xs:all>
+        </xs:sequence>
+        <xs:attribute name="async" type="xs:boolean" use="required" default="true" />
     </xs:complexType>
 
     <xs:complexType name="blacklistType">

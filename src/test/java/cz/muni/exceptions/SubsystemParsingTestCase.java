@@ -13,6 +13,7 @@ import org.jboss.as.subsystem.test.KernelServices;
 import org.jboss.dmr.ModelNode;
 import org.junit.Test;
 
+import java.io.*;
 import java.util.List;
 import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
 
@@ -223,15 +224,28 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         
     private String getSubsystemXml() {
         //Parse the subsystem xml and install into the first controller
-        String subsystemXml =
-                "<subsystem xmlns=\"" + ExceptionExtension.NAMESPACE + "\">" +
-                "<sources>"
-                + "<debugger-source enabled='true' port='8787' />"
-                + "</sources>"
-                + "<listeners>"
-                + "<database-listener dataSource='java:jboss/datasources/ExampleDS' isJta='true' />"
-                + "</listeners>"
-                + "</subsystem>";
-        return subsystemXml;
+        File configFile = null;
+        try {
+            configFile = new File(getClass().getClassLoader().getResource("configs/complete_subsystem.xml").toURI());
+        } catch (Exception ex) {
+            throw new IllegalStateException("Configuration file was not found.", ex);
+        }
+
+        StringBuilder configBuilder = new StringBuilder();
+        try (InputStreamReader isr = new FileReader(configFile);
+            BufferedReader br = new BufferedReader(isr);) {
+
+            String line = br.readLine();
+            while (line != null) {
+                configBuilder.append(line.trim());
+                line = br.readLine();
+            }
+
+        } catch (Exception ex) {
+            throw new IllegalStateException("Error occurred while loading subsystem configuration.", ex);
+        }
+
+
+        return configBuilder.toString();
     }
 }
