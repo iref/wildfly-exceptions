@@ -19,7 +19,7 @@ public class ExceptionDispatcherService implements Service<ExceptionDispatcher> 
     private static final Logger LOGGER = Logger.getLogger(ExceptionDispatcherService.class);
     
     /** Service name. */
-    private static final String SERVICE_NAME = "ExceptionDispatcherService";
+    private static final String SERVICE_NAME = "Exception-ExceptionDispatcherService";
     
     /** Dispatcher, provided by service. */
     private final ExceptionDispatcher dispatcher;        
@@ -37,8 +37,8 @@ public class ExceptionDispatcherService implements Service<ExceptionDispatcher> 
         this.dispatcher = dispatcher;
     }
     
-    public static ServiceName createServiceName(String alias) {
-        return ServiceName.JBOSS.append(SERVICE_NAME, alias);
+    public static ServiceName createServiceName() {
+        return ServiceName.JBOSS.append(SERVICE_NAME);
     }
 
     @Override

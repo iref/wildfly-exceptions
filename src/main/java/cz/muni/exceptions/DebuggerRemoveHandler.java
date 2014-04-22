@@ -26,7 +26,7 @@ public class DebuggerRemoveHandler extends AbstractRemoveStepHandler {
         
         String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS))
                 .getLastElement().getValue();
-        ServiceName serviceName = DebuggerService.createServiceName(suffix);
+        ServiceName serviceName = DebuggerService.createServiceName();
         context.removeService(serviceName);
     }        
     

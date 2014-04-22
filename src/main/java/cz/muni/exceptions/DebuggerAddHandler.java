@@ -1,7 +1,5 @@
 package cz.muni.exceptions;
 
-import java.util.List;
-
 import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
 import cz.muni.exceptions.service.DebuggerService;
 import cz.muni.exceptions.service.ExceptionDispatcherService;
@@ -10,9 +8,10 @@ import cz.muni.exceptions.source.DebuggerReferenceTranslator;
 import org.jboss.as.controller.*;
 import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
 import org.jboss.dmr.ModelNode;
-import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceController;
 import org.jboss.msc.service.ServiceName;
+
+import java.util.List;
 
 /**
  *
@@ -50,15 +49,11 @@ public class DebuggerAddHandler extends AbstractAddStepHandler {
         // if debugger is enabled start DebuggerSource on given port
         if (isEnabled) {
             PathAddress operationAddress = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.OP_ADDR));
-            String dispatcherAlias = operation.get(ModelDescriptionConstants.ADDRESS).asPropertyList().get(0)
-                    .getValue().asString();
-            ServiceName dispatcherService = ExceptionDispatcherService.createServiceName(dispatcherAlias);
-
-            String serviceAlias = operationAddress.getLastElement().getValue();
+            ServiceName dispatcherService = ExceptionDispatcherService.createServiceName();
             DebuggerService debuggerService = new DebuggerService(new DebuggerReferenceTranslator(), port);
 
             ServiceController<DebuggerExceptionSource> serviceController = context.getServiceTarget()
-                    .addService(DebuggerService.createServiceName(serviceAlias), debuggerService)
+                    .addService(DebuggerService.createServiceName(), debuggerService)
                     .addDependency(dispatcherService,
                             ExceptionDispatcher.class, debuggerService.getExceptionDispatcher())
                     .addListener(verificationHandler)

@@ -25,7 +25,7 @@ public class DatabaseListenerRemoveHandler extends AbstractRemoveStepHandler {
 
         String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS))
                 .getLastElement().getValue();
-        ServiceName serviceName = DatabaseListenerService.createServiceName(suffix);
+        ServiceName serviceName = DatabaseListenerService.createServiceName();
         context.removeService(serviceName);
     }
 }

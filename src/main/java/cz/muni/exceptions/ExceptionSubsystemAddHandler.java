@@ -1,9 +1,6 @@
 package cz.muni.exceptions;
 
-import java.util.List;
-
-import cz.muni.exceptions.dispatcher.ExceptionFilter;
-import cz.muni.exceptions.dispatcher.ExceptionFilters;
+import cz.muni.exceptions.deployment.SubsystemDeploymentProcessor;
 import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
@@ -14,15 +11,7 @@ import org.jboss.dmr.ModelNode;
 import org.jboss.logging.Logger;
 import org.jboss.msc.service.ServiceController;
 
-import cz.muni.exceptions.deployment.SubsystemDeploymentProcessor;
-import cz.muni.exceptions.dispatcher.AsyncExceptionDispatcher;
-import cz.muni.exceptions.service.ExceptionDispatcherService;
-import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
-import java.util.concurrent.Executors;
-import org.jboss.as.controller.PathAddress;
-import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
-import org.jboss.msc.service.Service;
-import org.jboss.msc.service.ServiceName;
+import java.util.List;
 
 /**
  * Handler responsible for adding the subsystem resource to the model
@@ -62,24 +51,5 @@ class ExceptionSubsystemAddHandler extends AbstractBoottimeAddStepHandler {
 
             }
         }, OperationContext.Stage.RUNTIME);
-        
-        
-        // Add exception dispatcher service
-        PathAddress pathAddress = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.OP_ADDR));
-        String alias = pathAddress.getLastElement().getValue();
-        ServiceName serviceName = ExceptionDispatcherService.createServiceName(alias);
-
-        //TODO create blacklist filter instead
-        ExceptionFilter exceptionFilter = ExceptionFilters.ALWAYS_PASSES;
-        Service<ExceptionDispatcher> dispatcherService = new ExceptionDispatcherService(
-                new AsyncExceptionDispatcher(Executors.defaultThreadFactory(), exceptionFilter));
-        ServiceController<ExceptionDispatcher> serviceController = context.getServiceTarget()
-                .addService(serviceName, dispatcherService)
-                .addListener(verificationHandler)
-                .setInitialMode(ServiceController.Mode.ACTIVE).install();
-        
-        if (newControllers != null) {
-            newControllers.add(serviceController);
-        }        
     }
 }
