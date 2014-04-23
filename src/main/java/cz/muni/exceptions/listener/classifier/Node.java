@@ -1,9 +1,11 @@
 package cz.muni.exceptions.listener.classifier;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import cz.muni.exceptions.listener.db.model.TicketClass;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -48,7 +50,7 @@ public class Node {
         this.weight = weight;
 
         if (children != null || children.isEmpty()) {
-            this.children = ImmutableSet.copyOf(children);
+            this.children = new HashSet<>(children);
         } else {
             this.children = ImmutableSet.of();
         }
@@ -88,7 +90,7 @@ public class Node {
      * @return immutable set of children nodes
      */
     public Set<Node> getChildren() {
-        return children;
+        return ImmutableSet.copyOf(children);
     }
 
     /**
@@ -100,6 +102,10 @@ public class Node {
         return this.children.isEmpty();
     }
 
+    public boolean addChild(Node node) {
+        return this.children.add(node);
+    }
+
     /**
      * Creates new node that, has same values but sets its children to nodes in given collection.
      *
@@ -108,6 +114,23 @@ public class Node {
      */
     public Node withChildren(Collection<Node> newChildren) {
         return new Node(this.token, this.label, this.weight, newChildren);
+    }
+
+    /**
+     * Lookup children with given token.
+     *
+     * @param token child token
+     * @return child with given token or {@code Optional.absent()} if child was not found.
+     */
+    public Optional<Node> lookupChild(String token) {
+        Optional<Node> result = Optional.absent();
+        for (Node child : getChildren()) {
+            if (child.getToken().equalsIgnoreCase(token)) {
+                result = Optional.of(child);
+                break;
+            }
+        }
+        return result;
     }
 
     @Override
