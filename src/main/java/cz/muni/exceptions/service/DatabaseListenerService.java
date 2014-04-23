@@ -18,7 +18,7 @@ import javax.transaction.TransactionManager;
 public class DatabaseListenerService implements Service<DatabaseExceptionListener> {
 
     /** Name of service. */
-    private static final String SERVICE_NAME = "database-listener";
+    private static final String SERVICE_NAME = "Exceptions-DatabaseListener";
 
     /** JNDI name of data source */
     private final String dataSourceJNDIName;
@@ -45,8 +45,8 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
         this.dataSourceJNDIName = dataSourceJNDIName;
     }
 
-    public static ServiceName createServiceName(String alias) {
-        return ServiceName.JBOSS.append(SERVICE_NAME, alias);
+    public static ServiceName createServiceName() {
+        return ServiceName.JBOSS.append(SERVICE_NAME);
     }
 
     @Override

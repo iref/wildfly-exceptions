@@ -25,7 +25,7 @@ public class ExceptionDispatcherRemoveHandler extends AbstractRemoveStepHandler 
 
         String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS))
                 .getLastElement().getValue();
-        ServiceName serviceName = ExceptionDispatcherService.createServiceName(suffix);
+        ServiceName serviceName = ExceptionDispatcherService.createServiceName();
         context.removeService(serviceName);
     }
 }
