@@ -59,19 +59,6 @@ public class ExceptionSubsystemParser implements XMLStreamConstants,
 
         writer.writeStartElement("sources");
 
-        // marshall logging source model
-        if (node.hasDefined(ModelElement.LOGGING_SOURCE.getName())) {
-            ModelNode loggingSources = node.get(ModelElement.LOGGING_SOURCE.getName());
-
-            for (Property property : loggingSources.asPropertyList()) {
-                final String name = property.getName();
-                final ModelNode loggingSource = property.getValue();
-                if (loggingSource.isDefined()) {
-                    writeLoggingSource(writer, name, loggingSource);
-                }
-            }
-        }
-
         // marshall debugger source model
         if (node.hasDefined(ModelElement.DEBUGGER_SOURCE.getName())) {
             ModelNode debuggerSources = node.get(ModelElement.DEBUGGER_SOURCE.getName());
@@ -112,12 +99,6 @@ public class ExceptionSubsystemParser implements XMLStreamConstants,
 
             ExceptionDispatcherResourceDefinition.ASYNC.marshallAsAttribute(dispatcher, true, writer);
             ExceptionDispatcherResourceDefinition.BLACKLIST.marshallAsElement(dispatcher, false, writer);
-            writer.writeEndElement();
-    }
-
-    private void writeLoggingSource(XMLExtendedStreamWriter writer, String name, ModelNode source) throws XMLStreamException {
-            writer.writeStartElement(name);
-            LoggingResourceDefinition.ENABLED.marshallAsAttribute(source, true, writer);
             writer.writeEndElement();
     }
 
@@ -251,36 +232,9 @@ public class ExceptionSubsystemParser implements XMLStreamConstants,
 
             switch(modelElement) {
                 case DEBUGGER_SOURCE: createDebuggerAddOperation(reader, list); break;
-                case LOGGING_SOURCE: createLoggingAddOperation(reader, list); break;
-                default:
-                    throw ParseUtils.unexpectedElement(reader);
+                default: throw ParseUtils.unexpectedElement(reader);
             }
         }
-    }
-
-    private void createLoggingAddOperation(XMLExtendedStreamReader reader, List<ModelNode> list)
-            throws XMLStreamException {
-
-        ModelNode addLoggingOperation = new ModelNode();
-        addLoggingOperation.get(OP).set(ModelDescriptionConstants.ADD);
-
-        String elementName = reader.getLocalName();
-        for (int i = 0; i < reader.getAttributeCount(); i++) {
-            String attributeName = reader.getAttributeLocalName(i);
-            String attributeValue = reader.getAttributeValue(i);
-            if (ModelElement.LOGGING_SOURCE_ENABLED.getName().equals(attributeName)) {
-                LoggingResourceDefinition.ENABLED.parseAndSetParameter(//
-                    attributeValue, addLoggingOperation, reader);
-            } else {
-                throw ParseUtils.unexpectedElement(reader);
-            }
-        }
-        ParseUtils.requireNoContent(reader);
-
-        PathAddress address = PathAddress.pathAddress(ExceptionExtension.SUBSYSTEM_PATH,
-        PathElement.pathElement(elementName, elementName));
-        addLoggingOperation.get(OP_ADDR).set(address.toModelNode());
-        list.add(addLoggingOperation);
     }
 
     private void createDebuggerAddOperation(XMLExtendedStreamReader reader, List<ModelNode> list) throws XMLStreamException {

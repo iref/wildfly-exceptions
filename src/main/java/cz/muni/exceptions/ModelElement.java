@@ -13,10 +13,6 @@ public enum ModelElement {
     /** Grouping element for all listeners. */
     LISTENERS("listeners"),
     
-    /** Logging source model elements */
-    LOGGING_SOURCE("logging-source"),
-    LOGGING_SOURCE_ENABLED("enabled"),
-    
     /** Debugger source model elements */
     DEBUGGER_SOURCE("debugger-source"),
     DEBUGGER_SOURCE_ENABLED("enabled"),
