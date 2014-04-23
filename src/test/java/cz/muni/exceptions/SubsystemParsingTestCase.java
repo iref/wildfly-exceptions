@@ -209,17 +209,17 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     public void testSubsystemRemoval() throws Exception {
         String subsystemXml = getSubsystemXml();
         KernelServices services = super.installInController(subsystemXml);
-        final ServiceName serviceName = ExceptionDispatcherService.createServiceName("exception");
+        final ServiceName serviceName = ExceptionDispatcherService.createServiceName();
         ServiceController<?> dispatcherService = services.getContainer()
                 .getRequiredService(serviceName);
         Assert.assertNotNull(dispatcherService);
 
-        final ServiceName debuggerServiceName = DebuggerService.createServiceName("debugger-source");
+        final ServiceName debuggerServiceName = DebuggerService.createServiceName();
         ServiceController<?> debuggerService = services.getContainer()
                 .getRequiredService(debuggerServiceName);
         Assert.assertNotNull(debuggerService);
 
-        final ServiceName databaseServiceName = DatabaseListenerService.createServiceName("database-listener");
+        final ServiceName databaseServiceName = DatabaseListenerService.createServiceName();
         ServiceController<?> databaseService = services.getContainer()
                 .getRequiredService(databaseServiceName);
         Assert.assertNotNull(databaseService);

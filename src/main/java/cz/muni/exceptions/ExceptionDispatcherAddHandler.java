@@ -53,7 +53,7 @@ public class ExceptionDispatcherAddHandler extends AbstractAddStepHandler {
         // Add exception dispatcher service
         PathAddress pathAddress = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.OP_ADDR));
         String alias = pathAddress.getLastElement().getValue();
-        ServiceName serviceName = ExceptionDispatcherService.createServiceName(alias);
+        ServiceName serviceName = ExceptionDispatcherService.createServiceName();
 
         Service<ExceptionDispatcher> dispatcherService = new ExceptionDispatcherService(dispatcher);
         ServiceController<ExceptionDispatcher> serviceController = context.getServiceTarget()
