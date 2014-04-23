@@ -67,11 +67,16 @@ public class ExceptionDispatcherAddHandler extends AbstractAddStepHandler {
     }
 
     private List<String> getBlacklistPatterns(OperationContext context, ModelNode model) throws OperationFailedException{
-        List<ModelNode> blacklistItems = ExceptionDispatcherResourceDefinition.BLACKLIST
-                .resolveModelAttribute(context, model)
-                .asList();
+        ModelNode blacklistItems = ExceptionDispatcherResourceDefinition.BLACKLIST
+                .resolveModelAttribute(context, model);
+
         List<String> blacklistPatterns = new ArrayList<>();
-        for (ModelNode item : blacklistItems) {
+        if (!blacklistItems.isDefined()) {
+            return blacklistPatterns;
+        }
+
+
+        for (ModelNode item : blacklistItems.asList()) {
             if (item.isDefined()) {
                 blacklistPatterns.add(item.asString());
             }
