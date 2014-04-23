@@ -57,7 +57,7 @@ public class ExceptionSubsystemParser implements XMLStreamConstants,
             }
         }
 
-        writer.writeStartElement("sources");
+        writer.writeStartElement(ModelElement.SOURCES.getName());
 
         // marshall debugger source model
         if (node.hasDefined(ModelElement.DEBUGGER_SOURCE.getName())) {
@@ -75,7 +75,7 @@ public class ExceptionSubsystemParser implements XMLStreamConstants,
         // end of sources
         writer.writeEndElement();
 
-        writer.writeStartElement("listeners");
+        writer.writeStartElement(ModelElement.LISTENERS.getName());
 
         if (node.hasDefined(ModelElement.DATABASE_LISTENER.getName())) {
             ModelNode databaseListeners = node.get(ModelElement.DATABASE_LISTENER.getName());
