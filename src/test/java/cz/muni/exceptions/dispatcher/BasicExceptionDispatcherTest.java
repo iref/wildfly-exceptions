@@ -27,16 +27,16 @@ public class BasicExceptionDispatcherTest {
     
     @Before
     public void setUp() {
-        this.dispatcher = new BasicExceptionDispatcher();
+        this.dispatcher = new BasicExceptionDispatcher(ExceptionFilters.ALWAYS_PASSES);
     }
     
     @Test
     public void testConstructorIgnoresNullAndEmptyListeners() {
-        BasicExceptionDispatcher nullListeners = new BasicExceptionDispatcher(null);
+        BasicExceptionDispatcher nullListeners = new BasicExceptionDispatcher(ExceptionFilters.ALWAYS_PASSES);
         assertTrue(nullListeners.getListeners().isEmpty());
         
         final List<ExceptionListener> emptyListenersList = Collections.<ExceptionListener>emptyList();        
-        BasicExceptionDispatcher emptyListeners = new BasicExceptionDispatcher(emptyListenersList);
+        BasicExceptionDispatcher emptyListeners = new BasicExceptionDispatcher(null, emptyListenersList);
         assertTrue(emptyListeners.getListeners().isEmpty());
     }
     
@@ -89,7 +89,7 @@ public class BasicExceptionDispatcherTest {
     public void testWarnEveryListeners() {
         List<ExceptionListener> listeners = createMockListeners();
         
-        ExceptionDispatcher newSource = new BasicExceptionDispatcher(listeners);
+        ExceptionDispatcher newSource = new BasicExceptionDispatcher(ExceptionFilters.ALWAYS_PASSES, listeners);
         
         newSource.warnListeners(mockReport);
         
@@ -103,10 +103,24 @@ public class BasicExceptionDispatcherTest {
     public void testWarnIgnoresNullThrowables() {
         List<ExceptionListener> listeners = createMockListeners();
         
-        ExceptionDispatcher newSource = new BasicExceptionDispatcher(listeners);
+        ExceptionDispatcher newSource = new BasicExceptionDispatcher(ExceptionFilters.ALWAYS_PASSES, listeners);
         newSource.warnListeners(null);
         
         for (ExceptionListener listener : dispatcher.getListeners()) {
+            MockListener mockListener = (MockListener) listener;
+            assertFalse(mockListener.isNotified());
+        }
+    }
+
+    @Test
+    public void testWarnIgnoresFilteredExceptions() {
+        List<ExceptionListener> listeners = createMockListeners();
+
+        ExceptionFilter exceptionFilter = ExceptionFilters.ALWAYS_FILTERED;
+
+        ExceptionDispatcher newDispatcher = new BasicExceptionDispatcher(exceptionFilter, listeners);
+        newDispatcher.warnListeners(mockReport);
+        for (ExceptionListener listener : listeners) {
             MockListener mockListener = (MockListener) listener;
             assertFalse(mockListener.isNotified());
         }

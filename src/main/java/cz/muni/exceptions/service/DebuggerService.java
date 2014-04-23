@@ -6,8 +6,6 @@ import cz.muni.exceptions.source.DebuggerReferenceTranslator;
 import org.jboss.msc.service.*;
 import org.jboss.msc.value.InjectedValue;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 /**
  * Service, that launches debugger exception source.
  *
@@ -16,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class DebuggerService implements Service<DebuggerExceptionSource> {
 
     /** Service name. */
-    private static final String SERVICE_NAME = "DebuggerExceptionSource";
+    private static final String SERVICE_NAME = "Exceptions-DebuggerExceptionSource";
 
     /** Translator to translate Debugger API classes into model. */
     private final DebuggerReferenceTranslator translator;
@@ -44,8 +42,8 @@ public class DebuggerService implements Service<DebuggerExceptionSource> {
         this.port = port;
     }
 
-    public static ServiceName createServiceName(String alias) {
-        return ServiceName.JBOSS.append(SERVICE_NAME, alias);
+    public static ServiceName createServiceName() {
+        return ServiceName.JBOSS.append(SERVICE_NAME);
     }
 
     @Override

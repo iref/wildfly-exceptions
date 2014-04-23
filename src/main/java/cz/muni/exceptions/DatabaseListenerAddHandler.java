@@ -1,13 +1,9 @@
 package cz.muni.exceptions;
 
-import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
 import cz.muni.exceptions.listener.DatabaseExceptionListener;
 import cz.muni.exceptions.service.DatabaseListenerService;
 import cz.muni.exceptions.service.ExceptionDispatcherService;
-import org.hibernate.metamodel.relational.Database;
 import org.jboss.as.controller.*;
-import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
-import org.jboss.as.controller.registry.Resource;
 import org.jboss.as.txn.service.TxnServices;
 import org.jboss.dmr.ModelNode;
 import org.jboss.msc.service.ServiceBuilder;
@@ -47,14 +43,9 @@ public class DatabaseListenerAddHandler extends AbstractAddStepHandler {
                 .asBoolean();
 
         DatabaseListenerService databaseListenerService = new DatabaseListenerService(dataSource);
+        ServiceName dispatcherServiceName = ExceptionDispatcherService.createServiceName();
 
-        String dispatcherAlias = operation.get(ModelDescriptionConstants.ADDRESS).asPropertyList().get(0)
-                .getValue().asString();
-        ServiceName dispatcherServiceName = ExceptionDispatcherService.createServiceName(dispatcherAlias);
-
-        PathAddress operationAddress = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.OP_ADDR));
-        String serviceAlias = operationAddress.getLastElement().getValue();
-        ServiceName databaseListenerServiceName = DatabaseListenerService.createServiceName(serviceAlias);
+        ServiceName databaseListenerServiceName = DatabaseListenerService.createServiceName();
 
         ServiceBuilder<DatabaseExceptionListener> serviceBuilder = context.getServiceTarget()
                 .addService(databaseListenerServiceName, databaseListenerService)

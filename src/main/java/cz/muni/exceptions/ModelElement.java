@@ -6,6 +6,12 @@ package cz.muni.exceptions;
  * @author Jan Ferko
  */
 public enum ModelElement {
+
+    /** Grouping element for all sources */
+    SOURCES("sources"),
+
+    /** Grouping element for all listeners. */
+    LISTENERS("listeners"),
     
     /** Debugger source model elements */
     DEBUGGER_SOURCE("debugger-source"),
@@ -15,7 +21,13 @@ public enum ModelElement {
     /** Database listener model elements */
     DATABASE_LISTENER("database-listener"),
     DATABASE_LISTENER_DATA_SOURCE("dataSource"),
-    DATABASE_LISTENER_JTA("isJta");
+    DATABASE_LISTENER_JTA("isJta"),
+
+    /** Exception dispatcher model elements */
+    DISPATCHER("dispatcher"),
+    DISPATCHER_ASYNC("async"),
+    DISPATCHER_BLACKLIST("blacklist"),
+    DISPATCHER_BLACKLIST_CLASS("class");
     
     /** Name of element */
     private final String name;

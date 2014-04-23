@@ -1,6 +1,6 @@
 package cz.muni.exceptions;
 
-import cz.muni.exceptions.service.DatabaseListenerService;
+import cz.muni.exceptions.service.ExceptionDispatcherService;
 import org.jboss.as.controller.AbstractRemoveStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
@@ -12,11 +12,11 @@ import org.jboss.msc.service.ServiceName;
 /**
  * @author Jan Ferko
  */
-public class DatabaseListenerRemoveHandler extends AbstractRemoveStepHandler {
+public class ExceptionDispatcherRemoveHandler extends AbstractRemoveStepHandler {
 
-    public static final DatabaseListenerRemoveHandler INSTANCE = new DatabaseListenerRemoveHandler();
+    public static final ExceptionDispatcherRemoveHandler INSTANCE = new ExceptionDispatcherRemoveHandler();
 
-    private DatabaseListenerRemoveHandler() {
+    private ExceptionDispatcherRemoveHandler() {
     }
 
     @Override
@@ -25,7 +25,7 @@ public class DatabaseListenerRemoveHandler extends AbstractRemoveStepHandler {
 
         String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS))
                 .getLastElement().getValue();
-        ServiceName serviceName = DatabaseListenerService.createServiceName();
+        ServiceName serviceName = ExceptionDispatcherService.createServiceName();
         context.removeService(serviceName);
     }
 }

@@ -25,7 +25,7 @@ public class DebuggerExceptionSourceTest {
     @Before
     public void setUp() throws InterruptedException {
         System.out.println("Setting Up Tests");
-        mockDispatcher = new BasicExceptionDispatcher();        
+        mockDispatcher = new BasicExceptionDispatcher(null);
         mockDispatcher.registerListener(new MockListener());
         
         source = new DebuggerExceptionSource(mockDispatcher, new DebuggerReferenceTranslator(), 8000);
