@@ -35,7 +35,7 @@ public class ExceptionDispatcherResourceDefinition extends SimpleResourceDefinit
 
     public static final SimpleListAttributeDefinition BLACKLIST =
             new SimpleListAttributeDefinition.Builder(ModelElement.DISPATCHER_BLACKLIST.getName(), BLACKLIST_CLASS)
-            .setAllowNull(false)
+            .setAllowNull(true)
             .setAllowExpression(true)
             .setWrapXmlList(true)
             .setAttributeMarshaller(new AttributeMarshaller() {
