@@ -40,6 +40,56 @@ public class StaxPackageDataParserTest {
         dataStream.close();
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testParsePackageWithoutName() throws IOException {
+        InputStream dataStream = loadStream("classifier/missing_name_packages.xml");
+        Node tree = parser.parseInput(dataStream);
+        dataStream.close();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testParsePackageWithoutLabel() throws IOException {
+        InputStream dataStream = loadStream("classifier/missing_label_packages.xml");
+        Node tree = parser.parseInput(dataStream);
+        dataStream.close();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testParsePackageWithoutWeight() throws IOException {
+        InputStream dataStream = loadStream("classifier/missing_weight_packages.xml");
+        Node tree = parser.parseInput(dataStream);
+        dataStream.close();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testParsePackagesWithInvalidAttribute() throws IOException {
+        InputStream dataStream = loadStream("classifier/invalid_attribute_packages.xml");
+        Node tree = parser.parseInput(dataStream);
+        dataStream.close();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testParsePackagesWithInvalidElement() throws IOException {
+        InputStream dataStream = loadStream("classifier/invalid_element_packages.xml");
+        Node tree = parser.parseInput(dataStream);
+        dataStream.close();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testParseWithInvalidRoot() throws IOException {
+        InputStream dataStream = loadStream("classifier/invalid_root_packages.xml");
+        Node tree = parser.parseInput(dataStream);
+        dataStream.close();
+    }
+
+    @Test
+    public void testParseEmptyPackages() throws IOException {
+        InputStream dataStream = loadStream("classifier/empty_packages.xml");
+        Node tree = parser.parseInput(dataStream);
+        Assert.assertTrue(tree.getChildren().isEmpty());
+        dataStream.close();
+    }
+
     private InputStream loadStream(String path) {
         ClassLoader classLoader = this.getClass().getClassLoader();
         return classLoader.getResourceAsStream(path);

@@ -33,6 +33,9 @@ public final class StaxPackageDataParser implements PackageDataParser {
             reader.nextTag();
 
             Element element = Element.forName(reader.getLocalName());
+            if (element == null) {
+                throw new IllegalStateException("Unexpected root element");
+            }
             // check for root element
             switch (element) {
                 case PACKAGES: {
