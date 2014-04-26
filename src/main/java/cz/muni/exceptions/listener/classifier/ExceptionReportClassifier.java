@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public class ExceptionReportClassifier {
 
+    private static final double EXCEPTION_CLASS_COEFFICIENT = 1.2;
+
     private final PackageTreeSearcher searcher;
 
     public ExceptionReportClassifier(PackageTreeSearcher searcher) {
@@ -27,21 +29,33 @@ public class ExceptionReportClassifier {
             throw new IllegalArgumentException("[Report] is required and should not be null");
         }
 
+        if (report.getCause() != null) {
+            return classify(report.getCause());
+        }
         EnumMap<TicketClass, Double> classification = buildClassification(report);
         return max(classification);
     }
 
     private EnumMap<TicketClass, Double> buildClassification(ExceptionReport report) {
         EnumMap<TicketClass, Double> classification = new EnumMap<>(TicketClass.class);
+
+        Optional<Node> exceptionClassClassification = searcher.search(report.getExceptionClass());
+        if (exceptionClassClassification.isPresent()) {
+            double weight = exceptionClassClassification.get().getWeight() * EXCEPTION_CLASS_COEFFICIENT;
+            classification.put(exceptionClassClassification.get().getLabel(), weight);
+        }
+
+        double depthCoefficient = 1.0;
         for (StackTraceElement element : report.getStackTrace()) {
             Optional<Node> node = searcher.search(element.getClassName());
             if (node.isPresent()) {
                 TicketClass label = node.get().getLabel();
                 Double existingWeight = classification.get(label);
                 double weight = existingWeight != null ? existingWeight + node.get().getWeight() : node.get().getWeight();
-
+                weight = weight * depthCoefficient;
                 classification.put(label, weight);
             }
+            depthCoefficient -= 0.05;
         }
         return classification;
     }
