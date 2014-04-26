@@ -1059,7 +1059,7 @@
             at java.lang.Thread.run(Thread.java:744)
         </stacktrace>
     </exception>
-    <exception class="org.apache.ibatis.builder.BuilderException" message="Unknown element <#comment> in SQL statement." label="database">
+    <exception class="org.apache.ibatis.builder.BuilderException" message="Unknown element #comment in SQL statement." label="database">
         <stacktrace>
             <![CDATA[
             at org.apache.ibatis.builder.xml.XMLStatementBuilder.parseDynamicTags(XMLStatementBuilder.java:83)
@@ -1195,6 +1195,7 @@
     <exception class="org.datanucleus.exceptions.NucleusException" message="Plugin (Bundle) org.datanucleus is already registered. Ensure you dont have multiple JAR versions of the same plugin in the classpath.The URL file:/C:/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/tools/datanucleus/v2/datanucleus-core-3.1.1.jar is already registered, and you are trying to register an identical plugin located at URL file:/C:/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v1/datanucleus-core-1.1.5.jar."
                label="integration">
         <stacktrace>
+            <![CDATA[
             at org.datanucleus.plugin.NonManagedPluginRegistry.registerBundle(NonManagedPluginRegistry.java:541)
             at org.datanucleus.plugin.NonManagedPluginRegistry.registerBundle(NonManagedPluginRegistry.java:395)
             at org.datanucleus.plugin.NonManagedPluginRegistry.registerExtensions(NonManagedPluginRegistry.java:219)
@@ -1205,6 +1206,7 @@
             at org.datanucleus.NucleusContext.<init>(NucleusContext.java:204)
             at org.datanucleus.enhancer.DataNucleusEnhancer.<init>(DataNucleusEnhancer.java:160)
             at org.datanucleus.enhancer.DataNucleusEnhancer.main(DataNucleusEnhancer.java:1133)
+            ]]>
         </stacktrace>
     </exception>
     <exception class="com.google.gwt.user.client.rpc.SerializationException" message="Type 'com.fes.client.Exam.Valid.Options' was not included in the set of types which can be serialized by this SerializationPolicy or its Class object could not be loaded. For security purposes, this type will not be serialized.: instance = com.fes.client.Exam.Valid.Options@9905e0" label="web">
@@ -1301,6 +1303,7 @@
     </exception>
     <exception class="org.hibernate.LazyInitializationException" message="could not initialize proxy - no Session" label="database">
         <stacktrace>
+            <![CDATA[
             at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:167)
             at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:215)
             at org.hibernate.proxy.pojo.javassist.JavassistLazyInitializer.invoke(JavassistLazyInitializer.java:190)
@@ -1345,6 +1348,7 @@
             at org.apache.wicket.protocol.http.WicketFilter.doFilter(WicketFilter.java:319)
             at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1088)
             at com.xxx.er.basman.HibernateTransactionFilter.doFilter(HibernateTransactionFilter.java:58)
+            ]]>
         </stacktrace>
     </exception>
 </exceptions>
