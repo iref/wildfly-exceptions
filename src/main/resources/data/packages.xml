@@ -138,7 +138,7 @@
     <package name="org.springframework.mail.javamail" label="network" weight="1.0" />
     <package name="org.springframework.orm" label="database" weight="1.0" />
     <package name="org.springframework.orm.hibernate3" label="database" weight="1.0" />
-    <package name="org.springframework.orm.hibernate3.support" label="database" weight="" />
+    <package name="org.springframework.orm.hibernate3.support" label="database" weight="1.0" />
     <package name="org.springframework.orm.hibernate4" label="database" weight="1.0" />
     <package name="org.springframework.orm.hibernate4.support" label="database" weight="1.0" />
     <package name="org.springframework.orm.ibatis" label="database" weight="1.0" />
