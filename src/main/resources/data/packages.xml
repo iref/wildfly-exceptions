@@ -645,4 +645,7 @@
     <package name="org.jboss.as.jsf" label="web" weight="0.75"/>
     <package name="org.wildfly" label="integration" weight="0.75" />
     <package name="org.widlfly.extention.undertow" label="web" weight="0.75" />
+    <package name="org.apache.activemq" label="messaging" weight="1.0" />
+    <package name="org.hornetq" label="messaging" weight="1.0" />
+    <package name="org.jboss" label="integration" weight="0.8" />
 </packages>
