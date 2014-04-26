@@ -3,12 +3,17 @@ package cz.muni.exceptions.service;
 import com.google.common.base.Optional;
 import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
 import cz.muni.exceptions.listener.DatabaseExceptionListener;
+import cz.muni.exceptions.listener.classifier.ExceptionReportClassifier;
+import cz.muni.exceptions.listener.classifier.Node;
+import cz.muni.exceptions.listener.classifier.PackageTreeSearcher;
+import cz.muni.exceptions.listener.classifier.StaxPackageDataParser;
 import cz.muni.exceptions.listener.db.JPATicketRepository;
 import cz.muni.exceptions.listener.db.PersistenceUnitCreator;
 import org.jboss.msc.service.*;
 import org.jboss.msc.value.InjectedValue;
 
 import javax.transaction.TransactionManager;
+import java.io.InputStream;
 
 /**
  * Service, that creates and registers DatabaseListener
@@ -19,6 +24,8 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
 
     /** Name of service. */
     private static final String SERVICE_NAME = "Exceptions-DatabaseListener";
+
+    private static final String PACKAGE_DATASET = "data/packages.xml";
 
     /** JNDI name of data source */
     private final String dataSourceJNDIName;
@@ -55,7 +62,15 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
         PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDIName, transactionManagerOption);
         JPATicketRepository repository = new JPATicketRepository(creator);
 
-        listener = new DatabaseExceptionListener(repository);
+        ExceptionReportClassifier classifier;
+        try {
+            classifier = buildClassifier();
+        } catch(Exception ex) {
+            throw new StartException("Exception while initializing exception classifier", ex);
+        }
+
+
+        listener = new DatabaseExceptionListener(repository, classifier);
         exceptionDispatcher.getValue().registerListener(listener);
     }
 
@@ -67,5 +82,13 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
     @Override
     public DatabaseExceptionListener getValue() throws IllegalStateException, IllegalArgumentException {
         return this.listener;
+    }
+
+    private ExceptionReportClassifier buildClassifier() {
+        InputStream dataStream = getClass().getClassLoader().getResourceAsStream(PACKAGE_DATASET);
+        Node tree = new StaxPackageDataParser().parseInput(dataStream);
+        PackageTreeSearcher searcher = new PackageTreeSearcher(tree);
+
+        return new ExceptionReportClassifier(searcher);
     }
 }
