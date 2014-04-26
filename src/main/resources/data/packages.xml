@@ -648,4 +648,9 @@
     <package name="org.apache.activemq" label="messaging" weight="1.0" />
     <package name="org.hornetq" label="messaging" weight="1.0" />
     <package name="org.jboss" label="integration" weight="0.8" />
+    <package name="org.jboss.msc" label="messaging" weight="1.0" />
+    <package name="org.jboss.weld" label="integration" weight="1.0" />
+    <package name="org.jboss.resteasy" label="messaging" weight="1.0" />
+    <package name="org.mybatis" label="database" weight="1.0" />
+    <package name="org.apache.ibatis" label="database" weight="1.0" />
 </packages>
