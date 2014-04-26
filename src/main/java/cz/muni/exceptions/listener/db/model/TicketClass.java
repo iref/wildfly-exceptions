@@ -14,7 +14,12 @@ public enum TicketClass {
     NETWORK(5, "network"),
     FILE(6, "file"),
     JVM(7, "jvm"),
-    UNKNOWN(8, "unknown");
+    CONCURRENCY(8, "concurrency"),
+    MESSAGING(9, "messaging"),
+    XML(10, "xml"),
+    TRANSACTION(11, "transaction"),
+    SECURITY(12, "security"),
+    UNKNOWN(13, "unknown");
     
     private int id;
 
