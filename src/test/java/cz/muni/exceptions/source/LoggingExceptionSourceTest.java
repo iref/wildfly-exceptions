@@ -7,9 +7,13 @@ import cz.muni.exceptions.listener.ExceptionListener;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
+
+import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.annotation.security.RunAs;
 
 /**
  *

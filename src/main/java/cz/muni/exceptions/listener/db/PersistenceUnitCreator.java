@@ -5,18 +5,17 @@ import com.google.common.collect.ImmutableSet;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.engine.transaction.jta.platform.internal.JBossAppServerJtaPlatform;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.transaction.Status;
+import javax.transaction.UserTransaction;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.transaction.Status;
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
 
 /**
  * Class creates new EntityManageFactory, that allows to persist exception data 
@@ -32,22 +31,22 @@ public class PersistenceUnitCreator {
 
     private EntityManagerFactory emf;
 
-    private Optional<TransactionManager> transactionManager;
+    private Optional<UserTransaction> userTransaction;
     
     /**
      * Constructor creates new instance of creator for given datasource name.
      * 
      * @param dataSourceJNDIName JNDI identifier of data source.
-     * @param transactionManager JTA transaction manager, that should be used to manage transaction
+     * @param userTransaction JTA transaction manager, that should be used to manage transaction
      *                           or {@link com.google.common.base.Optional#absent()} if data source
      *                           does not use JTA
      * @throws IllegalArgumentException if {@code dataSourceJNDIName} is {@code null} or empty
      */
-    public PersistenceUnitCreator(String dataSourceJNDIName, Optional<TransactionManager> transactionManager) {
+    public PersistenceUnitCreator(String dataSourceJNDIName, Optional<UserTransaction> userTransaction) {
         if (dataSourceJNDIName == null || dataSourceJNDIName.isEmpty()) {
             throw new IllegalArgumentException("[DataSourceJndiName] is required and should not be null.");
         }
-        this.transactionManager = transactionManager;
+        this.userTransaction = userTransaction;
         this.emf = createEntityManagerFactory(dataSourceJNDIName);
     }
 
@@ -59,9 +58,9 @@ public class PersistenceUnitCreator {
     public EntityManager createEntityManager() {
         final EntityManager result;
 
-        if (this.transactionManager.isPresent()) {
+        if (this.userTransaction.isPresent()) {
             EntityManagerInvocationHandler proxy = new EntityManagerInvocationHandler(
-                    this.emf.createEntityManager(), transactionManager.get());
+                    this.emf.createEntityManager(), userTransaction.get());
             ClassLoader threadClassLoader = Thread.currentThread().getContextClassLoader();
             result = (EntityManager) Proxy.newProxyInstance(threadClassLoader, new Class<?>[]{EntityManager.class},
                     proxy);
@@ -78,7 +77,7 @@ public class PersistenceUnitCreator {
      * @return {@code true} if PersistenceUnitCreator creates JTA managed entity managers, otherwise {@code false}.
      */
     public boolean isJtaManaged() {
-        return this.transactionManager.isPresent();
+        return this.userTransaction.isPresent();
     }
     
     /**
@@ -92,7 +91,7 @@ public class PersistenceUnitCreator {
         Map<String, Object> properties = new HashMap<>();
         
         try {
-            if (this.transactionManager.isPresent()) {
+            if (this.userTransaction.isPresent()) {
                 properties.put("javax.persistence.jtaDataSource", dataSourceJNDIName);
                 properties.put("javax.persistence.transactionType", "JTA");
                 properties.put(AvailableSettings.JTA_PLATFORM, new JBossAppServerJtaPlatform());
@@ -120,7 +119,7 @@ public class PersistenceUnitCreator {
         private final EntityManager entityManager;
 
         /** Transaction manager, that is used to manage transactions. */
-        private final TransactionManager transactionManager;
+        private final UserTransaction userTransaction;
 
         static {
             TRANSACTION_MANAGED_METHODS = ImmutableSet.of("persist", "merge", "remove", "flush", "lock",
@@ -131,22 +130,20 @@ public class PersistenceUnitCreator {
          * Constructor creates new instance of invocation handler.
          *
          * @param entityManager entity manager, that should be decorated
-         * @param transactionManager transaction manager, that is used to manage transaction
+         * @param userTransaction transaction manager, that is used to manage transaction
          */
-        public EntityManagerInvocationHandler(EntityManager entityManager, TransactionManager transactionManager) {
-            this.transactionManager = transactionManager;
+        public EntityManagerInvocationHandler(EntityManager entityManager, UserTransaction userTransaction) {
+            this.userTransaction = userTransaction;
             this.entityManager = entityManager;
         }
 
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            Transaction tx = null;
 
             if (TRANSACTION_MANAGED_METHODS.contains(method.getName())) {
-                if (transactionManager.getStatus() == Status.STATUS_NO_TRANSACTION) {
-                    transactionManager.begin();
-                    tx = transactionManager.getTransaction();
+                if (userTransaction.getStatus() == Status.STATUS_NO_TRANSACTION) {
+                    userTransaction.begin();
                 }
 
                 this.entityManager.joinTransaction();
@@ -155,9 +152,8 @@ public class PersistenceUnitCreator {
             try {
                 return method.invoke(entityManager, args);
             } finally {
-                if (tx != null) {
-                    tx.commit();
-                    transactionManager.suspend();
+                if (userTransaction.getStatus() == Status.STATUS_ACTIVE) {
+                    userTransaction.commit();
                 }
             }
         }

@@ -1,9 +1,26 @@
 
 package cz.muni.exceptions.source;
 
-import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
+import com.google.common.base.Optional;
+import cz.muni.exceptions.dispatcher.*;
+import cz.muni.exceptions.listener.DatabaseExceptionListener;
+import cz.muni.exceptions.listener.ExceptionListener;
+import cz.muni.exceptions.listener.classifier.ExceptionReportClassifier;
+import cz.muni.exceptions.listener.classifier.Node;
+import cz.muni.exceptions.listener.classifier.PackageTreeSearcher;
+import cz.muni.exceptions.listener.classifier.StaxPackageDataParser;
+import cz.muni.exceptions.listener.db.JPATicketRepository;
+import cz.muni.exceptions.listener.db.PersistenceUnitCreator;
+import cz.muni.exceptions.listener.db.TicketRepository;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.transaction.UserTransaction;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -13,18 +30,53 @@ import java.util.logging.LogRecord;
  * @author Jan Ferko 
  */
 public class LoggingExceptionSource extends Handler {
+
+    private static final String TRANSACTION_MANAGER_JNDI = "java:/TransactionManager";
     
-    private final ExceptionDispatcher dispatcher;
+    private ExceptionDispatcher dispatcher;
+
+    private boolean async = true;
+    private boolean isJta = true;
+    private String blacklist;
+    private boolean databaseListenerEnabled;
+    private String dataSourceJNDI;
+
+    public LoggingExceptionSource() {
+    }
 
     public LoggingExceptionSource(ExceptionDispatcher dispatcher) {
+        super();
         if (dispatcher == null) {
             throw new IllegalArgumentException("[Dispatcher] is required and must not be null.");
         }
         this.dispatcher = dispatcher;
-    }        
+    }
+
+    private synchronized boolean initialize() {
+        if (dispatcher != null) {
+            return true;
+        }
+
+        List<ExceptionListener> listeners = new ArrayList<>();
+        if (databaseListenerEnabled) {
+            listeners.add(createDatabaseListener());
+        }
+
+        List<String> blacklistItems = Arrays.asList(blacklist.split("."));
+        ExceptionFilter blacklistFilter = new BlacklistFilter(blacklistItems);
+
+        this.dispatcher = createDispatcher(listeners, blacklistFilter);
+
+        return true;
+    }
+
+
 
     @Override
     public void publish(LogRecord record) {
+        if (!initialize()) {
+            return;
+        }
         if (record == null || !isLoggable(record)) {
             return;
         }
@@ -47,10 +99,78 @@ public class LoggingExceptionSource extends Handler {
         setLevel(Level.OFF);
         // clear dispatcher for this source, so no more throwables are propagated
     }
-    
+
+    public void setAsync(String async) {
+        this.async = parseBoolean(async, true);
+    }
+
+    public void setBlacklist(String blacklist) {
+        this.blacklist = blacklist;
+    }
+
+    public void setDatabaseListenerEnabled(String databaseListenerEnabled) {
+        this.databaseListenerEnabled = parseBoolean(databaseListenerEnabled, true);
+    }
+
+    public void setDataSourceJNDI(String dataSourceJNDI) {
+        this.dataSourceJNDI = dataSourceJNDI;
+    }
+
+    public void setJta(String isJta) {
+        this.isJta = parseBoolean(isJta, true);
+    }
+
+    private boolean  parseBoolean(String value, boolean defaultValue) {
+        try {
+            return Boolean.parseBoolean(value);
+        } catch (Exception ex) {
+            // keep default;
+        }
+        return defaultValue;
+    }
+
+    private ExceptionDispatcher createDispatcher(List<ExceptionListener> listeners, ExceptionFilter blacklistFilter) {
+        if (async) {
+            AsyncExceptionDispatcher dispatcher = new AsyncExceptionDispatcher(Executors.defaultThreadFactory(), blacklistFilter);
+            for (ExceptionListener listener : listeners) {
+                this.dispatcher.registerListener(listener);
+            }
+            return dispatcher;
+        } else {
+            return new BasicExceptionDispatcher(blacklistFilter, listeners);
+        }
+    }
+
+    private ExceptionListener createDatabaseListener() {
+        StaxPackageDataParser packageDataParser = new StaxPackageDataParser();
+        InputStream packageInput = getClass().getClassLoader().getResourceAsStream("data/packages.xml");
+        Node packageTree = packageDataParser.parseInput(packageInput);
+        PackageTreeSearcher searcher = new PackageTreeSearcher(packageTree);
+        ExceptionReportClassifier classifier = new ExceptionReportClassifier(searcher);
+
+        if (dataSourceJNDI == null) {
+            throw new RuntimeException("Database Listener cannot be initialize if [dataSourceJNDI] property is not set.");
+        }
+        Optional<UserTransaction> userTransaction = Optional.absent();
+        if (isJta) {
+            try {
+                Context context = new InitialContext();
+                UserTransaction txManager = (UserTransaction) context.lookup(TRANSACTION_MANAGER_JNDI);
+                userTransaction = Optional.of(txManager);
+            } catch (Exception ex) {
+                throw new RuntimeException("JNDI lookup of TransactionManager has failed.");
+            }
+        }
+
+        PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDI, userTransaction);
+        TicketRepository ticketRepository = new JPATicketRepository(creator);
+
+        return new DatabaseExceptionListener(ticketRepository, classifier);
+    }
+
     /**
      * Method creates Exception report for given throwable.
-     * 
+     *
      * @param throwable throwable, which report should be created for
      * @return report for given throwable or {@code null} if throwable is {@code null}
      */
@@ -58,12 +178,11 @@ public class LoggingExceptionSource extends Handler {
         if (throwable == null) {
             return null;
         }
-        
+
         ExceptionReport cause = createReport(throwable.getCause());
         List<StackTraceElement> stackTrace = Arrays.asList(throwable.getStackTrace());
         ExceptionReport report = new ExceptionReport(throwable.getClass().getCanonicalName(), throwable.getMessage(), stackTrace, cause);
-        
+
         return report;
     }
-                
 }

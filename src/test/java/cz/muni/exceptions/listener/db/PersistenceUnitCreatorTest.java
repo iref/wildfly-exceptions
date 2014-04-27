@@ -4,17 +4,6 @@ import com.google.common.base.Optional;
 import cz.muni.exceptions.listener.db.model.Ticket;
 import cz.muni.exceptions.listener.db.model.TicketClass;
 import cz.muni.exceptions.listener.db.model.TicketOccurence;
-
-import java.io.File;
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Date;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.swing.text.html.parser.Entity;
-import javax.transaction.TransactionManager;
-
-import org.hibernate.engine.transaction.jta.platform.internal.JBossAppServerJtaPlatform;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -24,6 +13,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+
+import javax.persistence.EntityManager;
+import javax.transaction.UserTransaction;
+import java.io.File;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  *
@@ -51,32 +47,32 @@ public class PersistenceUnitCreatorTest {
     
     @Test(expected = IllegalArgumentException.class)
     public void testConstructForNullDataSource() {
-        new PersistenceUnitCreator(null, Optional.<TransactionManager>absent());
+        new PersistenceUnitCreator(null, Optional.<UserTransaction>absent());
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testConstructForEmptyDataSource() {
-        new PersistenceUnitCreator("", Optional.<TransactionManager>absent());
+        new PersistenceUnitCreator("", Optional.<UserTransaction>absent());
     }
 
     @Test
     public void isJtaManaged() {
-        TransactionManager mockTransactionManager = Mockito.mock(TransactionManager.class);
+        UserTransaction mockUserTransaction = Mockito.mock(UserTransaction.class);
         PersistenceUnitCreator managedCreator = new PersistenceUnitCreator("java:jboss/datasources/ExampleDS",
-                Optional.of(mockTransactionManager));
+                Optional.of(mockUserTransaction));
         Assert.assertTrue(managedCreator.isJtaManaged());
     }
 
     @Test
     public void isNotJtaManaged() {
-        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jdbc/arquillian", Optional.<TransactionManager>absent());
+        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jdbc/arquillian", Optional.<UserTransaction>absent());
         Assert.assertFalse(creator.isJtaManaged());
     }
     
     @Test
     public void testCreateEntityManagerWithoutJTA() {
         PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jdbc/arquillian",
-                Optional.<TransactionManager>absent());
+                Optional.<UserTransaction>absent());
         EntityManager em = creator.createEntityManager();
         Assert.assertNotNull(em);
 

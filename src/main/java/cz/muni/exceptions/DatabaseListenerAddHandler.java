@@ -54,8 +54,8 @@ public class DatabaseListenerAddHandler extends AbstractAddStepHandler {
                 .addListener(verificationHandler);
 
         if (isJta) {
-            ServiceName transactionManagerServiceName = TxnServices.JBOSS_TXN_TRANSACTION_MANAGER;
-            serviceBuilder.addDependency(ServiceBuilder.DependencyType.REQUIRED, transactionManagerServiceName);
+            ServiceName userTransactionService = TxnServices.JBOSS_TXN_USER_TRANSACTION;
+            serviceBuilder.addDependency(ServiceBuilder.DependencyType.REQUIRED, userTransactionService);
         }
 
         if (newControllers != null) {

@@ -12,7 +12,7 @@ import cz.muni.exceptions.listener.db.PersistenceUnitCreator;
 import org.jboss.msc.service.*;
 import org.jboss.msc.value.InjectedValue;
 
-import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
 import java.io.InputStream;
 
 /**
@@ -31,7 +31,7 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
     private final String dataSourceJNDIName;
 
     /** JBoss AS Transaction manager. */
-    private final InjectedValue<TransactionManager> transactionManager = new InjectedValue<>();
+    private final InjectedValue<UserTransaction> userTransaction = new InjectedValue<>();
 
     /** Exception dispatcher, that is created and is running in subsystem. */
     private final InjectedValue<ExceptionDispatcher> exceptionDispatcher = new InjectedValue<>();
@@ -58,8 +58,8 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
 
     @Override
     public void start(StartContext startContext) throws StartException {
-        Optional<TransactionManager> transactionManagerOption = Optional.fromNullable(transactionManager.getValue());
-        PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDIName, transactionManagerOption);
+        Optional<UserTransaction> userTransactionOptional = Optional.fromNullable(userTransaction.getValue());
+        PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDIName, userTransactionOptional);
         JPATicketRepository repository = new JPATicketRepository(creator);
 
         ExceptionReportClassifier classifier;
