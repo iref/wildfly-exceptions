@@ -556,7 +556,7 @@
     <package name="java.awt" label="web" weight="0.75" />
     <package name="java.beans" label="utils" weight="1.0" />
     <package name="java.io" label="file" weight="1.0" />
-    <package name="java.lang" label="utils" weight="1.0" />
+    <package name="java.lang" label="jvm" weight="1.0" />
     <package name="java.lang.instrument" label="jvm" weight="1.0" />
     <package name="java.lang.invoke" label="jvm" weight="1.0" />
     <package name="java.lang.management" label="jvm" weight="1.0" />
@@ -643,6 +643,18 @@
     <package name="org.jboss.as.mail" label="network" weight="0.75" />
     <package name="org.jboss.as.jmx" label="jvm" weight="0.75" />
     <package name="org.jboss.as.jsf" label="web" weight="0.75"/>
+    <package name="org.jboss.ws" label="web" weight="1.0" />
+    <package name="org.jboss.as.messaging" label="messaging" weight="0.75" />
+    <package name="org.jboss.logging" label="utils" weight="1.0" />
+    <package name="org.jboss.logmanager" label="utils" weight="1.0" />
+    <package name="org.jboss.remoting" label="network" weight="1.0" />
+    <package name="org.jboss.security" label="security" weight="1.0" />
+    <package name="org.jboss.transaction" label="transaction" weight="1.0" />
+    <package name="org.jboss.jaxrs" label="web" weight="1.0" />
+    <package name="org.jboss.jpa" label="database" weight="1.0" />
+    <package name="org.jboss.mail" label="network" weight="1.0" />
+    <package name="org.jboss.jmx" label="jvm" weight="1.0" />
+    <package name="org.jboss.jsf" label="web" weight="1.0"/>
     <package name="org.wildfly" label="integration" weight="0.75" />
     <package name="org.widlfly.extention.undertow" label="web" weight="0.75" />
     <package name="org.apache.activemq" label="messaging" weight="1.0" />
@@ -653,4 +665,6 @@
     <package name="org.jboss.resteasy" label="messaging" weight="1.0" />
     <package name="org.mybatis" label="database" weight="1.0" />
     <package name="org.apache.ibatis" label="database" weight="1.0" />
+    <package name="org.jglue.cdiunit" label="integration" weight="1.0" />
+    <package name="org.datanucleus" label="integration" weight="1.0" />
 </packages>

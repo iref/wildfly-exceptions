@@ -168,7 +168,7 @@
             at org.hibernate.cfg.AnnotationConfiguration.buildSessionFactory(AnnotationConfiguration.java:859)
         </stacktrace>
     </exception>
-    <exception class="org.hibernate.MappingException" message="Unable to instantiate custom type: org.hibernate.type.EnumType" label="hibernate">
+    <exception class="org.hibernate.MappingException" message="Unable to instantiate custom type: org.hibernate.type.EnumType" label="database">
         <stacktrace>
             at org.hibernate.type.TypeFactory.custom(TypeFactory.java:193)
             at org.hibernate.type.TypeFactory.custom(TypeFactory.java:179)
@@ -377,11 +377,6 @@
             at com.sun.ejb.containers.EJBLocalObjectInvocationHandler.invoke(EJBLocalObjectInvocationHandler.java:212)
         </stacktrace>
     </exception>
-    <exception class="" message="" label="">
-        <stacktrace>
-
-        </stacktrace>
-    </exception>
     <exception class="java.lang.NoClassDefFoundError" message="[Lorg/aopalliance/intercept/MethodInterceptor;" label="jvm">
         <stacktrace>
             at java.lang.Class.getDeclaredMethods0(Native Method)
@@ -558,7 +553,7 @@
             ]]>
         </stacktrace>
     </exception>
-    <exception class="org.springframework.beans.factory.CannotLoadBeanClassException" message="Cannot find class [org.spring.springframework.web.servlet.view.InternalResourceViewResolver] for bean with name 'viewResolver' defined in ServletContext resource [/WEB-INF/springapp-servlet.xml]; nested exception is java.lang.ClassNotFoundException: org.spring.springframework.web.servlet.view.InternalResourceViewResolver" label="web">
+    <exception class="org.springframework.beans.factory.CannotLoadBeanClassException" message="Cannot find class [org.spring.springframework.web.servlet.view.InternalResourceViewResolver] for bean with name 'viewResolver' defined in ServletContext resource [/WEB-INF/springapp-servlet.xml]; nested exception is java.lang.ClassNotFoundException: org.spring.springframework.web.servlet.view.InternalResourceViewResolver" label="integration">
         <stacktrace>
             at org.springframework.beans.factory.support.AbstractBeanFactory.resolveBeanClass(AbstractBeanFactory.java:1141)
             at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.predictBeanType(AbstractAutowireCapableBeanFactory.java:524)
@@ -714,7 +709,7 @@
             at org.wildfly.extension.undertow.deployment.WebParsingDeploymentProcess
         </stacktrace>
     </exception>
-    <exception class="java.lang.RuntimeException" message="Could not commit session or rollback" label="transaction">
+    <exception class="java.lang.RuntimeException" message="Could not commit session or rollback" label="integration">
         <stacktrace>
             <![CDATA[
             at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:288)
@@ -756,7 +751,7 @@
             at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:248) [jbossweb-7.0.3.Final.jar:7.1.0.Alpha2-SNAPSHOT]
         </stacktrace>
     </exception>
-    <exception class="java.lang.ClassNotFoundException" message="org.apache.xerces.dom.DocumentImpl (no security manager: RMI class loader disabled)" label="network">
+    <exception class="java.lang.ClassNotFoundException" message="org.apache.xerces.dom.DocumentImpl (no security manager: RMI class loader disabled)" label="jvm">
         <stacktrace>
             sun.rmi.server.UnicastServerRef.dispatch:353
             sun.rmi.transport.Transport$1.run:177
@@ -1275,7 +1270,7 @@
             at org.apache.wicket.util.lang.WicketObjects$SerializingObjectSizeOfStrategy.sizeOf(WicketObjects.java:124)
             at org.apache.wicket.util.lang.WicketObjects.sizeof(WicketObjects.java:416)
             at org.apache.wicket.Session.getSizeInBytes(Session.java:439)
-            at [...].PageBase.onAfterRender(PageBase.java:212)
+            at org.apache.wicket.PageBase.onAfterRender(PageBase.java:212)
             at org.apache.wicket.Component.afterRender(Component.java:962)
             at org.apache.wicket.Component.render(Component.java:2326)
             at org.apache.wicket.Page.renderPage(Page.java:1035)

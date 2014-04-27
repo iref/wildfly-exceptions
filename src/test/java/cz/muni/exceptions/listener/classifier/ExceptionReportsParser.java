@@ -58,7 +58,7 @@ final class ExceptionReportsParser {
     }
 
     private List<StackTraceElement> buildStackTrace(String stacktrace) {
-        Pattern pattern = Pattern.compile("at (.+)\\((\\S+?)\\:*(\\d*)\\)");
+        Pattern pattern = Pattern.compile("at (.+)\\((.+?)\\:*(\\d*)\\)");
         Matcher matcher = pattern.matcher(stacktrace);
 
         List<StackTraceElement> elements = new ArrayList<>();

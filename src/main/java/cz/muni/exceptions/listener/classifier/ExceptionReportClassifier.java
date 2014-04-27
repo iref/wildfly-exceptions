@@ -1,6 +1,7 @@
 package cz.muni.exceptions.listener.classifier;
 
 import com.google.common.base.Optional;
+import cz.muni.exceptions.listener.db.model.Ticket;
 import cz.muni.exceptions.listener.db.model.TicketClass;
 import cz.muni.exceptions.source.ExceptionReport;
 
@@ -51,11 +52,11 @@ public class ExceptionReportClassifier {
             if (node.isPresent()) {
                 TicketClass label = node.get().getLabel();
                 Double existingWeight = classification.get(label);
-                double weight = existingWeight != null ? existingWeight + node.get().getWeight() : node.get().getWeight();
-                weight = weight * depthCoefficient;
+                double newWeight = node.get().getWeight() * depthCoefficient;
+                double weight = existingWeight != null ? existingWeight + newWeight : newWeight;
                 classification.put(label, weight);
             }
-            depthCoefficient -= 0.05;
+            depthCoefficient = Math.max(depthCoefficient - 0.05, 0.0);
         }
         return classification;
     }
@@ -64,7 +65,7 @@ public class ExceptionReportClassifier {
         double maxWeight = Double.MIN_VALUE;
         TicketClass maxWeightLabel = TicketClass.UNKNOWN;
         for (Map.Entry<TicketClass, Double> entry : classification.entrySet()) {
-            if (maxWeight < entry.getValue()) {
+            if (!TicketClass.UNKNOWN.equals(entry.getKey()) && maxWeight < entry.getValue()) {
                 maxWeightLabel = entry.getKey();
                 maxWeight = entry.getValue();
             }

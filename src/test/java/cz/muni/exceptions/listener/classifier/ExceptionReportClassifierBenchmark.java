@@ -23,7 +23,7 @@ public class ExceptionReportClassifierBenchmark {
                 .parseDatSet("classifier/exceptions_dataset.xml");
 
         StaxPackageDataParser packageDataParser = new StaxPackageDataParser();
-        Node tree = packageDataParser.parseInput(getClass().getResourceAsStream("data/packages.xml"));
+        Node tree = packageDataParser.parseInput(getClass().getClassLoader().getResourceAsStream("data/packages.xml"));
         PackageTreeSearcher searcher = new PackageTreeSearcher(tree);
         ExceptionReportClassifier classifier = new ExceptionReportClassifier(searcher);
 
@@ -36,7 +36,7 @@ public class ExceptionReportClassifierBenchmark {
         for (int i = 0; i < actualLabels.size(); i++) {
             TicketClass actual = actualLabels.get(i);
             TicketClass expected = reportsData.getExpectedLabels().get(i);
-
+            System.out.println("Actual: " + actual + ", Expected: " + expected);
             if (expected.equals(actual)) {
                 correctlyClassified++;
             }
