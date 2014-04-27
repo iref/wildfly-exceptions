@@ -1,0 +1,1349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exceptions>
+    <exception class="java.io.FileNotFoundException" message="/usr/local/jboss-4.2.2.GA/server/default/work/jboss.web/localhost/catissuecore/org/apache/jsp/pages/content/home/Error_jsp.java (Too many open files)"
+            label="file">
+        <stacktrace>
+            <![CDATA[ at java.io.FileOutputStream.open(Native Method)
+            at java.io.FileOutputStream.<init>(FileOutputStream.java:179)
+            at java.io.FileOutputStream.<init>(FileOutputStream.java:70)
+            at org.apache.jasper.compiler.Compiler.generateJava(Compiler.java:152)
+            at org.apache.jasper.compiler.Compiler.compile(Compiler.java:306)
+            at org.apache.jasper.compiler.Compiler.compile(Compiler.java:286)
+            at org.apache.jasper.compiler.Compiler.compile(Compiler.java:273)
+            at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:566)
+            at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:316)
+            at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:336)
+            at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:265)
+            at javax.servlet.http.HttpServlet.service(HttpServlet.java:803)
+            at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:290)
+            at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+            at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:654)
+            at org.apache.catalina.core.ApplicationDispatcher.processRequest(ApplicationDispatcher.java:447)
+            at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:379)
+            at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:292)
+            at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:423)
+            at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:270)
+            at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:141)
+            at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:102)
+            at org.jboss.web.tomcat.service.jca.CachedConnectionValve.invoke(CachedConnectionValve.java:157)
+            at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:109)
+            at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:262)
+            at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:844)
+            at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:583)
+            at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:446)
+            at java.lang.Thread.run(Thread.java:619)
+            ]]>
+        </stacktrace>
+    </exception>
+    <exception class="java.net.UnknownHostException" message="Failed to connect to server MySqlDS" label="network">
+        <stacktrace>
+            at java.net.InetAddress.getAllByName0(Unknown Source)
+            at java.net.InetAddress.getAllByName(Unknown Source)
+            at java.net.InetAddress.getAllByName(Unknown Source)
+            at java.net.InetAddress.getByName(Unknown Source)
+            at org.jnp.interfaces.TimedSocketFactory.createSocket(TimedSocketFactory.java:81)
+            at org.jnp.interfaces.NamingContext.getServer(NamingContext.java:305)
+            at org.jnp.interfaces.NamingContext.getServer(NamingContext.java:301)
+            at org.jnp.interfaces.NamingContext.checkRef(NamingContext.java:1763)
+            at org.jnp.interfaces.NamingContext.lookup(NamingContext.java:693)
+            at org.jnp.interfaces.NamingContext.lookup(NamingContext.java:686)
+            at javax.naming.InitialContext.lookup(Unknown Source)
+            at JndiDsConTest.main(JndiDsConTest.java:25)
+            at org.jnp.interfaces.NamingContext.getServer(NamingContext.java:335)
+            at org.jnp.interfaces.NamingContext.checkRef(NamingContext.java:1734)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.ClassCastException" message="org.jboss.resource.adapter.jdbc.WrappedConnection" label="jvm">
+        <stacktrace></stacktrace>
+    </exception>
+    <exception class="javax.jms.JMSException" message="Timed out waiting for response when sending packet 40" label="messaging">
+        <stacktrace>
+            at org.hornetq.core.remoting.impl.ChannelImpl.sendBlocking(ChannelImpl.java:302)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.IllegalStateException" message=" No ConnectorMetaData found for mdf rarName: jboss-local-jdbc.rar" label="integration">
+        <stacktrace>
+            at org.jboss.deployers.plugins.deployers.DeployersImpl.checkComplete(DeployersImpl.java:1228) [:2.2.2.GA]
+            at org.jboss.deployers.plugins.main.MainDeployerImpl.checkComplete(MainDeployerImpl.java:905) [:2.2.2.GA]
+            at org.jboss.system.server.profileservice.deployers.MainDeployerPlugin.checkComplete(MainDeployerPlugin.java:87) [:6.1.0.Final]
+            at org.jboss.profileservice.deployment.ProfileDeployerPluginRegistry.checkAllComplete(ProfileDeployerPluginRegistry.java:107) [:0.2.2]
+            at org.jboss.system.server.profileservice.bootstrap.BasicProfileServiceBootstrap.start(BasicProfileServiceBootstrap.java:135) [:6.1.0.Final]
+            at org.jboss.system.server.profileservice.bootstrap.BasicProfileServiceBootstrap.start(BasicProfileServiceBootstrap.java:56) [:6.1.0.Final]
+            at org.jboss.bootstrap.impl.base.server.AbstractServer.startBootstraps(AbstractServer.java:827) [jboss-bootstrap-impl-base.jar:2.1.0-alpha-6]
+            at org.jboss.bootstrap.impl.base.server.AbstractServer$StartServerTask.run(AbstractServer.java:417) [jboss-bootstrap-impl-base.jar:2.1.0-alpha-6]
+            at java.lang.Thread.run(Thread.java:662) [:1.6.0_31]
+        </stacktrace>
+    </exception>
+    <exception class="org.jboss.weld.exceptions.DeploymentException" message="WELD-001408 Unsatisfied dependencies for type [Printer] with qualifiers [@StandardOutput] at injection point [[BackedAnnotatedField] @Inject @StandardOutput private com.company.mavenproject1.Main.printer]"
+               label="integration">
+        <stacktrace>
+            at org.jboss.weld.bootstrap.Validator.validateInjectionPointForDeploymentProblems(Validator.java:404)
+            at org.jboss.weld.bootstrap.Validator.validateInjectionPoint(Validator.java:326)
+            at org.jboss.weld.bootstrap.Validator.validateGeneralBean(Validator.java:177)
+            at org.jboss.weld.bootstrap.Validator.validateRIBean(Validator.java:208)
+            at org.jboss.weld.bootstrap.Validator.validateBean(Validator.java:520)
+            at org.jboss.weld.bootstrap.ConcurrentValidator$1.doWork(ConcurrentValidator.java:70)
+            at org.jboss.weld.bootstrap.ConcurrentValidator$1.doWork(ConcurrentValidator.java:68)
+            at org.jboss.weld.executor.IterativeWorkerTaskFactory$1.call(IterativeWorkerTaskFactory.java:60)
+            at org.jboss.weld.executor.IterativeWorkerTaskFactory$1.call(IterativeWorkerTaskFactory.java:53)
+            at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+            at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+            at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+            at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+            at java.lang.Thread.run(Thread.java:722)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.NoSuchMethodError" message="" label="integration">
+        <stacktrace>
+            <![CDATA[
+            at org.jglue.cdiunit.internal.WeldTestUrlDeployment.<init>(WeldTestUrlDeployment.java:80)
+            at org.jglue.cdiunit.CdiRunner$1.createDeployment(CdiRunner.java:71)
+            at org.jboss.weld.environment.se.Weld.initialize(Weld.java:137)
+            at org.jglue.cdiunit.CdiRunner.createTest(CdiRunner.java:82)
+            at org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:258)
+            at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+            at org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:255)
+            at org.jglue.cdiunit.CdiRunner.methodBlock(CdiRunner.java:113)
+            at org.junit.runners.BlockJUnit4ClassRunner.runNotIgnored(BlockJUnit4ClassRunner.java:79)
+            at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:71)
+            at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:49)
+            at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+            at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+            at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+            at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+            at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+            at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+            at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecuter.runTestClass(JUnitTestClassExecuter.java:55)
+            at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecuter.execute(JUnitTestClassExecuter.java:42)
+            at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassProcessor.processTestClass(JUnitTestClassProcessor.java:71)
+            at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.processTestClass(SuiteTestClassProcessor.java:49)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+            at java.lang.reflect.Method.invoke(Method.java:597)
+            at org.gradle.messaging.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:35)
+            at org.gradle.messaging.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+            at org.gradle.messaging.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:32)
+            at org.gradle.messaging.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:93)
+            at $Proxy2.processTestClass(Unknown Source)
+            at org.gradle.api.internal.tasks.testing.worker.TestWorker.processTestClass(TestWorker.java:103)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+            at java.lang.reflect.Method.invoke(Method.java:597)
+            at org.gradle.messaging.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:35)
+            at org.gradle.messaging.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+            at org.gradle.messaging.remote.internal.hub.MessageHub$Handler.run(MessageHub.java:355)
+            at org.gradle.internal.concurrent.DefaultExecutorFactory$StoppableExecutorImpl$1.run(DefaultExecutorFactory.java:66)
+            at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+            at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+            at java.lang.Thread.run(Thread.java:662)
+            ]]>
+        </stacktrace>
+    </exception>
+    <exception class="org.jboss.weld.exceptions.DeploymentException" message="WELD-001408 Unsatisfied dependencies for type [EntityManager] with qualifiers [@Default] at injection point [[field] @Inject xyz.beans.UploadImpl.em]" label="integration">
+        <stacktrace>
+            at org.jboss.weld.bootstrap.Validator.validateInjectionPoint(Validator.java:275)
+            at org.jboss.weld.bootstrap.Validator.validateInjectionPoint(Validator.java:244)
+            at org.jboss.weld.bootstrap.Validator.validateBean(Validator.java:107)
+            at org.jboss.weld.bootstrap.Validator.validateRIBean(Validator.java:127)
+            at org.jboss.weld.bootstrap.Validator.validateBeans(Validator.java:346)
+            at org.jboss.weld.bootstrap.Validator.validateDeployment(Validator.java:331)
+            at org.jboss.weld.bootstrap.WeldBootstrap.validateBeans(WeldBootstrap.java:366)
+            at org.jboss.as.weld.WeldContainer.start(WeldContainer.java:83)
+            at org.jboss.as.weld.services.WeldService.start(WeldService.java:76)
+            at org.jboss.msc.service.ServiceControllerImpl$StartTask.startService(ServiceControllerImpl.java:1811)
+            at org.jboss.msc.service.ServiceControllerImpl$StartTask.run(ServiceControllerImpl.java:1746)
+            at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+            at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+            at java.lang.Thread.run(Thread.java:724)
+        </stacktrace>
+    </exception>
+    <exception class="org.hibernate.MappingException" message="An association from the table coursemodule refers to an unmapped class: DAL.Module" label="database">
+        <stacktrace>
+            at org.hibernate.cfg.Configuration.secondPassCompileForeignKeys(Configuration.java:1252)
+            at org.hibernate.cfg.Configuration.secondPassCompile(Configuration.java:1170)
+            at org.hibernate.cfg.AnnotationConfiguration.secondPassCompile(AnnotationConfiguration.java:324)
+            at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:1286)
+            at org.hibernate.cfg.AnnotationConfiguration.buildSessionFactory(AnnotationConfiguration.java:859)
+        </stacktrace>
+    </exception>
+    <exception class="org.hibernate.MappingException" message="Unable to instantiate custom type: org.hibernate.type.EnumType" label="database">
+        <stacktrace>
+            at org.hibernate.type.TypeFactory.custom(TypeFactory.java:193)
+            at org.hibernate.type.TypeFactory.custom(TypeFactory.java:179)
+            at org.hibernate.type.TypeFactory.byClass(TypeFactory.java:103)
+            at org.hibernate.type.TypeResolver.heuristicType(TypeResolver.java:130)
+            at org.hibernate.mapping.SimpleValue.getType(SimpleValue.java:307)
+            at org.hibernate.mapping.SimpleValue.isValid(SimpleValue.java:294)
+            at org.hibernate.mapping.Property.isValid(Property.java:238)
+            at org.hibernate.mapping.PersistentClass.validate(PersistentClass.java:469)
+            at org.hibernate.mapping.RootClass.validate(RootClass.java:270)
+            at org.hibernate.cfg.Configuration.validate(Configuration.java:1294)
+            at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:1742)
+            at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:1788)
+            at org.springframework.orm.hibernate4.LocalSessionFactoryBuilder.buildSessionFactory(LocalSessionFactoryBuilder.java:189)
+            at org.springframework.orm.hibernate4.LocalSessionFactoryBean.buildSessionFactory(LocalSessionFactoryBean.java:350)
+            at org.springframework.orm.hibernate4.LocalSessionFactoryBean.afterPropertiesSet(LocalSessionFactoryBean.java:335)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory$6.run(AbstractAutowireCapableBeanFactory.java:1504)
+            at java.security.AccessController.doPrivileged(Native Method)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1502)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1452)
+        </stacktrace>
+    </exception>
+    <exception class="org.hibernate.TransientObjectException" message="object references an unsaved transient instance - save the transient instance before flushing: ca.ups.tle.sortCode.SortCode" label="database">
+        <stacktrace>
+            <![CDATA[
+            at org.hibernate.engine.ForeignKeys.getEntityIdentifierIfNotUnsaved(ForeignKeys.java:243)
+            at org.hibernate.type.EntityType.getIdentifier(EntityType.java:456)
+            at org.hibernate.type.ManyToOneType.nullSafeSet(ManyToOneType.java:130)
+            at org.hibernate.loader.Loader.bindPositionalParameters(Loader.java:1873)
+            at org.hibernate.loader.Loader.bindParameterValues(Loader.java:1844)
+            at org.hibernate.loader.Loader.prepareQueryStatement(Loader.java:1716)
+            at org.hibernate.loader.Loader.doQuery(Loader.java:801)
+            at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:274)
+            at org.hibernate.loader.Loader.doList(Loader.java:2542)
+            at org.hibernate.loader.Loader.listIgnoreQueryCache(Loader.java:2276)
+            at org.hibernate.loader.Loader.list(Loader.java:2271)
+            at org.hibernate.loader.criteria.CriteriaLoader.list(CriteriaLoader.java:119)
+            at org.hibernate.impl.SessionImpl.list(SessionImpl.java:1716)
+            at org.hibernate.impl.CriteriaImpl.list(CriteriaImpl.java:347)
+            at org.hibernate.impl.CriteriaImpl.uniqueResult(CriteriaImpl.java:369)
+            at ca.ups.tle.loadKey.DomLoadKeyHbmDao.read(DomLoadKeyHbmDao.java:74)
+            at ca.ups.tle.loadKey.DomLoadKeyHbmDao$$FastClassByCGLIB$$3036def2.invoke(<generated>)
+            at net.sf.cglib.proxy.MethodProxy.invoke(MethodProxy.java:191)
+            at org.springframework.aop.framework.Cglib2AopProxy$CglibMethodInvocation.invokeJoinpoint(Cglib2AopProxy.java:688)
+            at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:150)
+            at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:110)
+            at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+            at org.springframework.aop.framework.Cglib2AopProxy$DynamicAdvisedInterceptor.intercept(Cglib2AopProxy.java:621)
+            at ca.ups.tle.loadKey.DomLoadKeyHbmDao$$EnhancerByCGLIB$$71e33677_2.read(<generated>)
+            at ca.ups.tle.web.controller.assignLoads.NISLoadEntryController.usePositionInformationNis(NISLoadEntryController.java:1010)
+            at ca.ups.tle.web.controller.assignLoads.NISLoadEntryController$$FastClassByCGLIB$$c0ff7011.invoke(<generated>)
+            at net.sf.cglib.proxy.MethodProxy.invoke(MethodProxy.java:191)
+            at org.springframework.aop.framework.Cglib2AopProxy$CglibMethodInvocation.invokeJoinpoint(Cglib2AopProxy.java:688)
+            at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:150)
+            at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:110)
+            at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+            at org.springframework.aop.framework.Cglib2AopProxy$DynamicAdvisedInterceptor.intercept(Cglib2AopProxy.java:621)
+            at ca.ups.tle.web.controller.assignLoads.NISLoadEntryController$$EnhancerByCGLIB$$64e555c_2.usePositionInformationNis(<generated>)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+            at java.lang.reflect.Method.invoke(Method.java:597)
+            at org.springframework.expression.spel.support.ReflectiveMethodExecutor.execute(ReflectiveMethodExecutor.java:58)
+            at org.springframework.expression.spel.ast.MethodReference.getValueInternal(MethodReference.java:104)
+            at org.springframework.expression.spel.ast.CompoundExpression.getValueInternal(CompoundExpression.java:57)
+            at org.springframework.expression.spel.ast.SpelNodeImpl.getTypedValue(SpelNodeImpl.java:102)
+            at org.springframework.expression.spel.standard.SpelExpression.getValue(SpelExpression.java:97)
+            at org.springframework.binding.expression.spel.SpringELExpression.getValue(SpringELExpression.java:84)
+            at org.springframework.webflow.action.EvaluateAction.doExecute(EvaluateAction.java:75)
+            at org.springframework.webflow.action.AbstractAction.execute(AbstractAction.java:188)
+            at org.springframework.webflow.execution.AnnotatedAction.execute(AnnotatedAction.java:145)
+            at org.springframework.webflow.execution.ActionExecutor.execute(ActionExecutor.java:51)
+            at org.springframework.webflow.engine.support.ActionTransitionCriteria.test(ActionTransitionCriteria.java:82)
+            at org.springframework.webflow.engine.support.TransitionCriteriaChain.test(TransitionCriteriaChain.java:71)
+            at org.springframework.webflow.engine.Transition.canExecute(Transition.java:195)
+            at org.springframework.webflow.engine.Transition.execute(Transition.java:211)
+            at org.springframework.webflow.engine.impl.FlowExecutionImpl.execute(FlowExecutionImpl.java:393)
+            at org.springframework.webflow.engine.impl.RequestControlContextImpl.execute(RequestControlContextImpl.java:214)
+            at org.springframework.webflow.engine.TransitionableState.handleEvent(TransitionableState.java:119)
+            at org.springframework.webflow.engine.Flow.handleEvent(Flow.java:555)
+            at org.springframework.webflow.engine.impl.FlowExecutionImpl.handleEvent(FlowExecutionImpl.java:388)
+            at org.springframework.webflow.engine.impl.RequestControlContextImpl.handleEvent(RequestControlContextImpl.java:210)
+            at org.springframework.webflow.engine.ViewState.handleEvent(ViewState.java:232)
+            at org.springframework.webflow.engine.ViewState.resume(ViewState.java:196)
+            at org.springframework.webflow.engine.Flow.resume(Flow.java:545)
+            at org.springframework.webflow.engine.impl.FlowExecutionImpl.resume(FlowExecutionImpl.java:261)
+            at org.springframework.webflow.executor.FlowExecutorImpl.resumeExecution(FlowExecutorImpl.java:169)
+            at org.springframework.webflow.mvc.servlet.FlowHandlerAdapter.handle(FlowHandlerAdapter.java:183)
+            at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:790)
+            at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:719)
+            at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:644)
+            at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:560)
+            at javax.servlet.http.HttpServlet.service(HttpServlet.java:641)
+            at javax.servlet.http.HttpServlet.service(HttpServlet.java:722)
+            at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:304)
+            at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+            at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:368)
+            at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:109)
+            at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:83)
+            at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
+            at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:97)
+            at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
+            at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:100)
+            at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
+            at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:78)
+            at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
+            at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:54)
+            at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
+            at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:35)
+            at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
+            at org.springframework.security.web.authentication.www.BasicAuthenticationFilter.doFilter(BasicAuthenticationFilter.java:177)
+            at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
+            at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:187)
+            at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
+            at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:105)
+            at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
+            at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:79)
+            at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380)
+            at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:169)
+            at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:237)
+            at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:167)
+            at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+            at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+            at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:240)
+            at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:164)
+            at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:462)
+            at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:164)
+            at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:100)
+            at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:562)
+            at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:118)
+            at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:395)
+            at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:250)
+            at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:188)
+            at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:302)
+            at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+            at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+            at java.lang.Thread.run(Thread.java:662)
+            ]]>
+        </stacktrace>
+    </exception>
+    <exception class="org.xml.sax.SAXParseException" message="lineNumber: 2; columnNumber: 25; Document is invalid: no grammar found." label="xml">
+        <stacktrace>
+            at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:198)
+            at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.error(ErrorHandlerWrapper.java:134)
+            at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:387)
+            at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:321)
+            at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.scanStartElement(XMLNSDocumentScannerImpl.java:226)
+            at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl$NSContentDriver.scanRootElementHook(XMLNSDocumentScannerImpl.java:602)
+            at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(XMLDocumentFragmentScannerImpl.java:3080)
+            at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$PrologDriver.next(XMLDocumentScannerImpl.java:899)
+            at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:625)
+            at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:116)
+            at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:488)
+            at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:819)
+            at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:748)
+            at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:123)
+            at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1208)
+            at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(SAXParserImpl.java:525)
+            at org.dom4j.io.SAXReader.read(SAXReader.java:465)
+            at org.hibernate.cfg.Configuration.doConfigure(Configuration.java:2067)
+        </stacktrace>
+    </exception>
+    <exception class="org.hibernate.HibernateException" message="/hibernate.cfg.xml not found" label="database">
+        <stacktrace>
+            at org.hibernate.util.ConfigHelper.getResourceAsStream(ConfigHelper.java:170)
+            at org.hibernate.cfg.Configuration.getConfigurationInputStream(Configuration.java:2176)
+            at org.hibernate.cfg.Configuration.configure(Configuration.java:2157)
+            at org.hibernate.cfg.Configuration.configure(Configuration.java:2137)
+            at FirstHibernate.com.myhib.CRUDS.CrudsOps.main(CrudsOps.java:15)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.AbstractMethodError" message="org.hibernate.ejb.EntityManagerFactoryImpl.createEntityManager(Ljavax/persistence/SynchronizationType;Ljava/util/Map;)Ljavax/persistence/EntityManager;" label="database">
+        <stacktrace>
+            at com.sun.enterprise.container.common.impl.EntityManagerWrapper._getDelegate(EntityManagerWrapper.java:197)
+            at com.sun.enterprise.container.common.impl.EntityManagerWrapper.find(EntityManagerWrapper.java:341)
+            at TS.FrameWork.DAO.PessoaJpaController.findPessoa(PessoaJpaController.java:107)
+            at service.PessoaResource.findAll(PessoaResource.java:110)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:606)
+            at org.glassfish.ejb.security.application.EJBSecurityManager.runMethod(EJBSecurityManager.java:1081)
+            at org.glassfish.ejb.security.application.EJBSecurityManager.invoke(EJBSecurityManager.java:1153)
+            at com.sun.ejb.containers.BaseContainer.invokeBeanMethod(BaseContainer.java:4695)
+            at com.sun.ejb.EjbInvocation.invokeBeanMethod(EjbInvocation.java:630)
+            at com.sun.ejb.containers.interceptors.AroundInvokeChainImpl.invokeNext(InterceptorManager.java:822)
+            at com.sun.ejb.EjbInvocation.proceed(EjbInvocation.java:582)
+            at org.jboss.weld.ejb.AbstractEJBRequestScopeActivationInterceptor.aroundInvoke(AbstractEJBRequestScopeActivationInterceptor.java:46)
+            at sun.reflect.GeneratedMethodAccessor107.invoke(Unknown Source)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:606)
+            at com.sun.ejb.containers.interceptors.AroundInvokeInterceptor.intercept(InterceptorManager.java:883)
+            at com.sun.ejb.containers.interceptors.AroundInvokeChainImpl.invokeNext(InterceptorManager.java:822)
+            at com.sun.ejb.EjbInvocation.proceed(EjbInvocation.java:582)
+            at com.sun.ejb.containers.interceptors.SystemInterceptorProxy.doCall(SystemInterceptorProxy.java:163)
+            at com.sun.ejb.containers.interceptors.SystemInterceptorProxy.aroundInvoke(SystemInterceptorProxy.java:140)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:606)
+            at com.sun.ejb.containers.interceptors.AroundInvokeInterceptor.intercept(InterceptorManager.java:883)
+            at com.sun.ejb.containers.interceptors.AroundInvokeChainImpl.invokeNext(InterceptorManager.java:822)
+            at com.sun.ejb.containers.interceptors.InterceptorManager.intercept(InterceptorManager.java:369)
+            at com.sun.ejb.containers.BaseContainer.__intercept(BaseContainer.java:4667)
+            at com.sun.ejb.containers.BaseContainer.intercept(BaseContainer.java:4655)
+            at com.sun.ejb.containers.EJBLocalObjectInvocationHandler.invoke(EJBLocalObjectInvocationHandler.java:212)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.NoClassDefFoundError" message="[Lorg/aopalliance/intercept/MethodInterceptor;" label="jvm">
+        <stacktrace>
+            at java.lang.Class.getDeclaredMethods0(Native Method)
+            at java.lang.Class.privateGetDeclaredMethods(Class.java:2427)
+            at java.lang.Class.getDeclaredMethods(Class.java:1791)
+            at com.google.inject.internal.ProviderMethodsModule.getProviderMethods(ProviderMethodsModule.java:78)
+            at com.google.inject.internal.ProviderMethodsModule.configure(ProviderMethodsModule.java:70)
+            at com.google.inject.spi.Elements$RecordingBinder.install(Elements.java:223)
+            at com.google.inject.spi.Elements$RecordingBinder.install(Elements.java:232)
+            at com.google.inject.spi.Elements.getElements(Elements.java:101)
+            at com.google.inject.InjectorShell$Builder.build(InjectorShell.java:135)
+            at com.google.inject.InjectorBuilder.build(InjectorBuilder.java:102)
+            at com.google.inject.Guice.createInjector(Guice.java:92)
+            at com.google.inject.Guice.createInjector(Guice.java:69)
+            at com.google.inject.Guice.createInjector(Guice.java:59)
+            at App.main(App.java:6)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.ClassNotFoundException: " message="org.springframework.dao.DuplicateKeyException" label="jvm">
+        <stacktrace>
+            at org.apache.catalina.loader.WebappClassLoader.loadClass(WebappClassLoader.java:1702)
+            at org.apache.catalina.loader.WebappClassLoader.loadClass(WebappClassLoader.java:1547)
+            at org.springframework.jdbc.support.JdbcAccessor.getExceptionTranslator(JdbcAccessor.java:99)
+            at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:602)
+            at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:636)
+            at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:665)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.ClassNotFoundException" message="za.co.sanlam.epsilon.batch.alterationquotation.dao.hibernate.AlterationQuotationDaoTest" label="jvm">
+        <stacktrace>
+            at java.net.URLClassLoader.findClass(URLClassLoader.java:434)
+            at java.lang.ClassLoader.loadClass(ClassLoader.java:653)
+            at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:358)
+            at java.lang.ClassLoader.loadClass(ClassLoader.java:619)
+            at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.loadClass(RemoteTestRunner.java:693)
+            at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.loadClasses(RemoteTestRunner.java:429)
+            at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:452)
+            at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
+            at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
+            at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
+        </stacktrace>
+    </exception>
+    <exception class="org.springframework.beans.NotReadablePropertyException" message="Invalid property 'moduleCode' of bean class [org.springframework.ui.ModelMap]: Bean property 'moduleCode' is not readable or has an invalid getter method: Does the return type of the getter match the parameter type of the setter?" label="web">
+        <stacktrace>
+            <![CDATA[
+            org.springframework.beans.BeanWrapperImpl.getPropertyValue(BeanWrapperImpl.java:709)
+            org.springframework.beans.BeanWrapperImpl.getPropertyValue(BeanWrapperImpl.java:701)
+            org.springframework.validation.AbstractPropertyBindingResult.getActualFieldValue(AbstractPropertyBindingResult.java:99)
+            org.springframework.validation.AbstractBindingResult.getFieldValue(AbstractBindingResult.java:218)
+            org.springframework.web.servlet.support.BindStatus.<init>(BindStatus.java:120)
+            org.springframework.web.servlet.tags.form.AbstractDataBoundFormElementTag.getBindStatus(AbstractDataBoundFormElementTag.java:178)
+            org.springframework.web.servlet.tags.form.AbstractDataBoundFormElementTag.getPropertyPath(AbstractDataBoundFormElementTag.java:198)
+            org.springframework.web.servlet.tags.form.LabelTag.autogenerateFor(LabelTag.java:129)
+            org.springframework.web.servlet.tags.form.LabelTag.resolveFor(LabelTag.java:119)
+            org.springframework.web.servlet.tags.form.LabelTag.writeTagContent(LabelTag.java:89)
+            org.springframework.web.servlet.tags.form.AbstractFormTag.doStartTagInternal(AbstractFormTag.java:102)
+            org.springframework.web.servlet.tags.RequestContextAwareTag.doStartTag(RequestContextAwareTag.java:79)
+            org.apache.jsp.WEB_002dINF.jsp.admin.addModule_jsp._jspx_meth_form_005flabel_005f0(addModule_jsp.java:452)
+            org.apache.jsp.WEB_002dINF.jsp.admin.addModule_jsp._jspx_meth_form_005fform_005f0(addModule_jsp.java:363)
+            org.apache.jsp.WEB_002dINF.jsp.admin.addModule_jsp._jspService(addModule_jsp.java:151)
+            org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+            javax.servlet.http.HttpServlet.service(HttpServlet.java:728)
+            org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:432)
+            org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:390)
+            org.apache.jasper.servlet.JspServlet.service(JspServlet.java:334)
+            javax.servlet.http.HttpServlet.service(HttpServlet.java:728)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:330)
+            org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:108)
+            org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:84)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:113)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:64)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:113)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:54)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:45)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.authentication.www.BasicAuthenticationFilter.doFilter(BasicAuthenticationFilter.java:150)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:183)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:105)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:65)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:192)
+            org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:166)
+            org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:346)
+            org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:259)
+            org.springframework.web.servlet.view.InternalResourceView.renderMergedOutputModel(InternalResourceView.java:238)
+            org.springframework.web.servlet.view.AbstractView.render(AbstractView.java:264)
+            org.springframework.web.servlet.DispatcherServlet.render(DispatcherServlet.java:1208)
+            org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:992)
+            org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:939)
+            org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:856)
+            org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:915)
+            org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:811)
+            javax.servlet.http.HttpServlet.service(HttpServlet.java:621)
+            org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:796)
+            javax.servlet.http.HttpServlet.service(HttpServlet.java:728)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:330)
+            org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:118)
+            org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:84)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:113)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:103)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:113)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:54)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:45)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.authentication.www.BasicAuthenticationFilter.doFilter(BasicAuthenticationFilter.java:150)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:183)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:105)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:87)
+            org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:342)
+            org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:192)
+            org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:160)
+            org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:346)
+            org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:259)
+            ]]>
+        </stacktrace>
+    </exception>
+    <exception class="org.springframework.transaction.UnexpectedRollbackException" message="Transaction rolled back because it has been marked as rollback-only" label="transaction">
+        <stacktrace>
+            at org.springframework.transaction.support.AbstractPlatformTransactionManager.commit(AbstractPlatformTransactionManager.java:717)
+            at org.springframework.transaction.interceptor.TransactionAspectSupport.commitTransactionAfterReturning(TransactionAspectSupport.java:393)
+            at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:120)
+            at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+            at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:202)"
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.IllegalArgumentException" message="id to load is required for loading" label="database">
+        <stacktrace>
+            <![CDATA[
+            org.hibernate.event.spi.LoadEvent.<init>(LoadEvent.java:87)
+            org.hibernate.event.spi.LoadEvent.<init>(LoadEvent.java:59)
+            org.hibernate.internal.SessionImpl$IdentifierLoadAccessImpl.load(SessionImpl.java:2421)
+            org.hibernate.internal.SessionImpl.get(SessionImpl.java:974)
+            com.myproject.app.dao.UserDAO.getUserByID(UserDAO.java:126)
+            com.myproject.app.dao.UserDAO$$FastClassByCGLIB$$20f5ced0.invoke(<generated>)
+            org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+            org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:698)
+            org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:150)
+            org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:110)
+            org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+            org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:631)
+            com.myproject.app.dao.UserDAO$$EnhancerByCGLIB$$f3ffc7ba.getUserByID(<generated>)
+            com.myproject.app.service.UserServiceImpl.getUserByID(UserServiceImpl.java:34)
+            sun.reflect.GeneratedMethodAccessor212.invoke(Unknown Source)
+            sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            java.lang.reflect.Method.invoke(Method.java:601)
+            org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:317)
+            org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:183)
+            org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:150)
+            org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:110)
+            org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+            org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:204)
+            $Proxy522.getUserByID(Unknown Source)
+            com.myproject.app.controller.UserController.getSetterPage(UserController.java:73)
+            sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+            sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            java.lang.reflect.Method.invoke(Method.java:601)
+            ]]>
+        </stacktrace>
+    </exception>
+    <exception class="org.springframework.beans.factory.CannotLoadBeanClassException" message="Cannot find class [org.spring.springframework.web.servlet.view.InternalResourceViewResolver] for bean with name 'viewResolver' defined in ServletContext resource [/WEB-INF/springapp-servlet.xml]; nested exception is java.lang.ClassNotFoundException: org.spring.springframework.web.servlet.view.InternalResourceViewResolver" label="integration">
+        <stacktrace>
+            at org.springframework.beans.factory.support.AbstractBeanFactory.resolveBeanClass(AbstractBeanFactory.java:1141)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.predictBeanType(AbstractAutowireCapableBeanFactory.java:524)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.isFactoryBean(AbstractBeanFactory.java:1177)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.isFactoryBean(AbstractBeanFactory.java:758)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:422)
+            at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:728)
+            at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:380)
+            at org.springframework.web.servlet.FrameworkServlet.createWebApplicationContext(FrameworkServlet.java:402)
+            at org.springframework.web.servlet.FrameworkServlet.initWebApplicationContext(FrameworkServlet.java:316)
+            at org.springframework.web.servlet.FrameworkServlet.initServletBean(FrameworkServlet.java:282)
+            at org.springframework.web.servlet.HttpServletBean.init(HttpServletBean.java:126)
+            at javax.servlet.GenericServlet.init(GenericServlet.java:212)
+            at org.apache.catalina.core.StandardWrapper.loadServlet(StandardWrapper.java:1173)
+            at org.apache.catalina.core.StandardWrapper.load(StandardWrapper.java:993)
+            at org.apache.catalina.core.StandardContext.loadOnStartup(StandardContext.java:4187)
+            at org.apache.catalina.core.StandardContext.start(StandardContext.java:4496)
+            at org.apache.catalina.core.ContainerBase.addChildInternal(ContainerBase.java:791)
+            at org.apache.catalina.core.ContainerBase.addChild(ContainerBase.java:771)
+            at org.apache.catalina.core.StandardHost.addChild(StandardHost.java:546)
+            at org.apache.catalina.startup.HostConfig.deployDirectory(HostConfig.java:1041)
+            at org.apache.catalina.startup.HostConfig.deployDirectories(HostConfig.java:964)
+            at org.apache.catalina.startup.HostConfig.deployApps(HostConfig.java:502)
+            at org.apache.catalina.startup.HostConfig.start(HostConfig.java:1277)
+            at org.apache.catalina.startup.HostConfig.lifecycleEvent(HostConfig.java:321)
+            at org.apache.catalina.util.LifecycleSupport.fireLifecycleEvent(LifecycleSupport.java:119)
+            at org.apache.catalina.core.ContainerBase.start(ContainerBase.java:1053)
+            at org.apache.catalina.core.StandardHost.start(StandardHost.java:785)
+            at org.apache.catalina.core.ContainerBase.start(ContainerBase.java:1045)
+            at org.apache.catalina.core.StandardEngine.start(StandardEngine.java:443)
+            at org.apache.catalina.core.StandardService.start(StandardService.java:519)
+            at org.apache.catalina.core.StandardServer.start(StandardServer.java:710)
+            at org.apache.catalina.startup.Catalina.start(Catalina.java:581)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+            at java.lang.reflect.Method.invoke(Method.java:597)
+            at org.apache.catalina.startup.Bootstrap.start(Bootstrap.java:289)
+            at org.apache.catalina.startup.Bootstrap.main(Bootstrap.java:414)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.RuntimeException" message="Failed to dispatch CDI Event" label="integration">
+        <stacktrace>
+            at org.jboss.errai.cdi.server.events.EventDispatcher.callback(EventDispatcher.java:193)
+            at org.jboss.errai.bus.server.DeliveryPlan.deliver(DeliveryPlan.java:47)
+            at org.jboss.errai.bus.server.ServerMessageBusImpl.sendGlobal(ServerMessageBusImpl.java:284)
+            at org.jboss.errai.bus.server.SimpleDispatcher.dispatchGlobal(SimpleDispatcher.java:46)
+            at org.jboss.errai.bus.server.service.ErraiServiceImpl.store(ErraiServiceImpl.java:97)
+            at org.jboss.errai.bus.server.service.ErraiServiceImpl.store(ErraiServiceImpl.java:114)
+            at org.jboss.errai.bus.server.servlet.DefaultBlockingServlet.doPost(DefaultBlockingServlet.java:140)
+            at javax.servlet.http.HttpServlet.service(HttpServlet.java:646)
+            at javax.servlet.http.HttpServlet.service(HttpServlet.java:727)
+            at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+            at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+            at org.jboss.solder.servlet.exception.CatchExceptionFilter.doFilter(CatchExceptionFilter.java:65)
+            at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+            at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+            at org.jboss.solder.servlet.event.ServletEventBridgeFilter.doFilter(ServletEventBridgeFilter.java:74)
+            at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+            at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+            at org.jbpm.designer.web.filter.impl.PluggableFilter.doFilter(PluggableFilter.java:70)
+            at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+            at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+            at org.uberfire.security.server.UberFireSecurityFilter.doFilter(UberFireSecurityFilter.java:266)
+            at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+            at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+            at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+            at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+            at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:610)
+            at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:170)
+            at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:98)
+            at org.kie.integration.tomcat.JACCValve.invoke(JACCValve.java:93)
+            at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+            at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:408)
+            at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1040)
+            at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:607)
+            at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:315)
+            at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+            at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+            at java.lang.Thread.run(Thread.java:619)
+        </stacktrace>
+    </exception>
+    <exception class="org.jboss.weld.exceptions.DeploymentException" message="WELD-001408 Unsatisfied dependencies for type [ListeningStatus] with qualifiers [@Default] at injection point [[field] @Inject private biz.modit.tit.gop.common.task.TaskComponentController.listeningStatus]" label="integration">
+        <stacktrace>
+            at org.jboss.weld.bootstrap.Validator.validateInjectionPoint(Validator.java:311)
+            at org.jboss.weld.bootstrap.Validator.validateInjectionPoint(Validator.java:280)
+            at org.jboss.weld.bootstrap.Validator.validateBean(Validator.java:143)
+            at org.jboss.weld.bootstrap.Validator.validateRIBean(Validator.java:163)
+            at org.jboss.weld.bootstrap.Validator.validateBeans(Validator.java:382)
+            at org.jboss.weld.bootstrap.Validator.validateDeployment(Validator.java:367)
+            at org.jboss.weld.bootstrap.WeldBootstrap.validateBeans(WeldBootstrap.java:379)
+            at org.jboss.as.weld.WeldContainer.start(WeldContainer.java:83)
+            at org.jboss.as.weld.services.WeldService.start(WeldService.java:76)
+        </stacktrace>
+    </exception>
+    <exception class="java.net.UnknownHostException" message="foo.bar" label="network">
+        <stacktrace>
+            <![CDATA[
+            at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184) [rt.jar:1.8.0]
+            at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) [rt.jar:1.8.0]
+            at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) [rt.jar:1.8.0]
+            at java.net.Socket.connect(Socket.java:589) [rt.jar:1.8.0]
+            at java.net.Socket.connect(Socket.java:538) [rt.jar:1.8.0]
+            at sun.net.NetworkClient.doConnect(NetworkClient.java:180) [rt.jar:1.8.0]
+            at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) [rt.jar:1.8.0]
+            at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) [rt.jar:1.8.0]
+            at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) [rt.jar:1.8.0]
+            at sun.net.www.http.HttpClient.New(HttpClient.java:308) [rt.jar:1.8.0]
+            at sun.net.www.http.HttpClient.New(HttpClient.java:326) [rt.jar:1.8.0]
+            at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1167) [rt.jar:1.8.0]
+            at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1103) [rt.jar:1.8.0]
+            at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:997) [rt.jar:1.8.0]
+            at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:931) [rt.jar:1.8.0]
+            at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1511) [rt.jar:1.8.0]
+            at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1439) [rt.jar:1.8.0]
+            at java.net.URL.openStream(URL.java:1038) [rt.jar:1.8.0]
+            at org.jboss.ws.common.deployment.SOAPAddressWSDLParser.parse(SOAPAddressWSDLParser.java:134)
+            ]]>
+        </stacktrace>
+    </exception>
+    <exception class="org.jboss.msc.service.DuplicateServiceException" message="Service jboss.undertow.deployment.default-server.default-host./.codec is already registered" label="messaging">
+        <stacktrace>
+            at org.jboss.msc.service.ServiceRegistrationImpl.setInstance(ServiceRegistrationImpl.java:158) [jboss-msc-1.2.0.Final.jar:1.2.0.Final]
+            at org.jboss.msc.service.ServiceControllerImpl.startInstallation(ServiceControllerImpl.java:235) [jboss-msc-1.2.0.Final.jar:1.2.0.Final]
+            at org.jboss.msc.service.ServiceContainerImpl.install(ServiceContainerImpl.java:767) [jboss-msc-1.2.0.Final.jar:1.2.0.Final]
+            at org.jboss.msc.service.ServiceTargetImpl.install(ServiceTargetImpl.java:223) [jboss-msc-1.2.0.Final.jar:1.2.0.Final]
+            at org.jboss.msc.service.ServiceControllerImpl$ChildServiceTarget.install(ServiceControllerImpl.java:2401) [jboss-msc-1.2.0.Final.jar:1.2.0.Final]
+            at org.jboss.msc.service.ServiceTargetImpl.install(ServiceTargetImpl.java:223) [jboss-msc-1.2.0.Final.jar:1.2.0.Final]
+            at org.jboss.msc.service.ServiceControllerImpl$ChildServiceTarget.install(ServiceControllerImpl.java:2401) [jboss-msc-1.2.0.Final.jar:1.2.0.Final]
+            at org.jboss.msc.service.ServiceBuilderImpl.install(ServiceBuilderImpl.java:317) [jboss-msc-1.2.0.Final.jar:1.2.0.Final]
+            at org.wildfly.extension.undertow.deployment.UndertowDeploymentProcessor.installSessionIdentifierCodec(UndertowDeploymentProcessor.java:358)
+            at org.wildfly.extension.undertow.deployment.UndertowDeploymentProcessor.processDeployment(UndertowDeploymentProcessor.java:281)
+            at org.wildfly.extension.undertow.deployment.UndertowDeploymentProcessor.deploy(UndertowDeploymentProcessor.java:115)
+            at org.jboss.as.server.deployment.DeploymentUnitPhaseService.start(DeploymentUnitPhaseService.java:159) [wildfly-server-8.0.0.Final.jar:8.0.0.Final]
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.IllegalStateException" message="Cannot find binding for 1dadda13-b432-4004-b1df-e180d77245a5991862ea-cc57-11e3-899d-217962e95a1d on ClusterConnectionImpl@277207633[nodeUUID=7389f807-cc48-11e3-9d7d-4daadff738e7, connector=TransportConfiguration(name=netty, factory=org-hornetq-core-remoting-impl-netty-NettyConnectorFactory) ?port=5445host=10-4-167-27, address=jms, server=HornetQServerImpl::serverUUID=7389f807-cc48-11e3-9d7d-4daadff738e7]" label="messaging">
+        <stacktrace>
+            at org.hornetq.core.server.cluster.impl.ClusterConnectionImpl$MessageFlowRecordImpl.doConsumerCreated(ClusterConnectionImpl.java:1396) [hornetq-server-2.4.0-SNAPSHOT.jar:]
+            at org.hornetq.core.server.cluster.impl.ClusterConnectionImpl$MessageFlowRecordImpl.onMessage(ClusterConnectionImpl.java:1143) [hornetq-server-2.4.0-SNAPSHOT.jar:]
+            at org.hornetq.core.client.impl.ClientConsumerImpl.callOnMessage(ClientConsumerImpl.java:1117) [hornetq-core-client-2.4.0-SNAPSHOT.jar:]
+            at org.hornetq.core.client.impl.ClientConsumerImpl.access$500(ClientConsumerImpl.java:57) [hornetq-core-client-2.4.0-SNAPSHOT.jar:]
+            at org.hornetq.core.client.impl.ClientConsumerImpl$Runner.run(ClientConsumerImpl.java:1252) [hornetq-core-client-2.4.0-SNAPSHOT.jar:]
+        </stacktrace>
+    </exception>
+    <exception class="javax.xml.stream.XMLStreamException:" message="ParseError at [row,col]:[200,3] Message: Unexpected element '{http://java.sun.com/xml/ns/javaee}dispatcher' encountered" label="integration">
+        <stacktrace>
+            at org.jboss.metadata.parser.util.MetaDataElementParser.unexpectedElement(MetaDataElementParser.java:115)
+            at org.jboss.metadata.parser.servlet.ServletMappingMetaDataParser.parse(ServletMappingMetaDataParser.java:77)
+            at org.jboss.metadata.parser.servlet.WebCommonMetaDataParser.parse(WebCommonMetaDataParser.java:110)
+            at org.jboss.metadata.parser.servlet.WebMetaDataParser.parse(WebMetaDataParser.java:184)
+            at org.jboss.metadata.parser.servlet.WebMetaDataParser.parse(WebMetaDataParser.java:57)
+            at org.wildfly.extension.undertow.deployment.WebParsingDeploymentProcess
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.RuntimeException" message="Could not commit session or rollback" label="integration">
+        <stacktrace>
+            <![CDATA[
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:288)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1120)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:522)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:461)
+            at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:295)
+            at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:292)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:607)
+            at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:932)
+            at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:479)
+            at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:139)
+            at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:83)
+            at com.xyz.ras.test.MyTest.main(MyTest.java:20)
+            ]]>
+        </stacktrace>
+    </exception>
+    <exception class="javax.resource.ResourceException" message="IJ000453: Unable to get managed connection for java:/my.ds.core" label="database">
+        <stacktrace>
+            at org.jboss.jca.adapters.jdbc.WrapperDataSource.getConnection(WrapperDataSource.java:137)
+            at org.hibernate.service.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:141) [hibernate-core-4.0.0.CR6.jar:4.0.0.CR6]
+            at org.hibernate.internal.AbstractSessionImpl$NonContextualJdbcConnectionAccess.obtainConnection(AbstractSessionImpl.java:276) [hibernate-core-4.0.0.CR6.jar:4.0.0.CR6]
+            at org.hibernate.engine.jdbc.internal.LogicalConnectionImpl.obtainConnection(LogicalConnectionImpl.java:299) [hibernate-core-4.0.0.CR6.jar:4.0.0.CR6]
+            at org.hibernate.engine.jdbc.internal.LogicalConnectionImpl.getConnection(LogicalConnectionImpl.java:169) [hibernate-core-4.0.0.CR6.jar:4.0.0.CR6]
+            at org.hibernate.engine.jdbc.internal.proxy.ConnectionProxyHandler.extractPhysicalConnection(ConnectionProxyHandler.java:82) [hibernate-core-4.0.0.CR6.jar:4.0.0.CR6]
+            at org.hibernate.engine.jdbc.internal.proxy.ConnectionProxyHandler.continueInvocation(ConnectionProxyHandler.java:138) [hibernate-core-4.0.0.CR6.jar:4.0.0.CR6]
+            at org.hibernate.engine.jdbc.internal.proxy.AbstractProxyHandler.invoke(AbstractProxyHandler.java:81) [hibernate-core-4.0.0.CR6.jar:4.0.0.CR6]
+            at $Proxy81.prepareStatement(Unknown Source)    at org.hibernate.engine.jdbc.internal.StatementPreparerImpl$5.doPrepare(StatementPreparerImpl.java:149) [hibernate-core-4
+            .0.0.CR6.jar:4.0.0.CR6]
+            at org.hibernate.engine.jdbc.internal.StatementPreparerImpl$StatementPreparationTemplate.prepareStatement(StatementPreparerImpl.java:178) [hibernate-core-4.0.0.CR6.jar:4
+            .0.0.CR6]
+            at org.hibernate.engine.jdbc.internal.StatementPreparerImpl.prepareQueryStatement(StatementPreparerImpl.java:147) [hibernate-core-4.0.0.CR6.jar:4.0.0.CR6]
+            at org.hibernate.loader.Loader.prepareQueryStatement(Loader.java:1739) [hibernate-core-4.0.0.CR6.jar:4.0.0.CR6]
+            at org.hibernate.loader.Loader.doQuery(Loader.java:828) [hibernate-core-4.0.0.CR6.jar:4.0.0.CR6]
+            at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:289) [hibernate-core-4.0.0.CR6.jar:4.0.0.CR6]
+            at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:280) [jbossweb-7.0.3.Final.jar:7.1.0.Alpha2-SNAPSHOT]
+            at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:248) [jbossweb-7.0.3.Final.jar:7.1.0.Alpha2-SNAPSHOT]
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.ClassNotFoundException" message="org.apache.xerces.dom.DocumentImpl (no security manager: RMI class loader disabled)" label="jvm">
+        <stacktrace>
+            sun.rmi.server.UnicastServerRef.dispatch:353
+            sun.rmi.transport.Transport$1.run:177
+            sun.rmi.transport.Transport$1.run:174
+            java.security.AccessController.doPrivileged:-2
+            sun.rmi.transport.Transport.serviceCall:173
+            sun.rmi.transport.tcp.TCPTransport.handleMessages:556
+            sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0:811
+            sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run:670
+            java.util.concurrent.ThreadPoolExecutor.runWorker:1145
+            java.util.concurrent.ThreadPoolExecutor$Worker.run:615
+            java.lang.Thread.run:744
+        </stacktrace>
+    </exception>
+    <exception class="org.jboss.resteasy.spi.LoggableFailure" message="Unable to find contextual data of type: javax.ws.rs.core.HttpHeaders" label="messaging">
+        <stacktrace>
+            org.jboss.resteasy.core.ContextParameterInjector$GenericDelegatingProxy.invoke(ContextParameterInjector.java:53)
+            com.sun.proxy.$Proxy183.getRequestHeaders(Unknown Source)
+            org.kie.services.remote.rest.ResourceBase.getVariant(ResourceBase.java:118)
+            org.kie.services.remote.rest.exception.DescriptiveExceptionHandler.toResponse(DescriptiveExceptionHandler.java:66)
+            org.kie.services.remote.rest.exception.DescriptiveExceptionHandler.toResponse(DescriptiveExceptionHandler.java:25)
+            sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+            sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            java.lang.reflect.Method.invoke(Method.java:606)
+            org.jboss.weld.bean.proxy.AbstractBeanInstance.invoke(AbstractBeanInstance.java:44)
+            org.jboss.weld.bean.proxy.ProxyMethodHandler.invoke(ProxyMethodHandler.java:105)
+        </stacktrace>
+    </exception>
+    <exception class="java.io.IOException" message="Unable to invoke invoke(), status=WAITING" label="messaging">
+        <stacktrace>
+            at org.jboss.remotingjmx.protocol.v1.ClientConnection$TheConnection.invoke(ClientConnection.java:1218)
+            at javax.management.MBeanServerInvocationHandler.invoke(MBeanServerInvocationHandler.java:292)
+            at com.sun.proxy.$Proxy17.runTestMethod(Unknown Source)
+            at org.jboss.arquillian.protocol.jmx.JMXMethodExecutor.invoke(JMXMethodExecutor.java:71)
+            at org.jboss.arquillian.container.test.impl.execution.RemoteTestExecuter.execute(RemoteTestExecuter.java:120)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:606)
+            at org.jboss.arquillian.core.impl.ObserverImpl.invoke(ObserverImpl.java:94)
+            at org.jboss.arquillian.core.impl.EventContextImpl.invokeObservers(EventContextImpl.java:99)
+            at org.jboss.arquillian.core.impl.EventContextImpl.proceed(EventContextImpl.java:81)
+            at org.jboss.arquillian.core.impl.ManagerImpl.fire(ManagerImpl.java:135)
+            at org.jboss.arquillian.core.impl.ManagerImpl.fire(ManagerImpl.java:115)
+            at org.jboss.arquillian.core.impl.EventImpl.fire(EventImpl.java:67)
+            at org.jboss.arquillian.container.test.impl.execution.ClientTestExecuter.execute(ClientTestExecuter.java:57)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:606)
+            at org.jboss.arquillian.core.impl.ObserverImpl.invoke(ObserverImpl.java:94)
+            at org.jboss.arquillian.core.impl.EventContextImpl.invokeObservers(EventContextImpl.java:99)
+            at org.jboss.arquillian.core.impl.EventContextImpl.proceed(EventContextImpl.java:81)
+            at org.jboss.arquillian.container.test.impl.client.ContainerEventController.createContext(ContainerEventController.java:142)
+            at org.jboss.arquillian.container.test.impl.client.ContainerEventController.createTestContext(ContainerEventController.java:129)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:606)
+            at org.jboss.arquillian.core.impl.ObserverImpl.invoke(ObserverImpl.java:94)
+            at org.jboss.arquillian.core.impl.EventContextImpl.proceed(EventContextImpl.java:88)
+            at org.jboss.arquillian.test.impl.TestContextHandler.createTestContext(TestContextHandler.java:102)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:606)
+            at org.jboss.arquillian.core.impl.ObserverImpl.invoke(ObserverImpl.java:94)
+            at org.jboss.arquillian.core.impl.EventContextImpl.proceed(EventContextImpl.java:88)
+            at org.jboss.arquillian.test.impl.TestContextHandler.createClassContext(TestContextHandler.java:84)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:606)
+            at org.jboss.arquillian.core.impl.ObserverImpl.invoke(ObserverImpl.java:94)
+            at org.jboss.arquillian.core.impl.EventContextImpl.proceed(EventContextImpl.java:88)
+            at org.jboss.arquillian.test.impl.TestContextHandler.createSuiteContext(TestContextHandler.java:65)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:606)
+            at org.jboss.arquillian.core.impl.ObserverImpl.invoke(ObserverImpl.java:94)
+            at org.jboss.arquillian.core.impl.EventContextImpl.proceed(EventContextImpl.java:88)
+            at org.jboss.arquillian.core.impl.ManagerImpl.fire(ManagerImpl.java:135)
+            at org.jboss.arquillian.test.impl.EventTestRunnerAdaptor.test(EventTestRunnerAdaptor.java:111)
+            at org.jboss.arquillian.junit.Arquillian$6.evaluate(Arquillian.java:263)
+            at org.jboss.arquillian.junit.Arquillian$4.evaluate(Arquillian.java:226)
+            at org.jboss.arquillian.junit.Arquillian.multiExecute(Arquillian.java:314)
+            at org.jboss.arquillian.junit.Arquillian.access$100(Arquillian.java:46)
+            at org.jboss.arquillian.junit.Arquillian$5.evaluate(Arquillian.java:240)
+            at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:271)
+            at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:70)
+            at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+            at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238)
+            at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63)
+            at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236)
+            at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53)
+            at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229)
+            at org.jboss.arquillian.junit.Arquillian$2.evaluate(Arquillian.java:185)
+            at org.jboss.arquillian.junit.Arquillian.multiExecute(Arquillian.java:314)
+            at org.jboss.arquillian.junit.Arquillian.access$100(Arquillian.java:46)
+            at org.jboss.arquillian.junit.Arquillian$3.evaluate(Arquillian.java:199)
+            at org.junit.runners.ParentRunner.run(ParentRunner.java:309)
+            at org.jboss.arquillian.junit.Arquillian.run(Arquillian.java:147)
+            at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+            at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+            at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
+            at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
+            at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
+            at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
+        </stacktrace>
+    </exception>
+    <exception class="org.springframework.jdbc.BadSqlGrammarException" message="StatementCallback; bad SQL grammar [select type2 from query_cons where parameter_code='QQ' and query_code='CSER']; nested exception is java.sql.SQLException: [DataDirect][SQLServer JDBC Driver][SQLServer]Invalid object name 'query_cons'." label="database">
+        <stacktrace>
+            at org.springframework.jdbc.support.SQLStateSQLExceptionTranslator.translate(SQLStateSQLExceptionTranslator.java:88)
+            at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.translate(SQLErrorCodeSQLExceptionTranslator.java:257)
+            at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:294)
+            at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:348)
+            at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:352)
+            at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:356)
+            at org.springframework.jdbc.core.JdbcTemplate.queryForObject(JdbcTemplate.java:364)
+            at org.springframework.jdbc.core.JdbcTemplate.queryForObject(JdbcTemplate.java:369)
+            at com.systemspecs.Utility.JdbcDao.queryForObject(JdbcDao.java:779)
+            at com.systemspecs.servlets.InterceptingFilter.doBeforeProcessing(InterceptingFilter.java:138)
+            at com.systemspecs.servlets.InterceptingFilter.doFilter(InterceptingFilter.java:287)
+            at org.jboss.web.tomcat.filters.ReplyHeaderFilter.doFilter(ReplyHeaderFilter.java:81)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.IllegalStateException" message="EJBCLIENT000025: No EJB receiver available for handling [appName:Universalkatalog, moduleName:UniversalkatalogEJB, distinctName:] combination for invocation context org.jboss.ejb.client.EJBClientInvocationContext@3aa3db4b" label="integration">
+        <stacktrace>
+            at org.jboss.ejb.client.EJBClientContext.requireEJBReceiver(EJBClientContext.java:749)
+            at org.jboss.ejb.client.ReceiverInterceptor.handleInvocation(ReceiverInterceptor.java:116)
+            at org.jboss.ejb.client.EJBClientInvocationContext.sendRequest(EJBClientInvocationContext.java:183)
+            at org.jboss.ejb.client.EJBInvocationHandler.sendRequestWithPossibleRetries(EJBInvocationHandler.java:253)
+            at org.jboss.ejb.client.EJBInvocationHandler.doInvoke(EJBInvocationHandler.java:198)
+            at org.jboss.ejb.client.EJBInvocationHandler.doInvoke(EJBInvocationHandler.java:181)
+            at org.jboss.ejb.client.EJBInvocationHandler.invoke(EJBInvocationHandler.java:144)
+            at com.sun.proxy.$Proxy0.log(Unknown Source)
+            at de.stahlgruber.universal.client.EjbTryoutTestNoAuto.main(EjbTryoutTestNoAuto.java:87)
+        </stacktrace>
+    </exception>
+    <exception class="org.jboss.resteasy.client.ClientResponseFailure" message="Error status 404 Not Found returned" label="messaging">
+        <stacktrace>
+            at org.jboss.resteasy.client.core.BaseClientResponse.createResponseFailure(BaseClientResponse.java:523)
+            at org.jboss.resteasy.client.core.BaseClientResponse.createResponseFailure(BaseClientResponse.java:514)
+            at org.jboss.resteasy.client.core.BaseClientResponse.checkFailureStatus(BaseClientResponse.java:508)
+            at org.jboss.resteasy.client.core.extractors.BodyEntityExtractor.extractEntity(BodyEntityExtractor.java:38)
+            at org.switchyard.component.resteasy.util.ClientInvoker.invoke(ClientInvoker.java:291)
+            at org.switchyard.component.resteasy.OutboundHandler.handleMessage(OutboundHandler.java:138)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.NullPointerException" message="" label="database">
+        <stacktrace>
+            <![CDATA[
+            at org.hibernate.engine.transaction.internal.jta.JtaStatusHelper.getStatus(JtaStatusHelper.java:76)
+            at org.hibernate.engine.transaction.internal.jta.JtaStatusHelper.isActive(JtaStatusHelper.java:118)
+            at org.hibernate.engine.transaction.internal.jta.CMTTransaction.join(CMTTransaction.java:149)
+            at org.hibernate.jpa.spi.AbstractEntityManagerImpl.joinTransaction(AbstractEntityManagerImpl.java:1602)
+            at org.hibernate.jpa.spi.AbstractEntityManagerImpl.postInit(AbstractEntityManagerImpl.java:210)
+            at org.hibernate.jpa.internal.EntityManagerImpl.<init>(EntityManagerImpl.java:91)
+            at org.hibernate.jpa.internal.EntityManagerFactoryImpl.internalCreateEntityManager(EntityManagerFactoryImpl.java:345)
+            at org.hibernate.jpa.internal.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:313)
+            at org.glassfish.persistence.jpa.JPADeployer$2.visitPUD(JPADeployer.java:451)
+            at org.glassfish.persistence.jpa.JPADeployer$PersistenceUnitDescriptorIterator.iteratePUDs(JPADeployer.java:510)
+            at org.glassfish.persistence.jpa.JPADeployer.iterateInitializedPUsAtApplicationPrepare(JPADeployer.java:492)
+            at org.glassfish.persistence.jpa.JPADeployer.event(JPADeployer.java:398)
+            at org.glassfish.kernel.event.EventsImpl.send(EventsImpl.java:131)
+            at com.sun.enterprise.v3.server.ApplicationLifecycle.deploy(ApplicationLifecycle.java:484)
+            at com.sun.enterprise.v3.server.ApplicationLifecycle.deploy(ApplicationLifecycle.java:219)
+            at org.glassfish.deployment.admin.DeployCommand.execute(DeployCommand.java:491)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$2$1.run(CommandRunnerImpl.java:527)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$2$1.run(CommandRunnerImpl.java:523)
+            at java.security.AccessController.doPrivileged(Native Method)
+            at javax.security.auth.Subject.doAs(Subject.java:356)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$2.execute(CommandRunnerImpl.java:522)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl.doCommand(CommandRunnerImpl.java:546)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl.doCommand(CommandRunnerImpl.java:1423)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl.access$1500(CommandRunnerImpl.java:108)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$ExecutionContext.execute(CommandRunnerImpl.java:1762)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$ExecutionContext.execute(CommandRunnerImpl.java:1674)
+            at com.sun.enterprise.v3.admin.AdminAdapter.doCommand(AdminAdapter.java:534)
+            at com.sun.enterprise.v3.admin.AdminAdapter.onMissingResource(AdminAdapter.java:224)
+            at org.glassfish.grizzly.http.server.StaticHttpHandler.service(StaticHttpHandler.java:297)
+            at com.sun.enterprise.v3.services.impl.ContainerMapper.service(ContainerMapper.java:246)
+            at org.glassfish.grizzly.http.server.HttpHandler.runService(HttpHandler.java:191)
+            at org.glassfish.grizzly.http.server.HttpHandler.doHandle(HttpHandler.java:168)
+            at org.glassfish.grizzly.http.server.HttpServerFilter.handleRead(HttpServerFilter.java:189)
+            at org.glassfish.grizzly.filterchain.ExecutorResolver$9.execute(ExecutorResolver.java:119)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.executeFilter(DefaultFilterChain.java:288)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.executeChainPart(DefaultFilterChain.java:206)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.execute(DefaultFilterChain.java:136)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.process(DefaultFilterChain.java:114)
+            at org.glassfish.grizzly.ProcessorExecutor.execute(ProcessorExecutor.java:77)
+            at org.glassfish.grizzly.nio.transport.TCPNIOTransport.fireIOEvent(TCPNIOTransport.java:838)
+            at org.glassfish.grizzly.strategies.AbstractIOStrategy.fireIOEvent(AbstractIOStrategy.java:113)
+            at org.glassfish.grizzly.strategies.WorkerThreadIOStrategy.run0(WorkerThreadIOStrategy.java:115)
+            at org.glassfish.grizzly.strategies.WorkerThreadIOStrategy.access$100(WorkerThreadIOStrategy.java:55)
+            at org.glassfish.grizzly.strategies.WorkerThreadIOStrategy$WorkerThreadRunnable.run(WorkerThreadIOStrategy.java:135)
+            at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:564)
+            at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:544)
+            at java.lang.Thread.run(Thread.java:744)
+            ]]>
+        </stacktrace>
+    </exception>
+    <exception class="org.jboss.weld.exceptions.IllegalStateException" message="WELD-001332 BeanManager method getBeans() is not available during application initialization" label="integration">
+        <stacktrace>
+            at org.jboss.weld.bean.builtin.BeanManagerProxy.checkContainerValidated(BeanManagerProxy.java:142)
+            at org.jboss.weld.bean.builtin.BeanManagerProxy.getBeans(BeanManagerProxy.java:80)
+            at org.jboss.solder.core.CoreExtension.failIfWeldExtensionsDetected(CoreExtension.java:215)
+            at org.jboss.solder.core.CoreExtension.afterBeanDiscovery(CoreExtension.java:208)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:606)
+            at org.jboss.weld.injection.MethodInjectionPoint.invokeOnInstanceWithSpecialValue(MethodInjectionPoint.java:93)
+            at org.jboss.weld.event.ObserverMethodImpl.sendEvent(ObserverMethodImpl.java:274)
+            at org.jboss.weld.event.ExtensionObserverMethodImpl.sendEvent(ExtensionObserverMethodImpl.java:121)
+            at org.jboss.weld.event.ObserverMethodImpl.sendEvent(ObserverMethodImpl.java:261)
+            at org.jboss.weld.event.ObserverMethodImpl.notify(ObserverMethodImpl.java:240)
+            at org.jboss.weld.event.ObserverNotifier.notifyObserver(ObserverNotifier.java:170)
+            at org.jboss.weld.event.ObserverNotifier.notifyObservers(ObserverNotifier.java:129)
+            at org.jboss.weld.event.ObserverNotifier.fireEvent(ObserverNotifier.java:103)
+            at org.jboss.weld.bootstrap.events.AbstractContainerEvent.fire(AbstractContainerEvent.java:63)
+            at org.jboss.weld.bootstrap.events.AbstractDefinitionContainerEvent.fire(AbstractDefinitionContainerEvent.java:35)
+            at org.jboss.weld.bootstrap.events.AfterBeanDiscoveryImpl.fire(AfterBeanDiscoveryImpl.java:53)
+            at org.jboss.weld.bootstrap.WeldBootstrap.deployBeans(WeldBootstrap.java:515)
+            at org.glassfish.weld.WeldDeployer.event(WeldDeployer.java:213)
+            at org.glassfish.kernel.event.EventsImpl.send(EventsImpl.java:131)
+            at org.glassfish.internal.data.ApplicationInfo.load(ApplicationInfo.java:328)
+            at com.sun.enterprise.v3.server.ApplicationLifecycle.deploy(ApplicationLifecycle.java:493)
+            at com.sun.enterprise.v3.server.ApplicationLifecycle.deploy(ApplicationLifecycle.java:219)
+            at org.glassfish.deployment.admin.DeployCommand.execute(DeployCommand.java:491)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$2$1.run(CommandRunnerImpl.java:527)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$2$1.run(CommandRunnerImpl.java:523)
+            at java.security.AccessController.doPrivileged(Native Method)
+            at javax.security.auth.Subject.doAs(Subject.java:356)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$2.execute(CommandRunnerImpl.java:522)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl.doCommand(CommandRunnerImpl.java:546)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl.doCommand(CommandRunnerImpl.java:1423)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl.access$1500(CommandRunnerImpl.java:108)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$ExecutionContext.execute(CommandRunnerImpl.java:1762)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$ExecutionContext.execute(CommandRunnerImpl.java:1674)
+            at com.sun.enterprise.v3.admin.AdminAdapter.doCommand(AdminAdapter.java:534)
+            at com.sun.enterprise.v3.admin.AdminAdapter.onMissingResource(AdminAdapter.java:224)
+            at org.glassfish.grizzly.http.server.StaticHttpHandler.service(StaticHttpHandler.java:297)
+            at com.sun.enterprise.v3.services.impl.ContainerMapper.service(ContainerMapper.java:246)
+            at org.glassfish.grizzly.http.server.HttpHandler.runService(HttpHandler.java:191)
+            at org.glassfish.grizzly.http.server.HttpHandler.doHandle(HttpHandler.java:168)
+            at org.glassfish.grizzly.http.server.HttpServerFilter.handleRead(HttpServerFilter.java:189)
+            at org.glassfish.grizzly.filterchain.ExecutorResolver$9.execute(ExecutorResolver.java:119)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.executeFilter(DefaultFilterChain.java:288)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.executeChainPart(DefaultFilterChain.java:206)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.execute(DefaultFilterChain.java:136)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.process(DefaultFilterChain.java:114)
+            at org.glassfish.grizzly.ProcessorExecutor.execute(ProcessorExecutor.java:77)
+            at org.glassfish.grizzly.nio.transport.TCPNIOTransport.fireIOEvent(TCPNIOTransport.java:838)
+            at org.glassfish.grizzly.strategies.AbstractIOStrategy.fireIOEvent(AbstractIOStrategy.java:113)
+            at org.glassfish.grizzly.strategies.WorkerThreadIOStrategy.run0(WorkerThreadIOStrategy.java:115)
+            at org.glassfish.grizzly.strategies.WorkerThreadIOStrategy.access$100(WorkerThreadIOStrategy.java:55)
+            at org.glassfish.grizzly.strategies.WorkerThreadIOStrategy$WorkerThreadRunnable.run(WorkerThreadIOStrategy.java:135)
+            at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:564)
+            at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:544)
+            at java.lang.Thread.run(Thread.java:744)
+            at org.glassfish.weld.WeldDeployer.event(WeldDeployer.java:225)
+            at org.glassfish.kernel.event.EventsImpl.send(EventsImpl.java:131)
+            at org.glassfish.internal.data.ApplicationInfo.load(ApplicationInfo.java:328)
+            at com.sun.enterprise.v3.server.ApplicationLifecycle.deploy(ApplicationLifecycle.java:493)
+            at com.sun.enterprise.v3.server.ApplicationLifecycle.deploy(ApplicationLifecycle.java:219)
+            at org.glassfish.deployment.admin.DeployCommand.execute(DeployCommand.java:491)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$2$1.run(CommandRunnerImpl.java:527)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$2$1.run(CommandRunnerImpl.java:523)
+            at java.security.AccessController.doPrivileged(Native Method)
+            at javax.security.auth.Subject.doAs(Subject.java:356)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$2.execute(CommandRunnerImpl.java:522)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl.doCommand(CommandRunnerImpl.java:546)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl.doCommand(CommandRunnerImpl.java:1423)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl.access$1500(CommandRunnerImpl.java:108)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$ExecutionContext.execute(CommandRunnerImpl.java:1762)
+            at com.sun.enterprise.v3.admin.CommandRunnerImpl$ExecutionContext.execute(CommandRunnerImpl.java:1674)
+            at com.sun.enterprise.v3.admin.AdminAdapter.doCommand(AdminAdapter.java:534)
+            at com.sun.enterprise.v3.admin.AdminAdapter.onMissingResource(AdminAdapter.java:224)
+            at org.glassfish.grizzly.http.server.StaticHttpHandler.service(StaticHttpHandler.java:297)
+            at com.sun.enterprise.v3.services.impl.ContainerMapper.service(ContainerMapper.java:246)
+            at org.glassfish.grizzly.http.server.HttpHandler.runService(HttpHandler.java:191)
+            at org.glassfish.grizzly.http.server.HttpHandler.doHandle(HttpHandler.java:168)
+            at org.glassfish.grizzly.http.server.HttpServerFilter.handleRead(HttpServerFilter.java:189)
+            at org.glassfish.grizzly.filterchain.ExecutorResolver$9.execute(ExecutorResolver.java:119)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.executeFilter(DefaultFilterChain.java:288)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.executeChainPart(DefaultFilterChain.java:206)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.execute(DefaultFilterChain.java:136)
+            at org.glassfish.grizzly.filterchain.DefaultFilterChain.process(DefaultFilterChain.java:114)
+            at org.glassfish.grizzly.ProcessorExecutor.execute(ProcessorExecutor.java:77)
+            at org.glassfish.grizzly.nio.transport.TCPNIOTransport.fireIOEvent(TCPNIOTransport.java:838)
+            at org.glassfish.grizzly.strategies.AbstractIOStrategy.fireIOEvent(AbstractIOStrategy.java:113)
+            at org.glassfish.grizzly.strategies.WorkerThreadIOStrategy.run0(WorkerThreadIOStrategy.java:115)
+            at org.glassfish.grizzly.strategies.WorkerThreadIOStrategy.access$100(WorkerThreadIOStrategy.java:55)
+            at org.glassfish.grizzly.strategies.WorkerThreadIOStrategy$WorkerThreadRunnable.run(WorkerThreadIOStrategy.java:135)
+            at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:564)
+            at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:544)
+            at java.lang.Thread.run(Thread.java:744)
+        </stacktrace>
+    </exception>
+    <exception class="org.apache.ibatis.builder.BuilderException" message="Unknown element #comment in SQL statement." label="database">
+        <stacktrace>
+            <![CDATA[
+            at org.apache.ibatis.builder.xml.XMLStatementBuilder.parseDynamicTags(XMLStatementBuilder.java:83)
+            at org.apache.ibatis.builder.xml.XMLStatementBuilder.parseStatementNode(XMLStatementBuilder.java:43)
+            at org.apache.ibatis.session.Configuration.parseStatementNodes(Configuration.java:513)
+            at org.apache.ibatis.session.Configuration.buildStatementsForNamespace(Configuration.java:502)
+            at org.apache.ibatis.session.Configuration.buildStatementsFromId(Configuration.java:467)
+            at org.apache.ibatis.session.Configuration.getMappedStatement(Configuration.java:391)
+            at org.apache.ibatis.binding.MapperMethod.setupCommandType(MapperMethod.java:160)
+            at org.apache.ibatis.binding.MapperMethod.<init>(MapperMethod.java:48)
+            at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:37)
+            at $Proxy1.selectByExample(Unknown Source)
+            ]]>
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.UnsupportedOperationException" message="" label="database">
+        <stacktrace>
+            at org.apache.ibatis.reflection.wrapper.CollectionWrapper.findProperty(CollectionWrapper.java:42)
+            at org.apache.ibatis.reflection.MetaObject.findProperty(MetaObject.java:76)
+            at org.apache.ibatis.executor.resultset.FastResultSetHandler.applyAutomaticMappings(FastResultSetHandler.java:342)
+            at org.apache.ibatis.executor.resultset.FastResultSetHandler.getRowValue(FastResultSetHandler.java:267)
+            at org.apache.ibatis.executor.resultset.FastResultSetHandler.handleRowValues(FastResultSetHandler.java:216)
+            at org.apache.ibatis.executor.resultset.FastResultSetHandler.handleResultSet(FastResultSetHandler.java:188)
+            at org.apache.ibatis.executor.resultset.FastResultSetHandler.handleResultSets(FastResultSetHandler.java:154)
+            at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:57)
+            at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:70)
+            at org.apache.ibatis.executor.ReuseExecutor.doQuery(ReuseExecutor.java:54)
+            at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:259)
+            at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:132)
+            at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:105)
+            at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:81)
+            at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:104)
+        </stacktrace>
+    </exception>
+    <exception class="org.springframework.beans.factory.BeanCreationException" message="Error creating bean with name 'sqlSessionFactory' defined in ServletContext resource [/WEB-INF/spring/SpringMVCMyBatis-dao-context.xml]: Initialization of bean failed; nested exception is java.lang.reflect.MalformedParameterizedTypeException" label="integration">
+        <stacktrace>
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:521)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:450)
+            at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:290)
+            at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:287)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:189)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:545)
+            at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:871)
+            at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:423)
+            at org.springframework.web.context.ContextLoader.createWebApplicationContext(ContextLoader.java:276)
+            at org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:197)
+            at org.springframework.web.context.ContextLoaderListener.contextInitialized(ContextLoaderListener.java:47)
+            at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:3830)
+            at org.apache.catalina.core.StandardContext.start(StandardContext.java:4337)
+            at org.apache.catalina.core.ContainerBase.start(ContainerBase.java:1045)
+            at org.apache.catalina.core.StandardHost.start(StandardHost.java:719)
+            at org.apache.catalina.core.ContainerBase.start(ContainerBase.java:1045)
+            at org.apache.catalina.core.StandardEngine.start(StandardEngine.java:443)
+            at org.apache.catalina.core.StandardService.start(StandardService.java:516)
+            at org.apache.catalina.core.StandardServer.start(StandardServer.java:710)
+            at org.apache.catalina.startup.Catalina.start(Catalina.java:566)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+            at java.lang.reflect.Method.invoke(Unknown Source)
+            at org.apache.catalina.startup.Bootstrap.start(Bootstrap.java:288)
+            at org.apache.catalina.startup.Bootstrap.main(Bootstrap.java:413)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.reflect.MalformedParameterizedTypeException" message="" label="jvm">
+        <stacktrace>
+            <![CDATA[
+            at sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl.validateConstructorArguments(Unknown Source)
+            at sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl.<init>(Unknown Source)
+            at sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl.make(Unknown Source)
+            at sun.reflect.generics.factory.CoreReflectionFactory.makeParameterizedType(Unknown Source)
+            at sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Unknown Source)
+            at sun.reflect.generics.tree.ClassTypeSignature.accept(Unknown Source)
+            at sun.reflect.generics.visitor.Reifier.visitArrayTypeSignature(Unknown Source)
+            at sun.reflect.generics.tree.ArrayTypeSignature.accept(Unknown Source)
+            at sun.reflect.generics.repository.ConstructorRepository.getParameterTypes(Unknown Source)
+            at java.lang.reflect.Method.getGenericParameterTypes(Unknown Source)
+            at java.beans.FeatureDescriptor.getParameterTypes(Unknown Source)
+            at java.beans.MethodDescriptor.setMethod(Unknown Source)
+            at java.beans.MethodDescriptor.<init>(Unknown Source)
+            at java.beans.MethodDescriptor.<init>(Unknown Source)
+            at java.beans.Introspector.getTargetMethodInfo(Unknown Source)
+            at java.beans.Introspector.getBeanInfo(Unknown Source)
+            at java.beans.Introspector.getBeanInfo(Unknown Source)
+            at org.springframework.beans.CachedIntrospectionResults.<init>(CachedIntrospectionResults.java:224)
+            at org.springframework.beans.CachedIntrospectionResults.forClass(CachedIntrospectionResults.java:145)
+            at org.springframework.beans.BeanWrapperImpl.getCachedIntrospectionResults(BeanWrapperImpl.java:296)
+            at org.springframework.beans.BeanWrapperImpl.getPropertyDescriptorInternal(BeanWrapperImpl.java:326)
+            at org.springframework.beans.BeanWrapperImpl.isWritableProperty(BeanWrapperImpl.java:398)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1310)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1067)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:511)
+            ]]>
+        </stacktrace>
+    </exception>
+    <exception class=" java.lang.NoSuchMethodError" message="org.springframework.aop.config.AopNamespaceUtils.registerAutoProxyCreatorIfNecessary(Lorg/springframework/beans/factory/xml/ParserContext;Ljava/lang/Object;)V" label="integration">
+        <stacktrace>
+            at org.springframework.transaction.config.AnnotationDrivenBeanDefinitionParser.parseInternal(AnnotationDrivenBeanDefinitionParser.java:54)
+            at org.springframework.beans.factory.xml.AbstractBeanDefinitionParser.parse(AbstractBeanDefinitionParser.java:60)
+            at org.springframework.beans.factory.xml.NamespaceHandlerSupport.parse(NamespaceHandlerSupport.java:74)
+            at org.springframework.beans.factory.xml.BeanDefinitionParserDelegate.parseCustomElement(BeanDefinitionParserDelegate.java:1424)
+            at org.springframework.beans.factory.xml.BeanDefinitionParserDelegate.parseCustomElement(BeanDefinitionParserDelegate.java:1414)
+            at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.parseBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:187)
+            at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.doRegisterBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:141)
+            at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.registerBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:110)
+            at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.registerBeanDefinitions(XmlBeanDefinitionReader.java:508)
+        </stacktrace>
+    </exception>
+    <exception class="javax.xml.bind.PropertyException" message="jaxb.encoding" label="xml">
+        <stacktrace>
+            at javax.xml.bind.helpers.AbstractUnmarshallerImpl.getProperty(AbstractUnmarshallerImpl.java:360)
+            at com.sun.xml.internal.bind.v2.runtime.unmarshaller.UnmarshallerImpl.getProperty(UnmarshallerImpl.java:423)
+            at com.jaxb.JAXBTest.main(JAXBTest.java:23)
+        </stacktrace>
+    </exception>
+    <exception class="org.jboss.ws.WSException" message="arg0 is not a valid property on class ClassName" label="web">
+        <stacktrace>
+            at com.sun.xml.bind.v2.runtime.JAXBContextImpl.getElementPropertyAccessor(JAXBContextImpl.java:971)
+            at org.jboss.ws.metadata.accessor.JAXBAccessorFactory.create(JAXBAccessorFactory.java:49)
+            at org.jboss.ws.metadata.umdm.EndpointMetaData.createAccessor(EndpointMetaData.java:763)
+            at org.jboss.ws.metadata.umdm.EndpointMetaData.eagerInitializeAccessors(EndpointMetaData.java:697)
+            at org.jboss.ws.metadata.umdm.EndpointMetaData.initializeInternal(EndpointMetaData.java:569)
+            at org.jboss.ws.metadata.umdm.EndpointMetaData.eagerInitialize(EndpointMetaData.java:557)
+            at org.jboss.ws.metadata.umdm.ServiceMetaData.eagerInitialize(ServiceMetaData.java:433)
+            at org.jboss.ws.metadata.umdm.UnifiedMetaData.eagerInitialize(UnifiedMetaData.java:199)
+            at org.jboss.wsf.stack.jbws.EagerInitializeDeploymentAspect.start(EagerInitializeDeploymentAspect.java:48)
+            at org.jboss.webservices.integration.deployers.WSDeploymentAspectDeployer.internalDeploy(WSDeploymentAspectDeployer.java:107)
+            at org.jboss.deployers.spi.deployer.helpers.AbstractRealDeployer.deploy(AbstractRealDeployer.java:50)
+            at org.jboss.deployers.plugins.deployers.DeployerWrapper.deploy(DeployerWrapper.java:171)
+        </stacktrace>
+    </exception>
+    <exception class="org.datanucleus.exceptions.NucleusException" message="Plugin (Bundle) org.datanucleus is already registered. Ensure you dont have multiple JAR versions of the same plugin in the classpath.The URL file:/C:/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/tools/datanucleus/v2/datanucleus-core-3.1.1.jar is already registered, and you are trying to register an identical plugin located at URL file:/C:/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v1/datanucleus-core-1.1.5.jar."
+               label="integration">
+        <stacktrace>
+            <![CDATA[
+            at org.datanucleus.plugin.NonManagedPluginRegistry.registerBundle(NonManagedPluginRegistry.java:541)
+            at org.datanucleus.plugin.NonManagedPluginRegistry.registerBundle(NonManagedPluginRegistry.java:395)
+            at org.datanucleus.plugin.NonManagedPluginRegistry.registerExtensions(NonManagedPluginRegistry.java:219)
+            at org.datanucleus.plugin.NonManagedPluginRegistry.registerExtensionPoints(NonManagedPluginRegistry.java:160)
+            at org.datanucleus.plugin.PluginManager.<init>(PluginManager.java:65)
+            at org.datanucleus.plugin.PluginManager.createPluginManager(PluginManager.java:427)
+            at org.datanucleus.NucleusContext.<init>(NucleusContext.java:224)
+            at org.datanucleus.NucleusContext.<init>(NucleusContext.java:204)
+            at org.datanucleus.enhancer.DataNucleusEnhancer.<init>(DataNucleusEnhancer.java:160)
+            at org.datanucleus.enhancer.DataNucleusEnhancer.main(DataNucleusEnhancer.java:1133)
+            ]]>
+        </stacktrace>
+    </exception>
+    <exception class="com.google.gwt.user.client.rpc.SerializationException" message="Type 'com.fes.client.Exam.Valid.Options' was not included in the set of types which can be serialized by this SerializationPolicy or its Class object could not be loaded. For security purposes, this type will not be serialized.: instance = com.fes.client.Exam.Valid.Options@9905e0" label="web">
+        <stacktrace>
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter.serialize(ServerSerializationStreamWriter.java:667)
+            at com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamWriter.writeObject(AbstractSerializationStreamWriter.java:126)
+            at com.google.gwt.user.client.rpc.core.java.util.Collection_CustomFieldSerializerBase.serialize(Collection_CustomFieldSerializerBase.java:44)
+            at com.google.gwt.user.client.rpc.core.java.util.ArrayList_CustomFieldSerializer.serialize(ArrayList_CustomFieldSerializer.java:39)
+            at com.google.gwt.user.client.rpc.core.java.util.ArrayList_CustomFieldSerializer.serializeInstance(ArrayList_CustomFieldSerializer.java:51)
+            at com.google.gwt.user.client.rpc.core.java.util.ArrayList_CustomFieldSerializer.serializeInstance(ArrayList_CustomFieldSerializer.java:28)
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter.serializeImpl(ServerSerializationStreamWriter.java:788)
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter.serialize(ServerSerializationStreamWriter.java:669)
+            at com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamWriter.writeObject(AbstractSerializationStreamWriter.java:126)
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter$ValueWriter$8.write(ServerSerializationStreamWriter.java:153)
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter.serializeValue(ServerSerializationStreamWriter.java:587)
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter.serializeClass(ServerSerializationStreamWriter.java:757)
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter.serializeImpl(ServerSerializationStreamWriter.java:796)
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter.serialize(ServerSerializationStreamWriter.java:669)
+            at com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamWriter.writeObject(AbstractSerializationStreamWriter.java:126)
+            at com.google.gwt.user.client.rpc.core.java.util.Collection_CustomFieldSerializerBase.serialize(Collection_CustomFieldSerializerBase.java:44)
+            at com.google.gwt.user.client.rpc.core.java.util.ArrayList_CustomFieldSerializer.serialize(ArrayList_CustomFieldSerializer.java:39)
+            at com.google.gwt.user.client.rpc.core.java.util.ArrayList_CustomFieldSerializer.serializeInstance(ArrayList_CustomFieldSerializer.java:51)
+            at com.google.gwt.user.client.rpc.core.java.util.ArrayList_CustomFieldSerializer.serializeInstance(ArrayList_CustomFieldSerializer.java:28)
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter.serializeImpl(ServerSerializationStreamWriter.java:788)
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter.serialize(ServerSerializationStreamWriter.java:669)
+            at com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamWriter.writeObject(AbstractSerializationStreamWriter.java:126)
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter$ValueWriter$8.write(ServerSerializationStreamWriter.java:153)
+            at com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter.serializeValue(ServerSerializationStreamWriter.java:587)
+            at com.google.gwt.user.server.rpc.RPC.encodeResponse(RPC.java:605)
+            at com.google.gwt.user.server.rpc.RPC.encodeResponseForSuccess(RPC.java:471)
+            at com.google.gwt.user.server.rpc.RPC.invokeAndEncodeResponse(RPC.java:563)
+            at com.google.gwt.user.server.rpc.RemoteServiceServlet.processCall(RemoteServiceServlet.java:208)
+            at com.google.gwt.user.server.rpc.RemoteServiceServlet.processPost(RemoteServiceServlet.java:248)
+            at com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet.doPost(AbstractRemoteServiceServlet.java:62)
+            at javax.servlet.http.HttpServlet.service(HttpServlet.java:647)
+            at javax.servlet.http.HttpServlet.service(HttpServlet.java:728)
+            at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:305)
+            at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+            at org.netbeans.modules.web.monitor.server.MonitorFilter.doFilter(MonitorFilter.java:393)
+            at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+            at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+            at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:222)
+            at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:123)
+            at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:472)
+            at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:171)
+            at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:99)
+            at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:936)
+            at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:118)
+            at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:407)
+            at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1004)
+            at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:589)
+            at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:312)
+            at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+            at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+            at java.lang.Thread.run(Thread.java:744)
+        </stacktrace>
+    </exception>
+    <exception class="java.io.NotSerializableException" message="java.lang.Object" label="file">
+        <stacktrace>
+            at java.io.ObjectOutputStream.writeObject0(Unknown Source)
+            at java.io.ObjectOutputStream.defaultWriteFields(Unknown Source)
+            at java.io.ObjectOutputStream.writeSerialData(Unknown Source)
+            at java.io.ObjectOutputStream.writeOrdinaryObject(Unknown Source)
+            at java.io.ObjectOutputStream.writeObject0(Unknown Source)
+            at java.io.ObjectOutputStream.writeObject(Unknown Source)
+            at org.apache.wicket.util.lang.WicketObjects$SerializingObjectSizeOfStrategy.sizeOf(WicketObjects.java:124)
+            at org.apache.wicket.util.lang.WicketObjects.sizeof(WicketObjects.java:416)
+            at org.apache.wicket.Session.getSizeInBytes(Session.java:439)
+            at org.apache.wicket.PageBase.onAfterRender(PageBase.java:212)
+            at org.apache.wicket.Component.afterRender(Component.java:962)
+            at org.apache.wicket.Component.render(Component.java:2326)
+            at org.apache.wicket.Page.renderPage(Page.java:1035)
+            at org.apache.wicket.request.handler.render.WebPageRenderer.renderPage(WebPageRenderer.java:105)
+        </stacktrace>
+    </exception>
+    <exception class="java.lang.IllegalStateException" message="Committed" label="web">
+        <stacktrace>
+            at org.eclipse.jetty.server.Response.resetBuffer(Response.java:1059) ~[na:na]
+            at org.eclipse.jetty.server.Response.sendRedirect(Response.java:449) ~[na:na]
+            at org.apache.wicket.protocol.http.WebResponse.sendRedirect(WebResponse.java:299) ~[wicket-1.4.17.jar:1.4.17]
+            at org.apache.wicket.protocol.http.WebResponse.redirect(WebResponse.java:250) ~[wicket-1.4.17.jar:1.4.17]
+            at org.apache.wicket.protocol.http.BufferedWebResponse.close(BufferedWebResponse.java:67) ~[wicket-1.4.17.jar:1.4.17]
+        </stacktrace>
+    </exception>
+    <exception class="org.apache.wicket.WicketRuntimeException" message="No get method defined for class: class com.samoo.tool.pages.CreatePrintingJob expression: choices" label="web">
+        <stacktrace>
+            at org.apache.wicket.util.lang.PropertyResolver.getGetAndSetter(PropertyResolver.java:481)
+            at org.apache.wicket.util.lang.PropertyResolver.getObjectAndGetSetter(PropertyResolver.java:332)
+            at org.apache.wicket.util.lang.PropertyResolver.getObjectAndGetSetter(PropertyResolver.java:242)
+            at org.apache.wicket.util.lang.PropertyResolver.getValue(PropertyResolver.java:95)
+            at org.apache.wicket.model.AbstractPropertyModel.getObject(AbstractPropertyModel.java:130)
+            at org.apache.wicket.Component.getDefaultModelObject(Component.java:1724)
+        </stacktrace>
+    </exception>
+    <exception class="org.hibernate.LazyInitializationException" message="could not initialize proxy - no Session" label="database">
+        <stacktrace>
+            <![CDATA[
+            at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:167)
+            at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:215)
+            at org.hibernate.proxy.pojo.javassist.JavassistLazyInitializer.invoke(JavassistLazyInitializer.java:190)
+            at com.xxx.er.batch.beans.Load_$$_javassist_7.toString(Load_$$_javassist_7.java)
+            at com.xxx.er.basman.model.LinkPanel.<init>(LinkPanel.java:41)
+            at com.xxx.er.basman.pages.TasksOverviewPage$7.populateItem(TasksOverviewPage.java:130)
+            at org.apache.wicket.extensions.markup.html.repeater.data.grid.AbstractDataGridView.populateItem(AbstractDataGridView.java:187)
+            at org.apache.wicket.markup.repeater.RefreshingView$1.newItem(RefreshingView.java:114)
+            at org.apache.wicket.markup.repeater.DefaultItemReuseStrategy$1.next(DefaultItemReuseStrategy.java:71)
+            at org.apache.wicket.markup.repeater.DefaultItemReuseStrategy$1.next(DefaultItemReuseStrategy.java:68)
+            at org.apache.wicket.markup.repeater.RefreshingView.addItems(RefreshingView.java:189)
+            at org.apache.wicket.markup.repeater.RefreshingView.onPopulate(RefreshingView.java:98)
+            at org.apache.wicket.markup.repeater.AbstractRepeater.onBeforeRender(AbstractRepeater.java:131)
+            at org.apache.wicket.markup.repeater.AbstractPageableView.onBeforeRender(AbstractPageableView.java:121)
+            at org.apache.wicket.Component.internalBeforeRender(Component.java:1066)
+            at org.apache.wicket.Component.beforeRender(Component.java:1100)
+            at org.apache.wicket.MarkupContainer.onBeforeRenderChildren(MarkupContainer.java:1754)
+            at org.apache.wicket.Component.onBeforeRender(Component.java:3966)
+            at org.apache.wicket.Component.internalBeforeRender(Component.java:1066)
+            at org.apache.wicket.Component.beforeRender(Component.java:1100)
+            at org.apache.wicket.MarkupContainer.onBeforeRenderChildren(MarkupContainer.java:1754)
+            at org.apache.wicket.Component.onBeforeRender(Component.java:3966)
+            at org.apache.wicket.Component.internalBeforeRender(Component.java:1066)
+            at org.apache.wicket.Component.beforeRender(Component.java:1100)
+            at org.apache.wicket.MarkupContainer.onBeforeRenderChildren(MarkupContainer.java:1754)
+            at org.apache.wicket.Component.onBeforeRender(Component.java:3966)
+            at org.apache.wicket.Page.onBeforeRender(Page.java:1550)
+            at org.apache.wicket.Component.internalBeforeRender(Component.java:1066)
+            at org.apache.wicket.Component.beforeRender(Component.java:1100)
+            at org.apache.wicket.Component.prepareForRender(Component.java:2292)
+            at org.apache.wicket.Page.prepareForRender(Page.java:1540)
+            at org.apache.wicket.Component.prepareForRender(Component.java:2329)
+            at org.apache.wicket.Page.renderPage(Page.java:911)
+            at org.apache.wicket.protocol.http.WebRequestCycle.redirectTo(WebRequestCycle.java:201)
+            at org.apache.wicket.request.target.component.PageRequestTarget.respond(PageRequestTarget.java:58)
+            at org.apache.wicket.request.AbstractRequestCycleProcessor.respond(AbstractRequestCycleProcessor.java:105)
+            at org.apache.wicket.RequestCycle.processEventsAndRespond(RequestCycle.java:1258)
+            at org.apache.wicket.RequestCycle.step(RequestCycle.java:1329)
+            at org.apache.wicket.RequestCycle.steps(RequestCycle.java:1436)
+            at org.apache.wicket.RequestCycle.request(RequestCycle.java:545)
+            at org.apache.wicket.protocol.http.WicketFilter.doGet(WicketFilter.java:486)
+            at org.apache.wicket.protocol.http.WicketFilter.doFilter(WicketFilter.java:319)
+            at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1088)
+            at com.xxx.er.basman.HibernateTransactionFilter.doFilter(HibernateTransactionFilter.java:58)
+            ]]>
+        </stacktrace>
+    </exception>
+</exceptions>

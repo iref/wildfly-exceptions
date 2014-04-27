@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+    <package name="java.lang" label="jvm" weight="1.0" />
+    <package name="org.jboss.logging" label="utils" weight="1.0" />
+    <package name="org.jboss" label="integration" weight="0.5" />
+</packages>
