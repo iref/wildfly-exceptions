@@ -45,7 +45,7 @@
     <scm>
         <connection>scm:git:${extension.scm.connection}</connection>
         <developerConnection>scm:git:${extension.scm.connection}</developerConnection>
-        <url>${extrension.scm.url}</url>
+        <url>${extension.scm.url}</url>
     </scm>
 
     <developers>
@@ -176,6 +176,13 @@
               <version>1.9.5</version>
               <scope>test</scope>
           </dependency>
+          <dependency>
+              <groupId>net.sourceforge.htmlunit</groupId>
+              <artifactId>htmlunit</artifactId>
+              <version>2.7</version>
+              <scope>test</scope>
+          </dependency>
+
 
           <!-- Maven deps for Shrinkwrap maven resolver -->
           <dependency>
@@ -285,6 +292,11 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
