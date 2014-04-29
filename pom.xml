@@ -498,6 +498,14 @@
                                             </includes>
                                             <stylesheet>src/test/resources/xslt/addSubsystem.xsl</stylesheet>
                                         </transformationSet>
+                                        <transformationSet>
+                                            <dir>${jboss.as.home}/standalone/configuration</dir>
+                                            <outputDir>${jboss.as.home}/standalone/configuration</outputDir>
+                                            <includes>
+                                                <include>standalone.xml</include>
+                                            </includes>
+                                            <stylesheet>src/test/resources/xslt/addLoggingHandler.xsl</stylesheet>
+                                        </transformationSet>
                                     </transformationSets>
                                 </configuration>
                             </execution>

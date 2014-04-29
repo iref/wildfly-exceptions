@@ -1,7 +1,7 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:as="urn:jboss:domain:1.4"
-                xmlns:sd="urn:jboss:domain:datasources:1.1">
+                xmlns:as="urn:jboss:domain:2.0"
+                xmlns:sd="urn:jboss:domain:datasources:2.0">
 
     <xsl:output method="xml" indent="yes"/>
 
