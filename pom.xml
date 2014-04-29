@@ -58,13 +58,19 @@
         <extension.scm.connection>git@github.com:iref/wildfly-exceptions.git</extension.scm.connection>
         <extension.scm.url>https://github.com/iref/wildfly-exceptions</extension.scm.url>
 
+        <version.exceptions>1.0-SNAPSHOT</version.exceptions>
+
         <version.wildfly>8.0.0.Final</version.wildfly>
         <version.junit>4.8.2</version.junit>
         <version.shrinkwrap>1.2.2</version.shrinkwrap>
         <version.shrinkwrap.resolver>2.0.0</version.shrinkwrap.resolver>
+        <version.surefire>2.8.1</version.surefire>
         <module.name>exceptions</module.name>
 
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+        <wildfly.managed.dir>${basedir}/target/wildfly-managed</wildfly.managed.dir>
+        <wildfy.dist.name>wildfly-${version.wildfly}</wildfy.dist.name>
+        <jboss.home>${wildfly.managed.dir}/${wildfy.dist.name}</jboss.home>
     </properties>
 
     <repositories>
@@ -271,7 +277,7 @@
         </dependency>
         <dependency>
             <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-arquillian-container-remote</artifactId>
+            <artifactId>wildfly-arquillian-container-managed</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -317,7 +323,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.8.1</version>
+                <version>${version.surefire}</version>
                 <configuration>
                     <!--<redirectTestOutputToFile>false</redirectTestOutputToFile>-->
                     <enableAssertions>true</enableAssertions>
@@ -332,6 +338,9 @@
                         <include>**/*TestCase.java</include>
                         <include>**/*Test.java</include>
                     </includes>
+                    <excludes>
+                        <exclude>**/integration/*Test.java</exclude>
+                    </excludes>
                     <forkMode>once</forkMode>
                 </configuration>
             </plugin>
@@ -380,6 +389,190 @@
                     </execution>
                 </executions>
             </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-dependency-plugin</artifactId>
+              <executions>
+                  <execution>
+                      <id>unpack</id>
+                      <phase>process-test-resources</phase>
+                      <goals>
+                          <goal>unpack</goal>
+                      </goals>
+                      <configuration>
+                          <artifactItems>
+                              <artifactItem>
+                                  <groupId>org.wildfly</groupId>
+                                  <artifactId>wildfly-dist</artifactId>
+                                  <version>${version.wildfly}</version>
+                                  <type>zip</type>
+                                  <overWrite>false</overWrite>
+                                  <outputDirectory>${wildfly.managed.dir}</outputDirectory>
+                              </artifactItem>
+                          </artifactItems>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>integration-tests</id>
+            <properties>
+                <integration.tests.containers.dir>${wildfly.managed.dir}</integration.tests.containers.dir>
+                <jboss.as.home>${integration.tests.containers.dir}/${wildfy.dist.name}</jboss.as.home>
+                <jboss.modules.dir>${jboss.as.home}/modules/system/layers/base</jboss.modules.dir>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-arquillian-container-managed</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.wildfly</groupId>
+                                            <artifactId>wildfly-dist</artifactId>
+                                            <version>${version.wildfly}</version>
+                                            <type>zip</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>${integration.tests.containers.dir}</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>cz.muni.exceptions</groupId>
+                                            <artifact>exceptions-subsystem</artifact>
+                                            <version>${version.exceptions}</version>
+                                            <type>jar</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>${jboss.modules.dir}/cz/muni/exceptions/main</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- add subsystem definition to standalone.xml -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>xml-maven-plugin</artifactId>
+                        <version>1.0</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>transform</goal>
+                                </goals>
+                                <configuration>
+                                    <transformationSets>
+                                        <transformationSet>
+                                            <dir>${jboss.as.home}/standalone/configuration</dir>
+                                            <outputDir>${jboss.as.home}/standalone/configuration</outputDir>
+                                            <includes>
+                                                <include>standalone.xml</include>
+                                            </includes>
+                                            <stylesheet>src/test/resources/xslt/addExtension.xsl</stylesheet>
+                                        </transformationSet>
+                                        <transformationSet>
+                                            <dir>${jboss.as.home}/standalone/configuration</dir>
+                                            <outputDir>${jboss.as.home}/standalone/configuration</outputDir>
+                                            <includes>
+                                                <include>standalone.xml</include>
+                                            </includes>
+                                            <stylesheet>src/test/resources/xslt/addDataSource.xsl</stylesheet>
+                                        </transformationSet>
+                                        <transformationSet>
+                                            <dir>${jboss.as.home}/standalone/configuration</dir>
+                                            <outputDir>${jboss.as.home}/standalone/configuration</outputDir>
+                                            <includes>
+                                                <include>standalone.xml</include>
+                                            </includes>
+                                            <stylesheet>src/test/resources/xslt/addSubsystem.xsl</stylesheet>
+                                        </transformationSet>
+                                    </transformationSets>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- and last but not least copy module definitions -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>update-test-module</id>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <copy file="target/cz/muni/exceptions/main/exception-subsystem.jar"
+                                              todir="${jboss.modules.dir}/cz/muni/exceptions/main"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>${version.surefire}</version>
+                            <executions>
+                                <execution>
+                                    <id>integration-tests</id>
+                                    <phase>integration-test</phase>
+                                    <goals>
+                                        <goal>test</goal>
+                                    </goals>
+                                    <configuration>
+                                        <skip>false</skip>
+                                        <systemProperties>
+                                            <jboss.home>${jboss.as.home}</jboss.home>
+                                        </systemProperties>
+                                        <includes>
+                                            <include>**/integration/*Test.java</include>
+                                        </includes>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 </project>
