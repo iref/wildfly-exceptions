@@ -1,6 +1,6 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="urn:cz:muni:exception:1.0"
-            xmlns="urn:cz:muni:exception:1.0"
+            targetNamespace="urn:cz:muni:exceptions:1.0"
+            xmlns="urn:cz:muni:exceptions:1.0"
             elementFormDefault="qualified"
             attributeFormDefault="unqualified"
             version="1.0">

@@ -22,12 +22,12 @@ public class ExceptionExtension implements Extension {
     /**
      * The name space used for the {@code subsystem} element
      */
-    public static final String NAMESPACE = "urn:cz:muni:exception:1.0";
+    public static final String NAMESPACE = "urn:cz:muni:exceptions:1.0";
 
     /**
      * The name of our subsystem within the model.
      */
-    public static final String SUBSYSTEM_NAME = "exception";
+    public static final String SUBSYSTEM_NAME = "cz.muni.exceptions";
 
     /**
      * The parser used for parsing our subsystem
