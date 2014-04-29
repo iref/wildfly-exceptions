@@ -27,5 +27,6 @@ public class DatabaseListenerRemoveHandler extends AbstractRemoveStepHandler {
                 .getLastElement().getValue();
         ServiceName serviceName = DatabaseListenerService.createServiceName();
         context.removeService(serviceName);
+        context.completeStep(OperationContext.ResultHandler.NOOP_RESULT_HANDLER);
     }
 }

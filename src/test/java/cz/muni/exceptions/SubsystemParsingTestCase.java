@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.PathElement;
 import org.jboss.as.subsystem.test.AbstractSubsystemTest;
+import org.jboss.as.subsystem.test.AdditionalInitialization;
 import org.jboss.as.subsystem.test.KernelServices;
 import org.jboss.dmr.ModelNode;
 import org.jgroups.tests.bla;
@@ -121,7 +122,8 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
         //Parse the subsystem xml and install into the controller
         //Parse the subsystem xml into operations
         String subsystemXml = getSubsystemXml();
-        KernelServices services = super.installInController(subsystemXml);
+        KernelServices services = super.createKernelServicesBuilder(null)
+                .setSubsystemXml(subsystemXml).build();
         
         //Read the whole model and make sure it looks as expected
         ModelNode model = services.readWholeModel();
@@ -161,14 +163,16 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     public void testParseAndMarshalModel() throws Exception {
         //Parse the subsystem xml and install into the first controller
         String subsystemXml = getSubsystemXml();
-        KernelServices servicesA = super.installInController(subsystemXml);
+        KernelServices servicesA = super.createKernelServicesBuilder(null)
+                .setSubsystemXml(subsystemXml).build();
         
         //Get the model and the persisted xml from the first controller
         ModelNode modelA = servicesA.readWholeModel();
         String marshalled = servicesA.getPersistedSubsystemXml();
 
         //Install the persisted xml from the first controller into a second controller
-        KernelServices servicesB = super.installInController(marshalled);
+        KernelServices servicesB = super.createKernelServicesBuilder(AdditionalInitialization.MANAGEMENT)
+                .setSubsystemXml(marshalled).build();
         ModelNode modelB = servicesB.readWholeModel();
 
         //Make sure the models from the two controllers are identical
@@ -183,7 +187,8 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
     public void testDescribeHandler() throws Exception {
         //Parse the subsystem xml and install into the first controller
         String subsystemXml = getSubsystemXml();
-        KernelServices servicesA = super.installInController(subsystemXml);
+        KernelServices servicesA = super.createKernelServicesBuilder(null)
+                .setSubsystemXml(subsystemXml).build();
         //Get the model and the describe operations from the first controller
         ModelNode modelA = servicesA.readWholeModel();
         ModelNode describeOp = new ModelNode();
@@ -195,7 +200,8 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
 
 
         //Install the describe options from the first controller into a second controller
-        KernelServices servicesB = super.installInController(operations);
+        KernelServices servicesB = super.createKernelServicesBuilder(AdditionalInitialization.MANAGEMENT)
+                .setBootOperations(operations).build();
         ModelNode modelB = servicesB.readWholeModel();
 
         //Make sure the models from the two controllers are identical
@@ -207,8 +213,9 @@ public class SubsystemParsingTestCase extends AbstractSubsystemTest {
      */
     @Test
     public void testSubsystemRemoval() throws Exception {
-        String subsystemXml = getSubsystemXml();
-        KernelServices services = super.installInController(subsystemXml);
+        String subsystemXml =   getSubsystemXml();
+        KernelServices services = super.createKernelServicesBuilder(null)
+                .setSubsystemXml(subsystemXml).build();
         final ServiceName serviceName = ExceptionDispatcherService.createServiceName();
         ServiceController<?> dispatcherService = services.getContainer()
                 .getRequiredService(serviceName);
