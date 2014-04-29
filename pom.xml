@@ -65,7 +65,7 @@
         <version.shrinkwrap>1.2.2</version.shrinkwrap>
         <version.shrinkwrap.resolver>2.0.0</version.shrinkwrap.resolver>
         <version.surefire>2.8.1</version.surefire>
-        <module.name>exceptions</module.name>
+        <module.name>cz.muni.exceptions</module.name>
 
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
         <wildfly.managed.dir>${basedir}/target/wildfly-managed</wildfly.managed.dir>
@@ -330,19 +330,31 @@
                     <argLine>-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n</argLine>
                     <systemProperties>
                         <property>
-                          <name>jboss.home</name>
-                          <value>${jboss.home}</value>
+                            <name>jboss.home</name>
+                            <value>${jboss.home}</value>
                         </property>
                     </systemProperties>
-                    <includes>
-                        <include>**/*TestCase.java</include>
-                        <include>**/*Test.java</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/integration/*Test.java</exclude>
-                    </excludes>
                     <forkMode>once</forkMode>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>unit-tests</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*TestCase.java</include>
+                                <include>**/*Test.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/integration/*Test.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -435,32 +447,6 @@
 
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>cz.muni.exceptions</groupId>
-                                            <artifact>exceptions-subsystem</artifact>
-                                            <version>${version.exceptions}</version>
-                                            <type>jar</type>
-                                            <overWrite>false</overWrite>
-                                            <outputDirectory>${jboss.modules.dir}/cz/muni/exceptions/main</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
                     <!-- add subsystem definition to standalone.xml -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -526,8 +512,9 @@
                                 <phase>package</phase>
                                 <configuration>
                                     <target>
-                                        <copy file="target/cz/muni/exceptions/main/exception-subsystem.jar"
-                                              todir="${jboss.modules.dir}/cz/muni/exceptions/main"/>
+                                        <copy todir="${jboss.modules.dir}/cz/muni/exceptions/main">
+                                            <fileset dir="${basedir}/target/module/cz/muni/exceptions/main/" includes="**/*" />
+                                        </copy>
                                     </target>
                                 </configuration>
                             </execution>
