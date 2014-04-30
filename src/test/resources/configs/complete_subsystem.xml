@@ -1,4 +1,4 @@
-<subsystem xmlns="urn:cz:muni:exception:1.0">
+<subsystem xmlns="urn:cz:muni:exceptions:1.0">
     <dispatcher async='true' >
         <blacklist>
             <class>java.util.SecurityException</class>

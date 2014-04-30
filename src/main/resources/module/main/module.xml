@@ -1,4 +1,4 @@
-<module xmlns="urn:jboss:module:1.0" name="exceptions">
+<module xmlns="urn:jboss:module:1.0" name="cz.muni.exceptions">
     <resources>
         <resource-root path="exceptions-subsystem.jar"/>
     </resources>
