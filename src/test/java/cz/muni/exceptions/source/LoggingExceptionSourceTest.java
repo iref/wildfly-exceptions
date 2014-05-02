@@ -82,7 +82,25 @@ public class LoggingExceptionSourceTest {
         
         assertReported(true);
     }
-    
+
+    @Test
+    public void testInitFromProperties() {
+        LoggingExceptionSource emptySource = new LoggingExceptionSource();
+        emptySource.setAsync("true");
+        emptySource.setBlacklist("javax.security.*");
+        emptySource.setDatabaseListenerEnabled("true");
+        emptySource.setJta("false");
+        emptySource.setDataSourceJNDI("java:jboss/datasources/ExampleDS");
+
+        IllegalArgumentException exp = new IllegalArgumentException();
+        LogRecord actual = new LogRecord(Level.INFO, "IllegalArgumentsExceptionn");
+        actual.setThrown(exp);
+
+        emptySource.publish(actual);
+
+        assertReported(true);
+    }
+
     private void assertReported(boolean shouldBeReported) {
         for (ExceptionListener listener : mockDispatcher.getListeners()) {
             MockListener mockListener = (MockListener) listener;
