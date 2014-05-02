@@ -9,8 +9,8 @@
 
     <xsl:template match="//log:subsystem">
         <subsystem xmlns="urn:jboss:domain:logging:2.0">
-            <xsl:apply-templates select="@* | *" />
             <xsl:copy-of select="document('../exceptions-logging.xml')" />
+            <xsl:apply-templates select="@* | *" />
         </subsystem>
     </xsl:template>
 
