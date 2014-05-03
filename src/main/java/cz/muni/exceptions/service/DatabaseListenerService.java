@@ -9,6 +9,8 @@ import cz.muni.exceptions.listener.classifier.PackageTreeSearcher;
 import cz.muni.exceptions.listener.classifier.StaxPackageDataParser;
 import cz.muni.exceptions.listener.db.JPATicketRepository;
 import cz.muni.exceptions.listener.db.PersistenceUnitCreator;
+import cz.muni.exceptions.listener.duplication.LevenshteinSimilarityChecker;
+import cz.muni.exceptions.listener.duplication.SimilarityChecker;
 import org.jboss.msc.service.*;
 import org.jboss.msc.value.InjectedValue;
 
@@ -69,8 +71,8 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
             throw new StartException("Exception while initializing exception classifier", ex);
         }
 
-
-        listener = new DatabaseExceptionListener(repository, classifier);
+        SimilarityChecker checker = new LevenshteinSimilarityChecker();
+        listener = new DatabaseExceptionListener(repository, classifier, checker);
         exceptionDispatcher.getValue().registerListener(listener);
     }
 
