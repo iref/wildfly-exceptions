@@ -16,6 +16,9 @@ import cz.muni.exceptions.listener.db.TicketRepository;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.transaction.UserTransaction;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +44,8 @@ public class LoggingExceptionSource extends Handler {
     private boolean databaseListenerEnabled;
     private String dataSourceJNDI;
 
+    private BufferedWriter writer;
+
     public LoggingExceptionSource() {
     }
 
@@ -52,10 +57,13 @@ public class LoggingExceptionSource extends Handler {
         this.dispatcher = dispatcher;
     }
 
-    private synchronized boolean initialize() {
+    private synchronized boolean initialize() throws IOException {
         if (dispatcher != null) {
             return true;
         }
+
+        FileWriter fileWriter = new FileWriter("/tmp/logging.log", true);
+        writer = new BufferedWriter(fileWriter);
 
         List<ExceptionListener> listeners = new ArrayList<>();
         if (databaseListenerEnabled) {
@@ -74,8 +82,12 @@ public class LoggingExceptionSource extends Handler {
 
     @Override
     public void publish(LogRecord record) {
-        if (!initialize()) {
-            return;
+        try {
+            if (!initialize()) {
+                return;
+            }
+        } catch (IOException e) {
+            // ok
         }
         if (record == null || !isLoggable(record)) {
             return;
@@ -131,21 +143,27 @@ public class LoggingExceptionSource extends Handler {
 
     private ExceptionDispatcher createDispatcher(List<ExceptionListener> listeners, ExceptionFilter blacklistFilter) {
         if (async) {
-            AsyncExceptionDispatcher dispatcher = new AsyncExceptionDispatcher(Executors.defaultThreadFactory(), blacklistFilter);
+            AsyncExceptionDispatcher asyncDispatcher = new AsyncExceptionDispatcher(Executors.defaultThreadFactory(), blacklistFilter);
             for (ExceptionListener listener : listeners) {
-                this.dispatcher.registerListener(listener);
+                asyncDispatcher.registerListener(listener);
             }
-            return dispatcher;
+            return asyncDispatcher;
         } else {
             return new BasicExceptionDispatcher(blacklistFilter, listeners);
         }
     }
 
-    private ExceptionListener createDatabaseListener() {
+    private ExceptionListener createDatabaseListener() throws IOException {
         StaxPackageDataParser packageDataParser = new StaxPackageDataParser();
         InputStream packageInput = getClass().getClassLoader().getResourceAsStream("data/packages.xml");
         Node packageTree = packageDataParser.parseInput(packageInput);
+        writer.write("Creating searcher for tree.");
+        writer.newLine();
+        writer.flush();
         PackageTreeSearcher searcher = new PackageTreeSearcher(packageTree);
+        writer.write("Creating classifier");
+        writer.newLine();
+        writer.flush();
         ExceptionReportClassifier classifier = new ExceptionReportClassifier(searcher);
 
         if (dataSourceJNDI == null) {
@@ -154,17 +172,33 @@ public class LoggingExceptionSource extends Handler {
         Optional<UserTransaction> userTransaction = Optional.absent();
         if (isJta) {
             try {
+                writer.write("Getting JNDI context");
+                writer.newLine();
+                writer.flush();
                 Context context = new InitialContext();
+
+                writer.write("Looking for user transaction in JNDI");
+                writer.newLine();
+                writer.flush();
                 UserTransaction txManager = (UserTransaction) context.lookup(TRANSACTION_MANAGER_JNDI);
                 userTransaction = Optional.of(txManager);
             } catch (Exception ex) {
+                writer.write("Exception while looking for transaction:"  + ex.toString());
+                writer.newLine();
+                writer.flush();
                 throw new RuntimeException("JNDI lookup of TransactionManager has failed.");
             }
         }
 
+        writer.write("Creating persistence unit creator");
+        writer.newLine();
+        writer.flush();
         PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDI, userTransaction);
         TicketRepository ticketRepository = new JPATicketRepository(creator);
 
+        writer.write("database listener was created.");
+        writer.newLine();
+        writer.flush();
         return new DatabaseExceptionListener(ticketRepository, classifier);
     }
 

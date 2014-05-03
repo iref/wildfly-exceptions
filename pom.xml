@@ -277,7 +277,7 @@
         </dependency>
         <dependency>
             <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-arquillian-container-managed</artifactId>
+            <artifactId>wildfly-arquillian-container-remote</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -323,38 +323,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${version.surefire}</version>
-                <configuration>
-                    <!--<redirectTestOutputToFile>false</redirectTestOutputToFile>-->
-                    <enableAssertions>true</enableAssertions>
-                    <argLine>-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n</argLine>
-                    <systemProperties>
-                        <property>
-                            <name>jboss.home</name>
-                            <value>${jboss.home}</value>
-                        </property>
-                    </systemProperties>
-                    <forkMode>once</forkMode>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>unit-tests</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>**/*TestCase.java</include>
-                                <include>**/*Test.java</include>
-                            </includes>
-                            <excludes>
-                                <exclude>**/integration/*Test.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                </executions>
-
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -427,6 +395,48 @@
               </executions>
           </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.surefire}</version>
+                    <configuration>
+                        <!--<redirectTestOutputToFile>false</redirectTestOutputToFile>-->
+                        <skip>true</skip>
+                        <enableAssertions>true</enableAssertions>
+                        <argLine>-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n</argLine>
+                        <systemProperties>
+                            <property>
+                                <name>jboss.home</name>
+                                <value>${jboss.home}</value>
+                            </property>
+                        </systemProperties>
+                        <forkMode>once</forkMode>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>unit-tests</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <configuration>
+                                <skip>false</skip>
+                                <includes>
+                                    <include>**/*TestCase.java</include>
+                                    <include>**/*Test.java</include>
+                                </includes>
+                                <excludes>
+                                    <exclude>**/integration/*Test.java</exclude>
+                                </excludes>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>
@@ -447,6 +457,32 @@
 
             <build>
                 <plugins>
+                    <!--<plugin>-->
+                        <!--<groupId>org.apache.maven.plugins</groupId>-->
+                        <!--<artifactId>maven-dependency-plugin</artifactId>-->
+                        <!--<executions>-->
+                            <!--<execution>-->
+                                <!--<id>copy</id>-->
+                                <!--<phase>package</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>copy</goal>-->
+                                <!--</goals>-->
+                                <!--<configuration>-->
+                                    <!--<artifactItems>-->
+                                        <!--<artifactItem>-->
+                                            <!--<groupId>cz.muni.exceptions</groupId>-->
+                                            <!--<artifact>exceptions-subsystem</artifact>-->
+                                            <!--<version>${version.exceptions}</version>-->
+                                            <!--<type>jar</type>-->
+                                            <!--<overWrite>false</overWrite>-->
+                                            <!--<outputDirectory>${jboss.modules.dir}/cz/muni/exceptions/main</outputDirectory>-->
+                                        <!--</artifactItem>-->
+                                    <!--</artifactItems>-->
+                                <!--</configuration>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                    <!--</plugin>-->
+
                     <!-- add subsystem definition to standalone.xml -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -513,7 +549,7 @@
                                 <configuration>
                                     <target>
                                         <copy todir="${jboss.modules.dir}/cz/muni/exceptions/main">
-                                            <fileset dir="${basedir}/target/module/cz/muni/exceptions/main/" includes="**/*" />
+                                            <fileset dir="${basedir}/target/module/cz/muni/exceptions/main" includes="**/*" />
                                         </copy>
                                     </target>
                                 </configuration>
