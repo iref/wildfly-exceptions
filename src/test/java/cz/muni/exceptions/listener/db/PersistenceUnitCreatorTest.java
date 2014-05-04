@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import javax.persistence.EntityManager;
-import javax.transaction.UserTransaction;
+import javax.transaction.TransactionManager;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -47,17 +47,17 @@ public class PersistenceUnitCreatorTest {
     
     @Test(expected = IllegalArgumentException.class)
     public void testConstructForNullDataSource() {
-        new PersistenceUnitCreator(null, Optional.<UserTransaction>absent());
+        new PersistenceUnitCreator(null, Optional.<TransactionManager>absent());
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testConstructForEmptyDataSource() {
-        new PersistenceUnitCreator("", Optional.<UserTransaction>absent());
+        new PersistenceUnitCreator("", Optional.<TransactionManager>absent());
     }
 
     @Test
     public void isJtaManaged() {
-        UserTransaction mockUserTransaction = Mockito.mock(UserTransaction.class);
+        TransactionManager mockUserTransaction = Mockito.mock(TransactionManager.class);
         PersistenceUnitCreator managedCreator = new PersistenceUnitCreator("java:jboss/datasources/ExampleDS",
                 Optional.of(mockUserTransaction));
         Assert.assertTrue(managedCreator.isJtaManaged());
@@ -65,14 +65,14 @@ public class PersistenceUnitCreatorTest {
 
     @Test
     public void isNotJtaManaged() {
-        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jdbc/arquillian", Optional.<UserTransaction>absent());
+        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jdbc/arquillian", Optional.<TransactionManager>absent());
         Assert.assertFalse(creator.isJtaManaged());
     }
     
     @Test
     public void testCreateEntityManagerWithoutJTA() {
         PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jdbc/arquillian",
-                Optional.<UserTransaction>absent());
+                Optional.<TransactionManager>absent());
         EntityManager em = creator.createEntityManager();
         Assert.assertNotNull(em);
 

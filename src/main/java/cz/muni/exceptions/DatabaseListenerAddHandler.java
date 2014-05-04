@@ -12,7 +12,6 @@ import org.jboss.msc.service.ServiceController;
 import org.jboss.msc.service.ServiceName;
 
 import javax.transaction.TransactionManager;
-import javax.transaction.UserTransaction;
 import java.util.List;
 
 /**
@@ -57,8 +56,9 @@ public class DatabaseListenerAddHandler extends AbstractAddStepHandler {
                 .addListener(verificationHandler);
 
         if (isJta) {
-            ServiceName userTransactionService = TxnServices.JBOSS_TXN_USER_TRANSACTION;
-            serviceBuilder.addDependency(userTransactionService, UserTransaction.class, databaseListenerService.getUserTransaction());
+            ServiceName transactionManagerService = TxnServices.JBOSS_TXN_TRANSACTION_MANAGER;
+            serviceBuilder.addDependency(transactionManagerService, TransactionManager.class,
+                    databaseListenerService.getTransactionManager());
         }
 
         if (newControllers != null) {

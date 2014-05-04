@@ -9,9 +9,7 @@ import cz.muni.exceptions.listener.db.PersistenceUnitCreator;
 import cz.muni.exceptions.listener.db.TicketRepository;
 import cz.muni.exceptions.listener.db.model.Ticket;
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -21,11 +19,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.transaction.UserTransaction;
+import javax.transaction.TransactionManager;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Set;
 
 /**
@@ -57,14 +56,17 @@ public class LoggingExceptionSourceIntegrationTest {
     private TicketRepository repository;
 
     @Before
-    public void setUp() {
-        PersistenceUnitCreator creator = new PersistenceUnitCreator("jdbc/arquillian", Optional.<UserTransaction>absent());
+    public void setUp() throws NamingException {
+        InitialContext initialContext = new InitialContext();
+        TransactionManager ut = (TransactionManager) initialContext.lookup("java:jboss/TransactionManager");
+
+        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jboss/datasources/ExampleDS", Optional.of(ut));
         repository = new JPATicketRepository(creator);
 
         EntityManager entityManager = creator.createEntityManager();
-        entityManager.getTransaction().begin();
+
         entityManager.createQuery("DELETE FROM Ticket t").executeUpdate();
-        entityManager.getTransaction().commit();
+
     }
 
     @Test

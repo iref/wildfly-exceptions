@@ -4,17 +4,6 @@
     </resources>
 
     <dependencies>
-        <system export="true">
-            <paths>
-                <path name="META-INF" />
-            </paths>
-            <exports>
-                <include-set>
-                    <path name="META-INF/persistence.xml" />
-                </include-set>
-            </exports>
-        </system>
-
         <module name="javax.api"/>
         <module name="org.jboss.staxmapper"/>
         <module name="org.jboss.as.controller"/>

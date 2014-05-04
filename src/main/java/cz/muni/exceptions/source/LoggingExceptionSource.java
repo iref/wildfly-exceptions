@@ -12,10 +12,11 @@ import cz.muni.exceptions.listener.classifier.StaxPackageDataParser;
 import cz.muni.exceptions.listener.db.JPATicketRepository;
 import cz.muni.exceptions.listener.db.PersistenceUnitCreator;
 import cz.muni.exceptions.listener.db.TicketRepository;
+import cz.muni.exceptions.listener.duplication.LevenshteinSimilarityChecker;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.transaction.UserTransaction;
+import javax.transaction.TransactionManager;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -34,7 +35,7 @@ import java.util.logging.LogRecord;
  */
 public class LoggingExceptionSource extends Handler {
 
-    private static final String TRANSACTION_MANAGER_JNDI = "java:/TransactionManager";
+    private static final String TRANSACTION_MANAGER_JNDI = "java:jboss/TransactionManager";
     
     private ExceptionDispatcher dispatcher;
 
@@ -157,19 +158,13 @@ public class LoggingExceptionSource extends Handler {
         StaxPackageDataParser packageDataParser = new StaxPackageDataParser();
         InputStream packageInput = getClass().getClassLoader().getResourceAsStream("data/packages.xml");
         Node packageTree = packageDataParser.parseInput(packageInput);
-        writer.write("Creating searcher for tree.");
-        writer.newLine();
-        writer.flush();
         PackageTreeSearcher searcher = new PackageTreeSearcher(packageTree);
-        writer.write("Creating classifier");
-        writer.newLine();
-        writer.flush();
         ExceptionReportClassifier classifier = new ExceptionReportClassifier(searcher);
 
         if (dataSourceJNDI == null) {
             throw new RuntimeException("Database Listener cannot be initialize if [dataSourceJNDI] property is not set.");
         }
-        Optional<UserTransaction> userTransaction = Optional.absent();
+        Optional<TransactionManager> transactionManager = Optional.absent();
         if (isJta) {
             try {
                 writer.write("Getting JNDI context");
@@ -180,8 +175,8 @@ public class LoggingExceptionSource extends Handler {
                 writer.write("Looking for user transaction in JNDI");
                 writer.newLine();
                 writer.flush();
-                UserTransaction txManager = (UserTransaction) context.lookup(TRANSACTION_MANAGER_JNDI);
-                userTransaction = Optional.of(txManager);
+                TransactionManager txManager = (TransactionManager) context.lookup(TRANSACTION_MANAGER_JNDI);
+                transactionManager = Optional.of(txManager);
             } catch (Exception ex) {
                 writer.write("Exception while looking for transaction:"  + ex.toString());
                 writer.newLine();
@@ -193,13 +188,13 @@ public class LoggingExceptionSource extends Handler {
         writer.write("Creating persistence unit creator");
         writer.newLine();
         writer.flush();
-        PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDI, userTransaction);
+        PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDI, transactionManager);
         TicketRepository ticketRepository = new JPATicketRepository(creator);
 
         writer.write("database listener was created.");
         writer.newLine();
         writer.flush();
-        return new DatabaseExceptionListener(ticketRepository, classifier);
+        return new DatabaseExceptionListener(ticketRepository, classifier, new LevenshteinSimilarityChecker());
     }
 
     /**

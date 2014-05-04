@@ -14,7 +14,7 @@ import cz.muni.exceptions.listener.duplication.SimilarityChecker;
 import org.jboss.msc.service.*;
 import org.jboss.msc.value.InjectedValue;
 
-import javax.transaction.UserTransaction;
+import javax.transaction.TransactionManager;
 import java.io.InputStream;
 
 /**
@@ -33,7 +33,7 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
     private final String dataSourceJNDIName;
 
     /** JBoss AS Transaction manager. */
-    private final InjectedValue<UserTransaction> userTransaction = new InjectedValue<>();
+    private final InjectedValue<TransactionManager> transactionManager = new InjectedValue<>();
 
     /** Exception dispatcher, that is created and is running in subsystem. */
     private final InjectedValue<ExceptionDispatcher> exceptionDispatcher = new InjectedValue<>();
@@ -60,7 +60,7 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
 
     @Override
     public void start(StartContext startContext) throws StartException {
-        Optional<UserTransaction> userTransactionOptional = Optional.fromNullable(userTransaction.getOptionalValue());
+        Optional<TransactionManager> userTransactionOptional = Optional.fromNullable(transactionManager.getOptionalValue());
         PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDIName, userTransactionOptional);
         JPATicketRepository repository = new JPATicketRepository(creator);
 
@@ -90,8 +90,8 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
         return this.exceptionDispatcher;
     }
 
-    public InjectedValue<UserTransaction> getUserTransaction() {
-        return this.userTransaction;
+    public InjectedValue<TransactionManager> getTransactionManager() {
+        return this.transactionManager;
     }
 
     private ExceptionReportClassifier buildClassifier() {

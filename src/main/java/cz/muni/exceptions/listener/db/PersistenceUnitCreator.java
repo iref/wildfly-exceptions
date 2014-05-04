@@ -9,7 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.transaction.Status;
-import javax.transaction.UserTransaction;
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -31,22 +32,24 @@ public class PersistenceUnitCreator {
 
     private EntityManagerFactory emf;
 
-    private Optional<UserTransaction> userTransaction;
+    private Optional<TransactionManager> transactionManager;
     
     /**
      * Constructor creates new instance of creator for given datasource name.
      * 
+     *
+     *
      * @param dataSourceJNDIName JNDI identifier of data source.
-     * @param userTransaction JTA transaction manager, that should be used to manage transaction
+     * @param transactionManager JTA transaction manager, that should be used to manage transaction
      *                           or {@link com.google.common.base.Optional#absent()} if data source
      *                           does not use JTA
      * @throws IllegalArgumentException if {@code dataSourceJNDIName} is {@code null} or empty
      */
-    public PersistenceUnitCreator(String dataSourceJNDIName, Optional<UserTransaction> userTransaction) {
+    public PersistenceUnitCreator(String dataSourceJNDIName, Optional<TransactionManager> transactionManager) {
         if (dataSourceJNDIName == null || dataSourceJNDIName.isEmpty()) {
             throw new IllegalArgumentException("[DataSourceJndiName] is required and should not be null.");
         }
-        this.userTransaction = userTransaction;
+        this.transactionManager = transactionManager;
         this.emf = createEntityManagerFactory(dataSourceJNDIName);
     }
 
@@ -58,9 +61,9 @@ public class PersistenceUnitCreator {
     public EntityManager createEntityManager() {
         final EntityManager result;
 
-        if (this.userTransaction.isPresent()) {
+        if (this.transactionManager.isPresent()) {
             EntityManagerInvocationHandler proxy = new EntityManagerInvocationHandler(
-                    this.emf.createEntityManager(), userTransaction.get());
+                    this.emf.createEntityManager(), transactionManager.get());
             ClassLoader threadClassLoader = Thread.currentThread().getContextClassLoader();
             result = (EntityManager) Proxy.newProxyInstance(threadClassLoader, new Class<?>[]{EntityManager.class},
                     proxy);
@@ -77,7 +80,7 @@ public class PersistenceUnitCreator {
      * @return {@code true} if PersistenceUnitCreator creates JTA managed entity managers, otherwise {@code false}.
      */
     public boolean isJtaManaged() {
-        return this.userTransaction.isPresent();
+        return this.transactionManager.isPresent();
     }
     
     /**
@@ -89,9 +92,9 @@ public class PersistenceUnitCreator {
      */
     private EntityManagerFactory createEntityManagerFactory(String dataSourceJNDIName) {
         Map<String, Object> properties = new HashMap<>();
-        
+
         try {
-            if (this.userTransaction.isPresent()) {
+            if (this.transactionManager.isPresent()) {
                 properties.put("javax.persistence.jtaDataSource", dataSourceJNDIName);
                 properties.put("javax.persistence.transactionType", "JTA");
                 properties.put(AvailableSettings.JTA_PLATFORM, new JBossAppServerJtaPlatform());
@@ -119,21 +122,21 @@ public class PersistenceUnitCreator {
         private final EntityManager entityManager;
 
         /** Transaction manager, that is used to manage transactions. */
-        private final UserTransaction userTransaction;
+        private final TransactionManager transactionManager;
 
         static {
             TRANSACTION_MANAGED_METHODS = ImmutableSet.of("persist", "merge", "remove", "flush", "lock",
-                    "refresh", "getLockMode");
+                    "refresh", "getLockMode", "createQuery");
         }
 
         /**
          * Constructor creates new instance of invocation handler.
          *
          * @param entityManager entity manager, that should be decorated
-         * @param userTransaction transaction manager, that is used to manage transaction
+         * @param transactionManager transaction manager, that is used to manage transaction
          */
-        public EntityManagerInvocationHandler(EntityManager entityManager, UserTransaction userTransaction) {
-            this.userTransaction = userTransaction;
+        public EntityManagerInvocationHandler(EntityManager entityManager, TransactionManager transactionManager) {
+            this.transactionManager = transactionManager;
             this.entityManager = entityManager;
         }
 
@@ -141,9 +144,11 @@ public class PersistenceUnitCreator {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
+            Transaction tx = null;
             if (TRANSACTION_MANAGED_METHODS.contains(method.getName())) {
-                if (userTransaction.getStatus() == Status.STATUS_NO_TRANSACTION) {
-                    userTransaction.begin();
+                if (transactionManager.getStatus() == Status.STATUS_NO_TRANSACTION) {
+                    transactionManager.begin();
+                    tx = transactionManager.getTransaction();
                 }
 
                 this.entityManager.joinTransaction();
@@ -152,8 +157,9 @@ public class PersistenceUnitCreator {
             try {
                 return method.invoke(entityManager, args);
             } finally {
-                if (userTransaction.getStatus() == Status.STATUS_ACTIVE) {
-                    userTransaction.commit();
+                if (tx != null) {
+                    tx.commit();
+                    transactionManager.suspend();
                 }
             }
         }
