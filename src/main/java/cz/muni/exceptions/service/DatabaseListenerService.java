@@ -60,7 +60,7 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
 
     @Override
     public void start(StartContext startContext) throws StartException {
-        Optional<TransactionManager> transactionManagerOption = Optional.fromNullable(transactionManager.getValue());
+        Optional<TransactionManager> transactionManagerOption = Optional.fromNullable(transactionManager.getOptionalValue());
         PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDIName, transactionManagerOption);
         JPATicketRepository repository = new JPATicketRepository(creator);
 
