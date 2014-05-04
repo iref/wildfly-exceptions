@@ -1,9 +1,20 @@
-<module xmlns="urn:jboss:module:1.0" name="cz.muni.exceptions">
+<module xmlns="urn:jboss:module:1.1" name="cz.muni.exceptions">
     <resources>
         <resource-root path="exceptions-subsystem.jar"/>
     </resources>
 
     <dependencies>
+        <system export="true">
+            <paths>
+                <path name="META-INF" />
+            </paths>
+            <exports>
+                <include-set>
+                    <path name="META-INF/persistence.xml" />
+                </include-set>
+            </exports>
+        </system>
+
         <module name="javax.api"/>
         <module name="org.jboss.staxmapper"/>
         <module name="org.jboss.as.controller"/>
