@@ -10,6 +10,7 @@ import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceController;
 import org.jboss.msc.service.ServiceName;
 
+import javax.transaction.TransactionManager;
 import java.util.List;
 
 /**
