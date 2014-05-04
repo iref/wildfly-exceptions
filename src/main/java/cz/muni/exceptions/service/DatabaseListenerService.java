@@ -73,7 +73,7 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
 
         SimilarityChecker checker = new LevenshteinSimilarityChecker();
         listener = new DatabaseExceptionListener(repository, classifier, checker);
-        exceptionDispatcher.getValue().registerListener(listener);
+        getDispatcher().getValue().registerListener(listener);
     }
 
     @Override
@@ -84,6 +84,14 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
     @Override
     public DatabaseExceptionListener getValue() throws IllegalStateException, IllegalArgumentException {
         return this.listener;
+    }
+
+    public InjectedValue<ExceptionDispatcher> getDispatcher() {
+        return this.exceptionDispatcher;
+    }
+
+    public InjectedValue<UserTransaction> getUserTransaction() {
+        return this.userTransaction;
     }
 
     private ExceptionReportClassifier buildClassifier() {

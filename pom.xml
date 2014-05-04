@@ -462,6 +462,10 @@
 	
 		<profile>
 			<id>integration-tests</id>
+            <properties>
+                <jboss.as.home>${jboss.home}</jboss.as.home>
+                <jboss.modules.dir>${jboss.as.home}/modules/</jboss.modules.dir>
+            </properties>
             <build>
                 <plugins>
                     <!--<plugin>-->
