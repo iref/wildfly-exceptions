@@ -1,17 +1,15 @@
 package cz.muni.exceptions.listener.db.mybatis.handlers;
 
-import cz.muni.exceptions.listener.db.model.Ticket;
 import cz.muni.exceptions.listener.db.model.TicketClass;
 import junit.framework.Assert;
 import org.apache.ibatis.type.JdbcType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.inject.Inject;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,21 +21,21 @@ import java.sql.SQLException;
 @RunWith(MockitoJUnitRunner.class)
 public class TicketClassHandlerTest {
 
-    @Inject
+    @Mock
     private PreparedStatement preparedStatement;
 
-    @Inject
+    @Mock
     private ResultSet resultSet;
 
-    @Inject
+    @Mock
     private CallableStatement callableStatement;
 
-    private TicketClassHandler handler = new TicketClassHandler();
+    private TicketClassHandler handler;
 
-//    @Before
-//    public void setUp() {
-//        this.handler = new TicketClassHandler();
-//    }
+    @Before
+    public void setUp() {
+        this.handler = new TicketClassHandler();
+    }
 
     @Test
     public void testSetNonNullParameter() throws SQLException {
