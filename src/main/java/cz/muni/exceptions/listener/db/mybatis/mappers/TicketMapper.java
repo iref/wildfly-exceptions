@@ -3,7 +3,6 @@ package cz.muni.exceptions.listener.db.mybatis.mappers;
 import cz.muni.exceptions.listener.db.model.Ticket;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
 import java.util.Set;
 
 /**

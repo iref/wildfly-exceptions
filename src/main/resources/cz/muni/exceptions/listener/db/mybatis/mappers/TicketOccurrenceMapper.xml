@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cz.muni.exceptions.listener.db.mybatis.mappers.TicketOccurrenceMapper">
-    <resultMap id="ticketOccurrenceResultMap" type="TicketOccurence">
+    <resultMap  id="ticketOccurrenceResultMap" type="TicketOccurrence">
         <id     property="id"                   column="ticket_occurrence_id"/>
-        <result property="occurenceTimestamp"   column="ticket_occurence_timestamp" />
+        <result property="occurenceTimestamp"   column="ticket_occurrence_timestamp" />
     </resultMap>
 
     <sql id="ticketOccurrenceColumns">
@@ -12,19 +12,19 @@
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO ticket_occurrences (occurrence_timestamp, ticket_id)
+        INSERT INTO ${schema}.ticket_occurrences (occurrence_timestamp, ticket_id)
         VALUES (#{ticketOccurrence.occurenceTimestamp, #{ticketId})
     </insert>
 
     <delete id="deleteTicketOccurrences">
-        DELETE FROM ticket_occurrences WHERE ticket_id = #{ticketId}
+        DELETE FROM ${schema}.ticket_occurrences WHERE ticket_id = #{ticketId}
     </delete>
 
-    <select id="selectTicketOccurences" resultMap="ticketOccurrenceResultMap">
+    <select id="selectTicketOccurrences" resultMap="ticketOccurrenceResultMap">
         SELECT
             <include refid="ticketOccurrenceColumns" />
         FROM
-            ticket_occurrences AS to
+            ${schema}.ticket_occurrences AS to
         WHERE
             ticket_id = #{ticketId}
     </select>

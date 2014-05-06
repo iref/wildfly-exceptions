@@ -7,7 +7,8 @@
         <result column="ticket_stacktrace"         property="stackTrace" />
         <result column="ticket_class_id"           property="ticketClass" />
 
-        <collection property="occurences"  select="${mappers}.TicketOccurrenceMapper.selectTicketOccurences" />
+        <collection column="ticket_id"  property="occurences"
+                    select="${mappers}.TicketOccurrenceMapper.selectTicketOccurences" />
     </resultMap>
 
     <sql id="ticketColumns">
@@ -18,13 +19,13 @@
     </sql>
 
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        INSERT INTO tickets (detail_message, stacktrace, ticket_class_id)
+        INSERT INTO ${schema}.tickets (detail_message, stacktrace, ticket_class_id)
         VALUES (#{ticket.detailMessage}, #{ticket.stackTrace}, #{ticket.ticketClass.id})
     </insert>
 
     <update id="update">
         UPDATE
-            tickets
+            ${schema}.tickets
         SET
             detail_message = #{ticket.detailMessage},
             stacktrace = #{ticket.stackTrace},
@@ -34,21 +35,21 @@
     </update>
 
     <delete id="delete">
-        DELETE FROM tickets WHERE id = #{ticketId}
+        DELETE FROM ${schema}.tickets WHERE id = #{ticketId}
     </delete>
 
     <select id="selectAllTickets" resultMap="ticketResultMap">
         SELECT
             <include refid="ticketColumns" />
         FROM
-            tickets as t
+            ${schema}.tickets as t
     </select>
 
-    <select id="selectTicketById">
+    <select id="selectTicketById" resultMap="ticketResultMap">
         SELECT
             <include refid="ticketColumns" />
         FROM
-            tickets as t
+            ${schema}.tickets as t
         WHERE
             t.id = #{ticketId}
     </select>

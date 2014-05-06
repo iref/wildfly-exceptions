@@ -14,6 +14,6 @@ public interface TicketOccurrenceMapper {
 
     void deleteTicketOccurrences(@Param("ticketId") Long ticketId);
 
-    List<TicketOccurence> selectTicketOccurences(@Param("ticketId") Long ticketId);
+    List<TicketOccurence> selectTicketOccurrences(@Param("ticketId") Long ticketId);
 
 }
