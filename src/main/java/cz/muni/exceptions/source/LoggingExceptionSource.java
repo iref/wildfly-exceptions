@@ -167,20 +167,10 @@ public class LoggingExceptionSource extends Handler {
         Optional<TransactionManager> transactionManager = Optional.absent();
         if (isJta) {
             try {
-                writer.write("Getting JNDI context");
-                writer.newLine();
-                writer.flush();
                 Context context = new InitialContext();
-
-                writer.write("Looking for user transaction in JNDI");
-                writer.newLine();
-                writer.flush();
                 TransactionManager txManager = (TransactionManager) context.lookup(TRANSACTION_MANAGER_JNDI);
                 transactionManager = Optional.of(txManager);
             } catch (Exception ex) {
-                writer.write("Exception while looking for transaction:"  + ex.toString());
-                writer.newLine();
-                writer.flush();
                 throw new RuntimeException("JNDI lookup of TransactionManager has failed.");
             }
         }
