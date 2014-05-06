@@ -127,6 +127,6 @@ public class MybatisTicketRepository implements TicketRepository {
             sqlSession.close();
         }
 
-        tickets.build();
+        return tickets.build();
     }
 }
