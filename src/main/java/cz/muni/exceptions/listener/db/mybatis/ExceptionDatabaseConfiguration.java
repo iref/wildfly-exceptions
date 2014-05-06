@@ -1,8 +1,10 @@
 package cz.muni.exceptions.listener.db.mybatis;
 
+import com.google.common.base.Strings;
 import cz.muni.exceptions.listener.db.model.Ticket;
 import cz.muni.exceptions.listener.db.model.TicketOccurence;
 import cz.muni.exceptions.listener.db.mybatis.mappers.TicketMapper;
+import cz.muni.exceptions.listener.db.mybatis.mappers.TicketOccurrenceMapper;
 import org.apache.ibatis.session.Configuration;
 
 import java.util.Properties;
@@ -17,11 +19,15 @@ public class ExceptionDatabaseConfiguration extends AbstractDatabaseConfiguratio
     private static final String JTA_ENVIRONMENT = "jta";
     private static final String LOCAL_RESOURCES_ENVIRONMENT = "local-resources";
 
-    public ExceptionDatabaseConfiguration(String environment, Properties props) {
+    private ExceptionDatabaseConfiguration(String environment, Properties props) {
         super("mybatis/database-config.xml", environment, props);
     }
 
     public static ExceptionDatabaseConfiguration createConfiguration(String dataSource, boolean isJta) {
+        if (Strings.isNullOrEmpty(dataSource)) {
+            throw new IllegalArgumentException("[DataSource] is required and should not be null or empty");
+        }
+
         String environment = isJta ? JTA_ENVIRONMENT : LOCAL_RESOURCES_ENVIRONMENT;
         Properties props = new Properties();
         props.setProperty("jndi_datasource", dataSource);
@@ -32,12 +38,12 @@ public class ExceptionDatabaseConfiguration extends AbstractDatabaseConfiguratio
     @Override
     protected void registerAliases(Configuration configuration) {
         configuration.getTypeAliasRegistry().registerAlias(Ticket.class);
-        configuration.getTypeAliasRegistry().registerAlias(TicketOccurence.class);
+        configuration.getTypeAliasRegistry().registerAlias("ticketOccurrence", TicketOccurence.class);
     }
 
     @Override
     protected void registerMappers(Configuration configuration) {
         configuration.getMapperRegistry().addMapper(TicketMapper.class);
-        configuration.getMapperRegistry().addMapper(TicketOccurence.class);
+        configuration.getMapperRegistry().addMapper(TicketOccurrenceMapper.class);
     }
 }

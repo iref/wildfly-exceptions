@@ -7,7 +7,7 @@
 
     <environments default="jta">
         <environment id="jta">
-            <transactionManager type="JTA"/>
+            <transactionManager type="MANAGED"/>
             <dataSource type="JNDI">
                 <property name="data_source" value="${jndi_datasource}" />
             </dataSource>
@@ -15,7 +15,7 @@
         <environment id="local-resources">
             <transactionManager type="JDBC" />
             <dataSource type="JNDI">
-                <property name="data_source" value="${jndi_datasource" />
+                <property name="data_source" value="${jndi_datasource}" />
             </dataSource>
         </environment>
     </environments>
