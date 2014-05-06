@@ -261,6 +261,13 @@
             <artifactId>mybatis</artifactId>
             <version>3.2.3</version>
         </dependency>
+
+        <!-- for mybatis lazy loading, as mybatis sets its dependency on cglib as optional -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.2.2</version>
+        </dependency>
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
