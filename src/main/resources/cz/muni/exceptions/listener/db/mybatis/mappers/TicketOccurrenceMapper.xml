@@ -26,6 +26,8 @@
         FROM
             ${schema}.ticket_occurrences AS to
         WHERE
-            ticket_id = #{ticketId}
+            to.ticket_id = #{ticketId}
+        ORDER BY
+            to.occurrence_timestamp ASC
     </select>
 </mapper>
