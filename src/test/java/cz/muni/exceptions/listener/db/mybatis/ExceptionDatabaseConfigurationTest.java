@@ -3,6 +3,7 @@ package cz.muni.exceptions.listener.db.mybatis;
 import cz.muni.exceptions.listener.db.JPATicketRepository;
 import cz.muni.exceptions.listener.db.TicketRepository;
 import cz.muni.exceptions.listener.db.model.Ticket;
+import cz.muni.exceptions.listener.db.model.TicketClass;
 import cz.muni.exceptions.listener.db.model.TicketOccurence;
 import cz.muni.exceptions.listener.db.mybatis.mappers.TicketMapper;
 import cz.muni.exceptions.listener.db.mybatis.mappers.TicketOccurrenceMapper;
@@ -85,7 +86,8 @@ public class ExceptionDatabaseConfigurationTest {
                 "jdbc/arquillian", false        );
 
         TypeAliasRegistry typeAliasRegistry = configuration.getConfiguration().getTypeAliasRegistry();
-        Assert.assertEquals(typeAliasRegistry.resolveAlias("ticket"), Ticket.class);
-        Assert.assertEquals(typeAliasRegistry.resolveAlias("ticketOccurrence"), TicketOccurence.class);
+        Assert.assertEquals(Ticket.class, typeAliasRegistry.resolveAlias(Ticket.class.getSimpleName()));
+        Assert.assertEquals(TicketOccurence.class, typeAliasRegistry.resolveAlias("ticketOccurrence"));
+        Assert.assertEquals(TicketClass.class, typeAliasRegistry.resolveAlias(TicketClass.class.getSimpleName()));
     }
 }

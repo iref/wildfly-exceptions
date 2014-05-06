@@ -2,10 +2,13 @@ package cz.muni.exceptions.listener.db.mybatis;
 
 import com.google.common.base.Strings;
 import cz.muni.exceptions.listener.db.model.Ticket;
+import cz.muni.exceptions.listener.db.model.TicketClass;
 import cz.muni.exceptions.listener.db.model.TicketOccurence;
+import cz.muni.exceptions.listener.db.mybatis.handlers.TicketClassHandler;
 import cz.muni.exceptions.listener.db.mybatis.mappers.TicketMapper;
 import cz.muni.exceptions.listener.db.mybatis.mappers.TicketOccurrenceMapper;
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.type.JdbcType;
 
 import java.util.Properties;
 
@@ -39,11 +42,18 @@ public class ExceptionDatabaseConfiguration extends AbstractDatabaseConfiguratio
     protected void registerAliases(Configuration configuration) {
         configuration.getTypeAliasRegistry().registerAlias(Ticket.class);
         configuration.getTypeAliasRegistry().registerAlias("ticketOccurrence", TicketOccurence.class);
+        configuration.getTypeAliasRegistry().registerAlias(TicketClass.class);
     }
 
     @Override
     protected void registerMappers(Configuration configuration) {
         configuration.getMapperRegistry().addMapper(TicketMapper.class);
         configuration.getMapperRegistry().addMapper(TicketOccurrenceMapper.class);
+    }
+
+    @Override
+    protected void registerTypeHandlers(Configuration configuration) {
+        super.registerTypeHandlers(configuration);
+        configuration.getTypeHandlerRegistry().register(TicketClass.class, JdbcType.INTEGER, TicketClassHandler.class);
     }
 }
