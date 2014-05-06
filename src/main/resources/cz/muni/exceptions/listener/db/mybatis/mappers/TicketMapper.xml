@@ -5,20 +5,21 @@
         <id     column="ticket_id"                 property="id"/>
         <result column="ticket_detail_message"     property="detailMessage" />
         <result column="ticket_stacktrace"         property="stackTrace" />
-        <result column="ticket_class_id"           property="ticketClass" />
+        <result column="ticket_class_id"           property="ticketClass"
+                typeHandler="cz.muni.exceptions.listener.db.mybatis.handlers.TicketClassHandler"/>
 
         <collection column="ticket_id"  property="occurences"
-                    select="${mappers}.TicketOccurrenceMapper.selectTicketOccurences" />
+                    select="${mappers}.TicketOccurrenceMapper.selectTicketOccurrences" />
     </resultMap>
 
     <sql id="ticketColumns">
-        t.id AS ticket_id,
-        t.detail_message AS ticket_message,
-        t.stacktrace     AS ticket_stacktrace,
-        t.ticket_class_id AS ticket_class_id,
+        t.id              AS ticket_id,
+        t.detail_message  AS ticket_detail_message,
+        t.stacktrace      AS ticket_stacktrace,
+        t.ticket_class_id AS ticket_class_id
     </sql>
 
-    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+    <insert id="insert" keyProperty="ticket.id" useGeneratedKeys="true">
         INSERT INTO ${schema}.tickets (detail_message, stacktrace, ticket_class_id)
         VALUES (#{ticket.detailMessage}, #{ticket.stackTrace}, #{ticket.ticketClass.id})
     </insert>

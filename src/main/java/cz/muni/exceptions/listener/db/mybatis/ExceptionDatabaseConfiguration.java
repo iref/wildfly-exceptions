@@ -54,6 +54,6 @@ public class ExceptionDatabaseConfiguration extends AbstractDatabaseConfiguratio
     @Override
     protected void registerTypeHandlers(Configuration configuration) {
         super.registerTypeHandlers(configuration);
-        configuration.getTypeHandlerRegistry().register(TicketClass.class, JdbcType.INTEGER, TicketClassHandler.class);
+        configuration.getTypeHandlerRegistry().register(TicketClass.class, TicketClassHandler.class);
     }
 }

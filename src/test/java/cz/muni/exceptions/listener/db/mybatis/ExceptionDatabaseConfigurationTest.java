@@ -5,11 +5,13 @@ import cz.muni.exceptions.listener.db.TicketRepository;
 import cz.muni.exceptions.listener.db.model.Ticket;
 import cz.muni.exceptions.listener.db.model.TicketClass;
 import cz.muni.exceptions.listener.db.model.TicketOccurence;
+import cz.muni.exceptions.listener.db.mybatis.handlers.TicketClassHandler;
 import cz.muni.exceptions.listener.db.mybatis.mappers.TicketMapper;
 import cz.muni.exceptions.listener.db.mybatis.mappers.TicketOccurrenceMapper;
 import junit.framework.Assert;
 import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.type.TypeAliasRegistry;
+import org.apache.ibatis.type.TypeHandler;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
@@ -38,10 +40,11 @@ public class ExceptionDatabaseConfigurationTest {
                 .addAsLibraries(libs)
                 .addClass(TicketRepository.class)
                 .addPackage(TicketMapper.class.getPackage())
+                .addPackage(TicketClassHandler.class.getPackage())
                 .addPackage(ExceptionDatabaseConfiguration.class.getPackage())
                 .addPackage(Ticket.class.getPackage())
                 .addAsResource("mybatis/database-config.xml", "mybatis/database-config.xml")
-                .addAsResource(TicketMapper.class.getPackage(), "TicketMapper.xml", "TicketOccurrenceMapper.xml")
+                .addAsResources(TicketMapper.class.getPackage(), "TicketMapper.xml", "TicketOccurrenceMapper.xml")
                 .addAsWebInfResource("jbossas-ds.xml");
 
         return archive;
@@ -83,11 +86,20 @@ public class ExceptionDatabaseConfigurationTest {
     @Test
     public void testRegisterAliases() {
         ExceptionDatabaseConfiguration configuration = ExceptionDatabaseConfiguration.createConfiguration(
-                "jdbc/arquillian", false        );
+                "jdbc/arquillian", false);
 
         TypeAliasRegistry typeAliasRegistry = configuration.getConfiguration().getTypeAliasRegistry();
         Assert.assertEquals(Ticket.class, typeAliasRegistry.resolveAlias(Ticket.class.getSimpleName()));
         Assert.assertEquals(TicketOccurence.class, typeAliasRegistry.resolveAlias("ticketOccurrence"));
         Assert.assertEquals(TicketClass.class, typeAliasRegistry.resolveAlias(TicketClass.class.getSimpleName()));
+    }
+
+    @Test
+    public void testRegisterTypeHandlers() {
+        ExceptionDatabaseConfiguration configuration = ExceptionDatabaseConfiguration.createConfiguration(
+                "jdbc/arquillian", false);
+        TypeHandler<TicketClass> ticketClassHandler = configuration.getConfiguration()
+                .getTypeHandlerRegistry().getTypeHandler(TicketClass.class);
+        Assert.assertNotNull(ticketClassHandler);
     }
 }

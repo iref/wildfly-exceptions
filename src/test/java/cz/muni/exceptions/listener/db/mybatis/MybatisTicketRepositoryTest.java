@@ -1,8 +1,11 @@
 package cz.muni.exceptions.listener.db.mybatis;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import cz.muni.exceptions.listener.db.TicketRepository;
 import cz.muni.exceptions.listener.db.model.Ticket;
+import cz.muni.exceptions.listener.db.model.TicketClass;
+import cz.muni.exceptions.listener.db.model.TicketOccurence;
 import cz.muni.exceptions.listener.db.mybatis.handlers.TicketClassHandler;
 import cz.muni.exceptions.listener.db.mybatis.mappers.TicketMapper;
 import org.apache.ibatis.io.Resources;
@@ -22,6 +25,8 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -74,6 +79,99 @@ public class MybatisTicketRepositoryTest {
     public void testGetTicket() {
         Optional<Ticket> ticketOptional = repository.get(1L);
         Assert.assertTrue(ticketOptional.isPresent());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetTicketByNullId() {
+        Optional<Ticket> ticketOptional = repository.get(null);
+    }
+
+    @Test
+    public void testGetTicketByNonExistingId() {
+        Optional<Ticket> ticketOptional = repository.get(-1L);
+        Assert.assertFalse(ticketOptional.isPresent());
+    }
+
+    @Test
+    public void testGetTicketById() {
+        Optional<Ticket> ticketOptional = repository.get(1L);
+        Assert.assertTrue(ticketOptional.isPresent());
+
+        Ticket ticket = ticketOptional.get();
+        Assert.assertEquals(1L, ticket.getId().longValue());
+        Assert.assertEquals("Something went horribly wrong", ticket.getDetailMessage());
+        Assert.assertEquals("StackTrace1", ticket.getStackTrace());
+        Assert.assertEquals(TicketClass.find(1), ticket.getTicketClass());
+        Assert.assertEquals(2, ticket.getOccurences().size());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddNullTicket() {
+        repository.add(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddExistingTicket() {
+        Ticket ticket = new Ticket();
+        ticket.setId(1L);
+
+        repository.add(ticket);
+    }
+
+    @Test
+    public void testAddTicket() {
+        TicketOccurence ticketOccurence = new TicketOccurence();
+        ticketOccurence.setId(300L);
+        ticketOccurence.setTimestamp(new Timestamp(new Date().getTime()));
+        Ticket ticket = new Ticket("OctocatException", "Stacktrace3", TicketClass.DATABASE, Lists.newArrayList(ticketOccurence));
+
+        repository.add(ticket);
+
+        Assert.assertNotNull(ticket.getId());
+        Assert.assertTrue(repository.get(ticket.getId()).isPresent());
+    }
+
+    @Test
+    public void testUpdateTicket() {
+        TicketOccurence ticketOccurence = new TicketOccurence();
+        ticketOccurence.setTimestamp(new Timestamp(new Date().getTime()));
+        Ticket ticket = new Ticket("NewException", "Stacktrace updated", TicketClass.FILE,
+                Lists.newArrayList(ticketOccurence));
+        ticket.setId(1L);
+
+        repository.update(ticket);
+
+        Optional<Ticket> ticketOptional = repository.get(1L);
+        Assert.assertTrue(ticketOptional.isPresent());
+
+        Ticket updated = ticketOptional.get();
+        Assert.assertEquals("NewException", updated.getDetailMessage());
+        Assert.assertEquals("Stacktrace updated", updated.getStackTrace());
+        Assert.assertEquals(TicketClass.FILE, updated.getTicketClass());
+        Assert.assertEquals(1, updated.getOccurences().size());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateNullTicket() {
+        repository.update(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateTicketWithoutId() {
+        repository.update(new Ticket());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRemoveByNullId() {
+        repository.remove(null);
+    }
+
+    @Test
+    public void testRemove() {
+        repository.remove(2L);
+
+        Set<Ticket> all = repository.all();
+        Assert.assertEquals(1, all.size());
     }
 
     @Test

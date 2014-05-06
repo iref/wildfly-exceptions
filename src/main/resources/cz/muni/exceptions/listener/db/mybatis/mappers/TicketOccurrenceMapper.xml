@@ -11,9 +11,9 @@
         to.occurrence_timestamp AS ticket_occurrence_timestamp
     </sql>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="ticketOccurrence.id">
         INSERT INTO ${schema}.ticket_occurrences (occurrence_timestamp, ticket_id)
-        VALUES (#{ticketOccurrence.occurenceTimestamp, #{ticketId})
+        VALUES (#{ticketOccurrence.occurenceTimestamp}, #{ticketId})
     </insert>
 
     <delete id="deleteTicketOccurrences">
