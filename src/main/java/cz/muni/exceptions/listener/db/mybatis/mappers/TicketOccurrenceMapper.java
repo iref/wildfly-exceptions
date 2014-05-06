@@ -1,6 +1,7 @@
 package cz.muni.exceptions.listener.db.mybatis.mappers;
 
 import cz.muni.exceptions.listener.db.model.TicketOccurence;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -9,12 +10,10 @@ import java.util.List;
  */
 public interface TicketOccurrenceMapper {
 
-    void insert(TicketOccurence ticketOccurence, Long ticketId);
+    void insert(@Param("ticketOccurrence") TicketOccurence ticketOccurence, @Param("ticketId") Long ticketId);
 
-    void update(TicketOccurence ticketOccurence);
+    void deleteTicketOccurrences(@Param("ticketId") Long ticketId);
 
-    void delete(Long id);
-
-    List<TicketOccurence> selectTicketOccurences(Long ticketId);
+    List<TicketOccurence> selectTicketOccurences(@Param("ticketId") Long ticketId);
 
 }

@@ -7,7 +7,7 @@
         <result column="ticket_stacktrace"         property="stackTrace" />
         <result column="ticket_class_id"           property="ticketClass" />
 
-        <collection property="occurences"  select="${mappers}.TicketOccurrenceMapper.selectById" />
+        <collection property="occurences"  select="${mappers}.TicketOccurrenceMapper.selectTicketOccurences" />
     </resultMap>
 
     <sql id="ticketColumns">
