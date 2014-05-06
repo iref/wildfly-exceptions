@@ -68,7 +68,7 @@ public class MybatisTicketRepository implements TicketRepository {
             TicketOccurrenceMapper ticketOccurrenceMapper = sqlSession.getMapper(TicketOccurrenceMapper.class);
 
             ticketMapper.update(ticket);
-            ticketOccurrenceMapper.deleteTicketOccurences(ticket.getId());
+            ticketOccurrenceMapper.deleteTicketOccurrences(ticket.getId());
 
             for (TicketOccurence ticketOccurence: ticket.getOccurences()) {
                 ticketOccurrenceMapper.insert(ticketOccurence, ticket.getId());
