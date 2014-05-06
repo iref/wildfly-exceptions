@@ -26,9 +26,23 @@ public abstract class AbstractDatabaseConfiguration implements SqlSessionFactory
         } catch (IOException ex) {
             throw new IllegalStateException("Configuration was not found at path[" + configPath + "].", ex);
         }
+
+        Configuration configuration = delegate.getConfiguration();
+        configuration.setAggressiveLazyLoading(false);
+        configuration.setLazyLoadingEnabled(true);
+
+        registerAliases(configuration);
+        registerMappers(configuration);
+        registerTypeHandlers(configuration);
     }
 
-    protected void registerAliases(Configuration configuration);
+    protected abstract void registerAliases(Configuration configuration);
+
+    protected abstract void registerMappers(Configuration configuration);
+
+    protected void registerTypeHandlers(Configuration configuration) {
+        // no type handlers are registered by default
+    }
 
     @Override
     public Configuration getConfiguration() {
