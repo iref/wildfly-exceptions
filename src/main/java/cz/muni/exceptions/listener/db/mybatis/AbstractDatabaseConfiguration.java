@@ -17,6 +17,14 @@ public abstract class AbstractDatabaseConfiguration implements SqlSessionFactory
 
     private final SqlSessionFactory delegate;
 
+    /**
+     * Constructor creates new instance of database configuration.
+     *
+     * @param configPath path to configuration file
+     * @param environment id of environment, that should be used to initialize database connection
+     * @param properties additional properties to setup configuration
+     * @throws java.lang.IllegalStateException if configPath is not found.
+     */
     public AbstractDatabaseConfiguration(String configPath, String environment, Properties properties) {
 
         try {
@@ -36,10 +44,25 @@ public abstract class AbstractDatabaseConfiguration implements SqlSessionFactory
         registerTypeHandlers(configuration);
     }
 
+    /**
+     * Implementations should use this method to register new type aliases to configuration.
+     *
+     * @param configuration configuration, that can be used to register new type alias
+     */
     protected abstract void registerAliases(Configuration configuration);
 
+    /**
+     * Implementations should use this method to register new mappers to configuration.
+     *
+     * @param configuration configuration, that can be used to register new mapper
+     */
     protected abstract void registerMappers(Configuration configuration);
 
+    /**
+     * Implementations should use this method to register new type handler to configuration.
+     *
+     * @param configuration configuration, that can be used to register new type handlers
+     */
     protected void registerTypeHandlers(Configuration configuration) {
         // no type handlers are registered by default
     }

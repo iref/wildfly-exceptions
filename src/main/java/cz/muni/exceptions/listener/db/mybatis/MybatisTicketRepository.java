@@ -13,6 +13,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import java.util.Set;
 
 /**
+ * Implementation of {@link cz.muni.exceptions.listener.db.TicketRepository},
+ * that uses Mybatis to access database.
+ *
  * @author Jan Ferko
  */
 public class MybatisTicketRepository implements TicketRepository {

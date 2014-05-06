@@ -26,6 +26,14 @@ public class ExceptionDatabaseConfiguration extends AbstractDatabaseConfiguratio
         super("mybatis/database-config.xml", environment, props);
     }
 
+    /**
+     * Factory method for creating new configuration.
+     *
+     * @param dataSource JNDI name of data source.
+     * @param isJta indicator if data source is JTA managed
+     * @return new database configuration for data source
+     * @throws java.lang.IllegalArgumentException if data source is {@code null} or empty
+     */
     public static ExceptionDatabaseConfiguration createConfiguration(String dataSource, boolean isJta) {
         if (Strings.isNullOrEmpty(dataSource)) {
             throw new IllegalArgumentException("[DataSource] is required and should not be null or empty");
