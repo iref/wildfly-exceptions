@@ -1,7 +1,6 @@
 
 package cz.muni.exceptions.source;
 
-import com.google.common.base.Optional;
 import cz.muni.exceptions.dispatcher.*;
 import cz.muni.exceptions.listener.DatabaseExceptionListener;
 import cz.muni.exceptions.listener.ExceptionListener;
@@ -9,17 +8,10 @@ import cz.muni.exceptions.listener.classifier.ExceptionReportClassifier;
 import cz.muni.exceptions.listener.classifier.Node;
 import cz.muni.exceptions.listener.classifier.PackageTreeSearcher;
 import cz.muni.exceptions.listener.classifier.StaxPackageDataParser;
-import cz.muni.exceptions.listener.db.JPATicketRepository;
-import cz.muni.exceptions.listener.db.PersistenceUnitCreator;
 import cz.muni.exceptions.listener.db.TicketRepository;
-import cz.muni.exceptions.listener.db.mybatis.AbstractDatabaseConfiguration;
-import cz.muni.exceptions.listener.db.mybatis.ExceptionDatabaseConfiguration;
-import cz.muni.exceptions.listener.db.mybatis.MybatisTicketRepository;
+import cz.muni.exceptions.listener.db.TicketRepositoryFactory;
 import cz.muni.exceptions.listener.duplication.LevenshteinSimilarityChecker;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.transaction.TransactionManager;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -81,8 +73,6 @@ public class LoggingExceptionSource extends Handler {
 
         return true;
     }
-
-
 
     @Override
     public void publish(LogRecord record) {
@@ -168,17 +158,7 @@ public class LoggingExceptionSource extends Handler {
             throw new RuntimeException("Database Listener cannot be initialize if [dataSourceJNDI] property is not set.");
         }
 
-        writer.write("Creating database configuration");
-        writer.newLine();
-        writer.flush();
-        AbstractDatabaseConfiguration configuration =
-                ExceptionDatabaseConfiguration.createConfiguration(dataSourceJNDI, isJta);
-        //@TODO check if database schema exists and if it does not create it
-        TicketRepository ticketRepository = new MybatisTicketRepository(configuration);
-
-        writer.write("database listener was created.");
-        writer.newLine();
-        writer.flush();
+        TicketRepository ticketRepository = TicketRepositoryFactory.newInstance(dataSourceJNDI, isJta);
         return new DatabaseExceptionListener(ticketRepository, classifier, new LevenshteinSimilarityChecker());
     }
 

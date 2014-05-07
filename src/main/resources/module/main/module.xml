@@ -19,11 +19,11 @@
         <module name="org.jboss.as.transactions"/>
         
         <module name="javax.persistence.api" />
+        <module name="javax.transaction.api"/>
+
         <module name="org.hibernate" />
         <module name="cglib"/>
         <module name="org.mybatis" />
-
-        <module name="javax.transaction.api"/>
 
         <module name="com.google.guava" />
         <module name="com.sun.tools" />
