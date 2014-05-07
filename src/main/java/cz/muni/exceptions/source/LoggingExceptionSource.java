@@ -76,6 +76,15 @@ public class LoggingExceptionSource extends Handler {
 
     @Override
     public void publish(LogRecord record) {
+        if (record == null || !isLoggable(record)) {
+            return;
+        }
+
+        Throwable thrown = record.getThrown();
+        if (thrown == null) {
+            return;
+        }
+
         try {
             if (!initialize()) {
                 return;
@@ -83,11 +92,7 @@ public class LoggingExceptionSource extends Handler {
         } catch (IOException e) {
             // ok
         }
-        if (record == null || !isLoggable(record)) {
-            return;
-        }
-        
-        Throwable thrown = record.getThrown();
+
         if (thrown != null) {
             ExceptionReport report = createReport(thrown);
             dispatcher.warnListeners(report);
