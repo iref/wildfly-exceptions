@@ -65,6 +65,8 @@
         <version.shrinkwrap>1.2.2</version.shrinkwrap>
         <version.shrinkwrap.resolver>2.0.0</version.shrinkwrap.resolver>
         <version.surefire>2.8.1</version.surefire>
+        <version.mybatis>3.2.7</version.mybatis>
+        <version.cglib>2.2.2</version.cglib>
         <module.name>cz.muni.exceptions</module.name>
 
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
@@ -256,17 +258,18 @@
             <artifactId>hibernate-core</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
-            <version>3.2.3</version>
+            <version>${version.mybatis}</version>
         </dependency>
 
         <!-- for mybatis lazy loading, as mybatis sets its dependency on cglib as optional -->
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
-            <version>2.2.2</version>
+            <version>${version.cglib}</version>
         </dependency>
         <dependency>
             <groupId>javax.transaction</groupId>

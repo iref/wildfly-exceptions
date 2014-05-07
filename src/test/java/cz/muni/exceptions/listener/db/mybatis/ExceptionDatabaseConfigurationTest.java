@@ -1,6 +1,5 @@
 package cz.muni.exceptions.listener.db.mybatis;
 
-import cz.muni.exceptions.listener.db.JPATicketRepository;
 import cz.muni.exceptions.listener.db.TicketRepository;
 import cz.muni.exceptions.listener.db.model.Ticket;
 import cz.muni.exceptions.listener.db.model.TicketClass;
@@ -9,7 +8,6 @@ import cz.muni.exceptions.listener.db.mybatis.handlers.TicketClassHandler;
 import cz.muni.exceptions.listener.db.mybatis.mappers.TicketMapper;
 import cz.muni.exceptions.listener.db.mybatis.mappers.TicketOccurrenceMapper;
 import junit.framework.Assert;
-import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.type.TypeAliasRegistry;
 import org.apache.ibatis.type.TypeHandler;
 import org.jboss.arquillian.container.test.api.Deployment;

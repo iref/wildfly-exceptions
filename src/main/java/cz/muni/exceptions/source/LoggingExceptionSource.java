@@ -12,6 +12,9 @@ import cz.muni.exceptions.listener.classifier.StaxPackageDataParser;
 import cz.muni.exceptions.listener.db.JPATicketRepository;
 import cz.muni.exceptions.listener.db.PersistenceUnitCreator;
 import cz.muni.exceptions.listener.db.TicketRepository;
+import cz.muni.exceptions.listener.db.mybatis.AbstractDatabaseConfiguration;
+import cz.muni.exceptions.listener.db.mybatis.ExceptionDatabaseConfiguration;
+import cz.muni.exceptions.listener.db.mybatis.MybatisTicketRepository;
 import cz.muni.exceptions.listener.duplication.LevenshteinSimilarityChecker;
 
 import javax.naming.Context;
@@ -164,22 +167,14 @@ public class LoggingExceptionSource extends Handler {
         if (dataSourceJNDI == null) {
             throw new RuntimeException("Database Listener cannot be initialize if [dataSourceJNDI] property is not set.");
         }
-        Optional<TransactionManager> transactionManager = Optional.absent();
-        if (isJta) {
-            try {
-                Context context = new InitialContext();
-                TransactionManager txManager = (TransactionManager) context.lookup(TRANSACTION_MANAGER_JNDI);
-                transactionManager = Optional.of(txManager);
-            } catch (Exception ex) {
-                throw new RuntimeException("JNDI lookup of TransactionManager has failed.");
-            }
-        }
 
-        writer.write("Creating persistence unit creator");
+        writer.write("Creating database configuration");
         writer.newLine();
         writer.flush();
-        PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDI, transactionManager);
-        TicketRepository ticketRepository = new JPATicketRepository(creator);
+        AbstractDatabaseConfiguration configuration =
+                ExceptionDatabaseConfiguration.createConfiguration(dataSourceJNDI, isJta);
+        //@TODO check if database schema exists and if it does not create it
+        TicketRepository ticketRepository = new MybatisTicketRepository(configuration);
 
         writer.write("database listener was created.");
         writer.newLine();
