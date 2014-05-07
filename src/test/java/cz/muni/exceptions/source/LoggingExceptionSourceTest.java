@@ -1,15 +1,35 @@
 
 package cz.muni.exceptions.source;
 
+import com.google.common.base.Optional;
 import cz.muni.exceptions.MockListener;
 import cz.muni.exceptions.dispatcher.BasicExceptionDispatcher;
+import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
+import cz.muni.exceptions.listener.DatabaseExceptionListener;
 import cz.muni.exceptions.listener.ExceptionListener;
+
+import java.io.File;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
+
+import cz.muni.exceptions.listener.classifier.ExceptionReportClassifier;
+import cz.muni.exceptions.listener.db.JPATicketRepository;
+import cz.muni.exceptions.listener.db.PersistenceUnitCreator;
+import cz.muni.exceptions.listener.db.model.Ticket;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import javax.annotation.security.RunAs;
+import javax.transaction.UserTransaction;
 
 /**
  *
@@ -78,7 +98,7 @@ public class LoggingExceptionSourceTest {
         
         assertReported(true);
     }
-    
+
     private void assertReported(boolean shouldBeReported) {
         for (ExceptionListener listener : mockDispatcher.getListeners()) {
             MockListener mockListener = (MockListener) listener;

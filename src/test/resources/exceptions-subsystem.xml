@@ -1,0 +1,13 @@
+<subsystem xmlns="urn:cz:muni:exceptions:1.0">
+    <dispatcher async="true">
+        <blacklist>
+            <class>javax.security.*</class>
+        </blacklist>
+    </dispatcher>
+    <sources>
+        <debugger-source enabled="true"/>
+    </sources>
+    <listeners>
+        <database-listener dataSource="java:jboss/datasources/ExampleDS" isJta="true" />
+    </listeners>
+</subsystem>

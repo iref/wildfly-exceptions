@@ -27,5 +27,6 @@ public class ExceptionDispatcherRemoveHandler extends AbstractRemoveStepHandler 
                 .getLastElement().getValue();
         ServiceName serviceName = ExceptionDispatcherService.createServiceName();
         context.removeService(serviceName);
+        context.completeStep(OperationContext.ResultHandler.NOOP_RESULT_HANDLER);
     }
 }

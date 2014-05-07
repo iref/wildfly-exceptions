@@ -1,0 +1,11 @@
+<custom-handler name="ExceptionHandler" class="cz.muni.exceptions.source.LoggingExceptionSource"
+                module="cz.muni.exceptions">
+    <level name="INFO" />
+    <properties>
+        <property name="async" value="true" />
+        <property name="blacklist" value="javax.security.*" />
+        <property name="databaseListenerEnabled" value="true" />
+        <property name="jta" value="true" />
+        <property name="dataSourceJNDI" value="java:jboss/datasources/ExampleDS" />
+    </properties>
+</custom-handler>

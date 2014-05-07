@@ -28,6 +28,7 @@ public class DebuggerRemoveHandler extends AbstractRemoveStepHandler {
                 .getLastElement().getValue();
         ServiceName serviceName = DebuggerService.createServiceName();
         context.removeService(serviceName);
+        context.completeStep(OperationContext.ResultHandler.NOOP_RESULT_HANDLER);
     }        
     
 }

@@ -667,4 +667,5 @@
     <package name="org.apache.ibatis" label="database" weight="1.0" />
     <package name="org.jglue.cdiunit" label="integration" weight="1.0" />
     <package name="org.datanucleus" label="integration" weight="1.0" />
+    <package name="io.undertow" label="web" weight="1.0" />
 </packages>

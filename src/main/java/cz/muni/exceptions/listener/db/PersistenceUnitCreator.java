@@ -5,18 +5,18 @@ import com.google.common.collect.ImmutableSet;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.engine.transaction.jta.platform.internal.JBossAppServerJtaPlatform;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.transaction.Status;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Class creates new EntityManageFactory, that allows to persist exception data 
@@ -37,6 +37,8 @@ public class PersistenceUnitCreator {
     /**
      * Constructor creates new instance of creator for given datasource name.
      * 
+     *
+     *
      * @param dataSourceJNDIName JNDI identifier of data source.
      * @param transactionManager JTA transaction manager, that should be used to manage transaction
      *                           or {@link com.google.common.base.Optional#absent()} if data source
@@ -90,7 +92,7 @@ public class PersistenceUnitCreator {
      */
     private EntityManagerFactory createEntityManagerFactory(String dataSourceJNDIName) {
         Map<String, Object> properties = new HashMap<>();
-        
+
         try {
             if (this.transactionManager.isPresent()) {
                 properties.put("javax.persistence.jtaDataSource", dataSourceJNDIName);
@@ -124,7 +126,7 @@ public class PersistenceUnitCreator {
 
         static {
             TRANSACTION_MANAGED_METHODS = ImmutableSet.of("persist", "merge", "remove", "flush", "lock",
-                    "refresh", "getLockMode");
+                    "refresh", "getLockMode", "createQuery");
         }
 
         /**
@@ -141,8 +143,8 @@ public class PersistenceUnitCreator {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            Transaction tx = null;
 
+            Transaction tx = null;
             if (TRANSACTION_MANAGED_METHODS.contains(method.getName())) {
                 if (transactionManager.getStatus() == Status.STATUS_NO_TRANSACTION) {
                     transactionManager.begin();

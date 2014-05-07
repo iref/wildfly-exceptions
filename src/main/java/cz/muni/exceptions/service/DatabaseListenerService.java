@@ -60,8 +60,8 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
 
     @Override
     public void start(StartContext startContext) throws StartException {
-        Optional<TransactionManager> transactionManagerOption = Optional.fromNullable(transactionManager.getValue());
-        PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDIName, transactionManagerOption);
+        Optional<TransactionManager> userTransactionOptional = Optional.fromNullable(transactionManager.getOptionalValue());
+        PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDIName, userTransactionOptional);
         JPATicketRepository repository = new JPATicketRepository(creator);
 
         ExceptionReportClassifier classifier;
@@ -73,7 +73,7 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
 
         SimilarityChecker checker = new LevenshteinSimilarityChecker();
         listener = new DatabaseExceptionListener(repository, classifier, checker);
-        exceptionDispatcher.getValue().registerListener(listener);
+        getDispatcher().getValue().registerListener(listener);
     }
 
     @Override
@@ -84,6 +84,14 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
     @Override
     public DatabaseExceptionListener getValue() throws IllegalStateException, IllegalArgumentException {
         return this.listener;
+    }
+
+    public InjectedValue<ExceptionDispatcher> getDispatcher() {
+        return this.exceptionDispatcher;
+    }
+
+    public InjectedValue<TransactionManager> getTransactionManager() {
+        return this.transactionManager;
     }
 
     private ExceptionReportClassifier buildClassifier() {

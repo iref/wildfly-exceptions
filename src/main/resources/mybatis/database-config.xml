@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties>
+        <property name="mappers" value="cz.muni.exceptions.listener.db.mybatis.mappers" />
+        <property name="schema" value="exceptions" />
+    </properties>
+
+    <environments default="jta">
+        <environment id="jta">
+            <transactionManager type="MANAGED"/>
+            <dataSource type="JNDI">
+                <property name="data_source" value="${jndi_datasource}" />
+            </dataSource>
+        </environment>
+        <environment id="local-resources">
+            <transactionManager type="JDBC" />
+            <dataSource type="JNDI">
+                <property name="data_source" value="${jndi_datasource}" />
+            </dataSource>
+        </environment>
+    </environments>
+</configuration>

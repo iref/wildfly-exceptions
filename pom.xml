@@ -45,7 +45,7 @@
     <scm>
         <connection>scm:git:${extension.scm.connection}</connection>
         <developerConnection>scm:git:${extension.scm.connection}</developerConnection>
-        <url>${extrension.scm.url}</url>
+        <url>${extension.scm.url}</url>
     </scm>
 
     <developers>
@@ -58,13 +58,21 @@
         <extension.scm.connection>git@github.com:iref/wildfly-exceptions.git</extension.scm.connection>
         <extension.scm.url>https://github.com/iref/wildfly-exceptions</extension.scm.url>
 
+        <version.exceptions>1.0-SNAPSHOT</version.exceptions>
+
         <version.wildfly>8.0.0.Final</version.wildfly>
         <version.junit>4.8.2</version.junit>
         <version.shrinkwrap>1.2.2</version.shrinkwrap>
         <version.shrinkwrap.resolver>2.0.0</version.shrinkwrap.resolver>
-        <module.name>exceptions</module.name>
+        <version.surefire>2.8.1</version.surefire>
+        <version.mybatis>3.2.7</version.mybatis>
+        <version.cglib>2.2.2</version.cglib>
+        <module.name>cz.muni.exceptions</module.name>
 
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+        <wildfly.managed.dir>${basedir}/target/wildfly-managed</wildfly.managed.dir>
+        <wildfy.dist.name>wildfly-${version.wildfly}</wildfy.dist.name>
+        <jboss.home>${wildfly.managed.dir}/${wildfy.dist.name}</jboss.home>
     </properties>
 
     <repositories>
@@ -176,6 +184,13 @@
               <version>1.9.5</version>
               <scope>test</scope>
           </dependency>
+          <dependency>
+              <groupId>net.sourceforge.htmlunit</groupId>
+              <artifactId>htmlunit</artifactId>
+              <version>2.7</version>
+              <scope>test</scope>
+          </dependency>
+
 
           <!-- Maven deps for Shrinkwrap maven resolver -->
           <dependency>
@@ -236,10 +251,25 @@
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
             <version>1.0.1.Final</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${version.mybatis}</version>
+        </dependency>
+
+        <!-- for mybatis lazy loading, as mybatis sets its dependency on cglib as optional -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>${version.cglib}</version>
         </dependency>
         <dependency>
             <groupId>javax.transaction</groupId>
@@ -287,6 +317,11 @@
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -305,23 +340,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.8.1</version>
-                <configuration>
-                    <!--<redirectTestOutputToFile>false</redirectTestOutputToFile>-->
-                    <enableAssertions>true</enableAssertions>
-                    <argLine>-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n</argLine>
-                    <systemProperties>
-                        <property>
-                          <name>jboss.home</name>
-                          <value>${jboss.home}</value>
-                        </property>
-                    </systemProperties>
-                    <includes>
-                        <include>**/*TestCase.java</include>
-                        <include>**/*Test.java</include>
-                    </includes>
-                    <forkMode>once</forkMode>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -368,6 +386,233 @@
                     </execution>
                 </executions>
             </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-dependency-plugin</artifactId>
+              <executions>
+                  <execution>
+                      <id>unpack</id>
+                      <phase>process-test-resources</phase>
+                      <goals>
+                          <goal>unpack</goal>
+                      </goals>
+                      <configuration>
+                          <artifactItems>
+                              <artifactItem>
+                                  <groupId>org.wildfly</groupId>
+                                  <artifactId>wildfly-dist</artifactId>
+                                  <version>${version.wildfly}</version>
+                                  <type>zip</type>
+                                  <overWrite>false</overWrite>
+                                  <outputDirectory>${wildfly.managed.dir}</outputDirectory>
+                              </artifactItem>
+                          </artifactItems>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.surefire}</version>
+                    <configuration>
+                        <!--<redirectTestOutputToFile>false</redirectTestOutputToFile>-->
+                        <skip>true</skip>
+                        <enableAssertions>true</enableAssertions>
+                        <argLine>-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n</argLine>
+                        <systemProperties>
+                            <property>
+                                <name>jboss.home</name>
+                                <value>${jboss.home}</value>
+                            </property>
+                        </systemProperties>
+                        <forkMode>once</forkMode>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>unit-tests</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <configuration>
+                                <skip>false</skip>
+                                <includes>
+                                    <include>**/*TestCase.java</include>
+                                    <include>**/*Test.java</include>
+                                </includes>
+                                <excludes>
+                                    <exclude>**/integration/*Test.java</exclude>
+                                </excludes>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>default-tools.jar</id>
+            <activation>
+                <property>
+                    <name>java.vendor</name>
+                    <value>Sun Microsystems Inc.</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                    <version>1.7.0</version>
+                    <scope>system</scope>
+                    <systemPath>${java.home}/../lib/tools.jar</systemPath>
+                </dependency>
+            </dependencies>
+        </profile>
+
+	
+		<profile>
+			<id>integration-tests</id>
+            <properties>
+                <jboss.as.home>${jboss.home}</jboss.as.home>
+                <jboss.modules.dir>${jboss.as.home}/modules/</jboss.modules.dir>
+            </properties>
+            <build>
+                <plugins>
+                    <!--<plugin>-->
+                        <!--<groupId>org.apache.maven.plugins</groupId>-->
+                        <!--<artifactId>maven-dependency-plugin</artifactId>-->
+                        <!--<executions>-->
+                            <!--<execution>-->
+                                <!--<id>copy</id>-->
+                                <!--<phase>package</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>copy</goal>-->
+                                <!--</goals>-->
+                                <!--<configuration>-->
+                                    <!--<artifactItems>-->
+                                        <!--<artifactItem>-->
+                                            <!--<groupId>cz.muni.exceptions</groupId>-->
+                                            <!--<artifact>exceptions-subsystem</artifact>-->
+                                            <!--<version>${version.exceptions}</version>-->
+                                            <!--<type>jar</type>-->
+                                            <!--<overWrite>false</overWrite>-->
+                                            <!--<outputDirectory>${jboss.modules.dir}/cz/muni/exceptions/main</outputDirectory>-->
+                                        <!--</artifactItem>-->
+                                    <!--</artifactItems>-->
+                                <!--</configuration>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                    <!--</plugin>-->
+
+                    <!-- add subsystem definition to standalone.xml -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>xml-maven-plugin</artifactId>
+                        <version>1.0</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>transform</goal>
+                                </goals>
+                                <configuration>
+                                    <transformationSets>
+                                        <transformationSet>
+                                            <dir>${jboss.as.home}/standalone/configuration</dir>
+                                            <outputDir>${jboss.as.home}/standalone/configuration</outputDir>
+                                            <includes>
+                                                <include>standalone.xml</include>
+                                            </includes>
+                                            <stylesheet>src/test/resources/xslt/addExtension.xsl</stylesheet>
+                                        </transformationSet>
+                                        <transformationSet>
+                                            <dir>${jboss.as.home}/standalone/configuration</dir>
+                                            <outputDir>${jboss.as.home}/standalone/configuration</outputDir>
+                                            <includes>
+                                                <include>standalone.xml</include>
+                                            </includes>
+                                            <stylesheet>src/test/resources/xslt/addDataSource.xsl</stylesheet>
+                                        </transformationSet>
+                                        <transformationSet>
+                                            <dir>${jboss.as.home}/standalone/configuration</dir>
+                                            <outputDir>${jboss.as.home}/standalone/configuration</outputDir>
+                                            <includes>
+                                                <include>standalone.xml</include>
+                                            </includes>
+                                            <stylesheet>src/test/resources/xslt/addSubsystem.xsl</stylesheet>
+                                        </transformationSet>
+                                        <transformationSet>
+                                            <dir>${jboss.as.home}/standalone/configuration</dir>
+                                            <outputDir>${jboss.as.home}/standalone/configuration</outputDir>
+                                            <includes>
+                                                <include>standalone.xml</include>
+                                            </includes>
+                                            <stylesheet>src/test/resources/xslt/addLoggingHandler.xsl</stylesheet>
+                                        </transformationSet>
+                                    </transformationSets>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- and last but not least copy module definitions -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>update-test-module</id>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <copy todir="${jboss.modules.dir}/cz/muni/exceptions/main">
+                                            <fileset dir="${basedir}/target/module/cz/muni/exceptions/main" includes="**/*" />
+                                        </copy>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>${version.surefire}</version>
+                            <executions>
+                                <execution>
+                                    <id>integration-test</id>
+                                    <phase>integration-test</phase>
+                                    <goals>
+                                        <goal>test</goal>
+                                    </goals>
+                                    <configuration>
+                                        <skip>false</skip>
+                                        <systemProperties>
+                                            <jboss.home>${jboss.as.home}</jboss.home>
+                                        </systemProperties>
+                                        <includes>
+                                            <include>**/integration/*Test.java</include>
+                                        </includes>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>                            
+        </profile>
+    </profiles>
 </project>

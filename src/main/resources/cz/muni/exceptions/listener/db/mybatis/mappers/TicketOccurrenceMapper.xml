@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cz.muni.exceptions.listener.db.mybatis.mappers.TicketOccurrenceMapper">
+    <resultMap  id="ticketOccurrenceResultMap" type="TicketOccurrence">
+        <id     property="id"                   column="ticket_occurrence_id"/>
+        <result property="occurenceTimestamp"   column="ticket_occurrence_timestamp" />
+    </resultMap>
+
+    <sql id="ticketOccurrenceColumns">
+        to.id                   AS ticket_occurrence_id,
+        to.occurrence_timestamp AS ticket_occurrence_timestamp
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="ticketOccurrence.id">
+        INSERT INTO ${schema}.ticket_occurrences (occurrence_timestamp, ticket_id)
+        VALUES (#{ticketOccurrence.occurenceTimestamp}, #{ticketId})
+    </insert>
+
+    <delete id="deleteTicketOccurrences">
+        DELETE FROM ${schema}.ticket_occurrences WHERE ticket_id = #{ticketId}
+    </delete>
+
+    <select id="selectTicketOccurrences" resultMap="ticketOccurrenceResultMap">
+        SELECT
+            <include refid="ticketOccurrenceColumns" />
+        FROM
+            ${schema}.ticket_occurrences AS to
+        WHERE
+            to.ticket_id = #{ticketId}
+        ORDER BY
+            to.occurrence_timestamp ASC
+    </select>
+</mapper>

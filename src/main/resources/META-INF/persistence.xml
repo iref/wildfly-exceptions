@@ -6,7 +6,9 @@
   <persistence-unit name="exceptionsPU">
     <!--<jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>-->
     <!--<non-jta-data-source>java:jboss/datasource/ExampleDS</non-jta-data-source>-->
-    
+
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
     <class>cz.muni.exceptions.listener.db.model.Ticket</class>
     <class>cz.muni.exceptions.listener.db.model.TicketOccurence</class>
 

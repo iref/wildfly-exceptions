@@ -1,5 +1,6 @@
 package cz.muni.exceptions;
 
+import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
 import cz.muni.exceptions.listener.DatabaseExceptionListener;
 import cz.muni.exceptions.service.DatabaseListenerService;
 import cz.muni.exceptions.service.ExceptionDispatcherService;
@@ -10,6 +11,7 @@ import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceController;
 import org.jboss.msc.service.ServiceName;
 
+import javax.transaction.TransactionManager;
 import java.util.List;
 
 /**
@@ -50,12 +52,13 @@ public class DatabaseListenerAddHandler extends AbstractAddStepHandler {
         ServiceBuilder<DatabaseExceptionListener> serviceBuilder = context.getServiceTarget()
                 .addService(databaseListenerServiceName, databaseListenerService)
                 .setInitialMode(ServiceController.Mode.ACTIVE)
-                .addDependency(ServiceBuilder.DependencyType.REQUIRED, dispatcherServiceName)
+                .addDependency(dispatcherServiceName, ExceptionDispatcher.class, databaseListenerService.getDispatcher())
                 .addListener(verificationHandler);
 
         if (isJta) {
-            ServiceName transactionManagerServiceName = TxnServices.JBOSS_TXN_TRANSACTION_MANAGER;
-            serviceBuilder.addDependency(ServiceBuilder.DependencyType.REQUIRED, transactionManagerServiceName);
+            ServiceName transactionManagerService = TxnServices.JBOSS_TXN_TRANSACTION_MANAGER;
+            serviceBuilder.addDependency(transactionManagerService, TransactionManager.class,
+                    databaseListenerService.getTransactionManager());
         }
 
         if (newControllers != null) {
