@@ -148,34 +148,34 @@ public class DebuggerExceptionSource {
      */
     private void listen(VirtualMachine vm) {        
         EventRequestManager requestManager = vm.eventRequestManager();
-        LOGGER.info("RequestManager instanciated.");                
+        LOGGER.info("RequestManager created.");
 
         ExceptionRequest exceptionRequest = createExceptionRequest(requestManager);        
         
         EventQueue eventQueue = vm.eventQueue();
-        
-        while (!stopDebuggerFlag.get()) {            
+
+        while (!stopDebuggerFlag.get()) {
             EventSet eventSet = null;            
             try {                
-                eventSet = eventQueue.remove(1000L);                
+                eventSet = eventQueue.remove(1000L);
+                if (eventSet == null) {
+                    continue;
+                }
+                LOGGER.log(Level.INFO, "Size of event set is {0}.", eventSet.size());
+
+                processEventSet(eventSet);
             } catch (InterruptedException ex) {
                 LOGGER.log(Level.INFO, "No exception caught in this try");
-                // no error occurred in last 5 seconds thats actually good :)
+                // no error occurred in last 1 seconds thats actually good :)
             } catch (VMDisconnectedException ex) {
                 LOGGER.log(Level.INFO, "Target VM was disconnected.", ex);
                 DebuggerExceptionSource.this.stop();
+            } finally {
+                if (eventSet != null) {
+                    eventSet.resume();
+                }
             }
-            
-            if (eventSet == null) {
-                continue;
-            }
-            
-            LOGGER.log(Level.INFO, "Size of event set is {0}.", eventSet.size());
-            
-            processEventSet(eventSet);
-
-            eventSet.resume();
-        }                
+        }
     }
 
     /**
@@ -193,7 +193,9 @@ public class DebuggerExceptionSource {
             } else if (event instanceof ExceptionEvent) {
                 LOGGER.log(Level.INFO, "Exception event was caught.");
                 ExceptionEvent exceptionEvent = (ExceptionEvent) event;
+                LOGGER.info("Creating report");
                 ExceptionReport report = translator.processExceptionEvent(exceptionEvent);
+                LOGGER.info("Sending report");
                 dispatcher.warnListeners(report);
             }
         }
@@ -211,7 +213,7 @@ public class DebuggerExceptionSource {
         ExceptionRequest exceptionRequest = requestManager.createExceptionRequest(null, true, true);
         exceptionRequest.setSuspendPolicy(ExceptionRequest.SUSPEND_NONE);
         exceptionRequest.addClassExclusionFilter("com.sun.tools.jdi.*");
-        exceptionRequest.addClassExclusionFilter("com.sun.jdi.*");        
+        exceptionRequest.addClassExclusionFilter("com.sun.jdi.*");
         
         exceptionRequest.enable();
         LOGGER.info("ExceptionRequest sent..");

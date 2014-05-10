@@ -92,11 +92,9 @@ public class LoggingExceptionSource extends Handler {
         } catch (IOException e) {
             // ok
         }
-
-        if (thrown != null) {
-            ExceptionReport report = createReport(thrown);
-            dispatcher.warnListeners(report);
-        }
+        
+        ExceptionReport report = createReport(thrown);
+        dispatcher.warnListeners(report);        
     }
 
     @Override
@@ -143,6 +141,7 @@ public class LoggingExceptionSource extends Handler {
     private ExceptionDispatcher createDispatcher(List<ExceptionListener> listeners, ExceptionFilter blacklistFilter) {
         if (async) {
             AsyncExceptionDispatcher asyncDispatcher = new AsyncExceptionDispatcher(Executors.defaultThreadFactory(), blacklistFilter);
+            asyncDispatcher.start();
             for (ExceptionListener listener : listeners) {
                 asyncDispatcher.registerListener(listener);
             }

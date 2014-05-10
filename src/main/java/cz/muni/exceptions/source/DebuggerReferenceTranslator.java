@@ -36,6 +36,7 @@ public class DebuggerReferenceTranslator {
     
     private ExceptionReport processObjectReference(ObjectReference exception) {
         String detailMessage = getDetailMessage(exception);
+        LOGGER.info("DetailMessage: " + detailMessage);
         List<StackTraceElement> stackTrace = getStackTrace(exception);
         String exceptionClass = exception.referenceType().name();
         ExceptionReport cause = getCause(exception);
@@ -46,16 +47,17 @@ public class DebuggerReferenceTranslator {
     private ExceptionReport getCause(ObjectReference exception) {
         Field causeField = exception.referenceType().fieldByName("cause");
         ObjectReference causeValue = (ObjectReference) exception.getValue(causeField);
-        LOGGER.log(Level.INFO, "Exception cause: {0}", causeValue);
-        
-        return causeValue != null && !"null".equals(causeValue.referenceType().name()) ?
-            processObjectReference(causeValue) : null;
+        //LOGGER.info("Cause: id=" + causeValue + ", class=" + (causeValue != null ? causeValue.referenceType().name() : null));
+        if (causeValue != null && !exception.equals(causeValue)) {
+            return processObjectReference(causeValue);
+        }
+
+        return null;
     }
 
     private List<StackTraceElement> getStackTrace(ObjectReference exception) {
         Field stackFramesField = exception.referenceType().fieldByName("stackTrace");
         ArrayReference stackTrace = (ArrayReference) exception.getValue(stackFramesField);
-        LOGGER.log(Level.INFO, "Stacktraces: {0}", stackTrace.getValues());
         
         List<StackTraceElement> stackTraceElements = new ArrayList<>();
         

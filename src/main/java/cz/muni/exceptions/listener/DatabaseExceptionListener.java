@@ -109,7 +109,7 @@ public class DatabaseExceptionListener implements ExceptionListener {
             String[] split = classNameAndMethod.split("\\.");
 
             String method = split[split.length - 1];
-            String[] classNames = Arrays.copyOfRange(split, 0, split.length - -1);
+            String[] classNames = Arrays.copyOfRange(split, 0, split.length - 1);
             StringBuilder classNameBuilder = new StringBuilder();
             for (String fragment : classNames) {
                 classNameBuilder.append(fragment).append(".");
