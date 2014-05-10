@@ -166,5 +166,17 @@ public class AsyncExceptionDispatcherTest {
         
         Assert.assertEquals(1, dispatcher.getListeners().size());
     }
-            
+
+    @Test
+    public void testStop() {
+        dispatcher.start();
+
+        MockListener listener = new MockListener();
+        dispatcher.registerListener(listener);
+
+        dispatcher.stop();
+        dispatcher.warnListeners(mockReport);
+
+        Assert.assertFalse(listener.isNotified());
+    }
 }

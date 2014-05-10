@@ -87,10 +87,6 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
         if (exceptionReport == null || filter.apply(exceptionReport)) {
             return;
         }
-        if (!isRunning.get()) {
-            isRunning.compareAndSet(false, true);
-            this.warningThread.start();            
-        }
         
         try {
             exceptionQueue.put(exceptionReport);
@@ -117,6 +113,19 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
         synchronized (listeners) {
             listeners.remove(listener);
         }
+    }
+
+    @Override
+    public void start() {
+        if (!isRunning.get()) {
+            isRunning.compareAndSet(false, true);
+            this.warningThread.start();
+        }
+    }
+
+    @Override
+    public void stop() {
+        isRunning.compareAndSet(true, false);
     }
 
     @Override

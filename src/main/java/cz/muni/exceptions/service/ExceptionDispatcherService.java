@@ -44,11 +44,13 @@ public class ExceptionDispatcherService implements Service<ExceptionDispatcher> 
     @Override
     public void start(StartContext context) throws StartException {
         LOGGER.infov("Starting {0} service", SERVICE_NAME);
+        this.dispatcher.start();
     }
 
     @Override
     public void stop(StopContext context) {
         LOGGER.infov("Stopping {0} service", SERVICE_NAME);
+        this.dispatcher.stop();
     }
 
     @Override

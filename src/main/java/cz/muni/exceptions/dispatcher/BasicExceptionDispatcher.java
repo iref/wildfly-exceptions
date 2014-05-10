@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Basic implementation of exception dispatcher. 
@@ -25,6 +26,9 @@ public class BasicExceptionDispatcher implements ExceptionDispatcher {
 
     /** Filter, for filtering exception, that should not be reported. */
     private final ExceptionFilter filter;
+
+    /** Indicator if dispatcher should dispatch new reports to listeners. */
+    private AtomicBoolean isRunning = new AtomicBoolean(true);
     
     /**
      * Constructor constructs new instance without any registered listeners.
@@ -53,7 +57,7 @@ public class BasicExceptionDispatcher implements ExceptionDispatcher {
 
     @Override
     public void warnListeners(ExceptionReport report) {
-        if (report == null || filter.apply(report)) {
+        if (isRunning.get() || report == null || filter.apply(report)) {
             return;
         }
         
@@ -74,6 +78,16 @@ public class BasicExceptionDispatcher implements ExceptionDispatcher {
         if (listener != null) {
             this.listeners.remove(listener);
         }
+    }
+
+    @Override
+    public void start() {
+        isRunning.compareAndSet(false, true);
+    }
+
+    @Override
+    public void stop() {
+        isRunning.compareAndSet(true, false);
     }
 
     @Override

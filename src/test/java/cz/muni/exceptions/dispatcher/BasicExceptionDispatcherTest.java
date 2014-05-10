@@ -90,7 +90,7 @@ public class BasicExceptionDispatcherTest {
         List<ExceptionListener> listeners = createMockListeners();
         
         ExceptionDispatcher newSource = new BasicExceptionDispatcher(ExceptionFilters.ALWAYS_PASSES, listeners);
-        
+        newSource.start();
         newSource.warnListeners(mockReport);
         
         for (ExceptionListener listener : dispatcher.getListeners()) {
@@ -104,6 +104,7 @@ public class BasicExceptionDispatcherTest {
         List<ExceptionListener> listeners = createMockListeners();
         
         ExceptionDispatcher newSource = new BasicExceptionDispatcher(ExceptionFilters.ALWAYS_PASSES, listeners);
+        newSource.start();
         newSource.warnListeners(null);
         
         for (ExceptionListener listener : dispatcher.getListeners()) {
@@ -119,6 +120,7 @@ public class BasicExceptionDispatcherTest {
         ExceptionFilter exceptionFilter = ExceptionFilters.ALWAYS_FILTERED;
 
         ExceptionDispatcher newDispatcher = new BasicExceptionDispatcher(exceptionFilter, listeners);
+        newDispatcher.start();
         newDispatcher.warnListeners(mockReport);
         for (ExceptionListener listener : listeners) {
             MockListener mockListener = (MockListener) listener;
@@ -143,6 +145,17 @@ public class BasicExceptionDispatcherTest {
         }
         
         return listeners;
-    }    
+    }
+
+    @Test
+    public void testStop() {
+        dispatcher.start();
+        MockListener listener = new MockListener();
+        dispatcher.registerListener(listener);
+
+        dispatcher.stop();
+        dispatcher.warnListeners(mockReport);
+        Assert.assertFalse(listener.isNotified());
+    }
 
 }

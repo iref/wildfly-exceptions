@@ -47,5 +47,15 @@ public interface ExceptionDispatcher {
      */
     Set<ExceptionListener> getListeners();
 
+    /**
+     * Starts dispatching event.
+     */
+    void start();
+
+    /**
+     *  Stops dispatching of new reports.
+     */
+    void stop();
+
 
 }
