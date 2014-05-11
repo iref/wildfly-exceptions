@@ -1,15 +1,12 @@
 package cz.muni.exceptions.service;
 
 import com.google.common.base.Optional;
-import com.sun.corba.se.spi.activation._RepositoryImplBase;
 import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
 import cz.muni.exceptions.listener.DatabaseExceptionListener;
 import cz.muni.exceptions.listener.classifier.ExceptionReportClassifier;
 import cz.muni.exceptions.listener.classifier.Node;
 import cz.muni.exceptions.listener.classifier.PackageTreeSearcher;
 import cz.muni.exceptions.listener.classifier.StaxPackageDataParser;
-import cz.muni.exceptions.listener.db.JPATicketRepository;
-import cz.muni.exceptions.listener.db.PersistenceUnitCreator;
 import cz.muni.exceptions.listener.db.TicketRepository;
 import cz.muni.exceptions.listener.db.TicketRepositoryFactory;
 import cz.muni.exceptions.listener.duplication.LevenshteinSimilarityChecker;

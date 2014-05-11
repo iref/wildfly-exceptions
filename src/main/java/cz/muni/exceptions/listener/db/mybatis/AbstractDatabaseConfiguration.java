@@ -39,9 +39,9 @@ public abstract class AbstractDatabaseConfiguration implements SqlSessionFactory
         configuration.setAggressiveLazyLoading(false);
         configuration.setLazyLoadingEnabled(true);
 
+        registerTypeHandlers(configuration);
         registerAliases(configuration);
         registerMappers(configuration);
-        registerTypeHandlers(configuration);
     }
 
     /**

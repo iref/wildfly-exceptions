@@ -5,8 +5,7 @@
         <id     column="ticket_id"                 property="id"/>
         <result column="ticket_detail_message"     property="detailMessage" />
         <result column="ticket_stacktrace"         property="stackTrace" />
-        <result column="ticket_class_id"           property="ticketClass"
-                typeHandler="cz.muni.exceptions.listener.db.mybatis.handlers.TicketClassHandler"/>
+        <result column="ticket_class_id"           property="ticketClass"/>
 
         <collection column="ticket_id"  property="occurences"
                     select="${mappers}.TicketOccurrenceMapper.selectTicketOccurrences" />
