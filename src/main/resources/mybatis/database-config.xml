@@ -3,7 +3,7 @@
 <configuration>
     <properties>
         <property name="mappers" value="cz.muni.exceptions.listener.db.mybatis.mappers" />
-        <property name="schema" value="exceptions" />
+        <property name="schema" value="public" />
     </properties>
 
     <environments default="jta">
