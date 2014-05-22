@@ -11,5 +11,5 @@ CREATE TABLE ticket_occurrences(
     occurrence_timestamp TIMESTAMP NOT NULL,
     ticket_id BIGINT,
     PRIMARY KEY (id),
-    FOREIGN KEY (ticket_id) REFERENCES exceptions.tickets (id)
+    FOREIGN KEY (ticket_id) REFERENCES tickets (id)
 );
