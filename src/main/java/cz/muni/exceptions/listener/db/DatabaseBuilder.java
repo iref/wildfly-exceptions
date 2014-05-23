@@ -5,7 +5,6 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import javax.persistence.PersistenceException;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -73,11 +72,12 @@ public class DatabaseBuilder {
 
         try {
             ScriptRunner scriptRunner = new ScriptRunner(sqlSession.getConnection());
+            scriptRunner.setStopOnError(true);
             Reader dropReader = Resources.getResourceAsReader(getClass().getClassLoader(), "sql/database-drop.sql");
-            Reader buildReader = Resources.getResourceAsReader(getClass().getClassLoader(), "sql/database-build.sql");
-            scriptRunner.runScript(dropReader);
-            scriptRunner.runScript(buildReader);
-            buildReader.close();
+            try (Reader buildReader = Resources.getResourceAsReader(getClass().getClassLoader(), "sql/database-build.sql")) {
+                scriptRunner.runScript(dropReader);
+                scriptRunner.runScript(buildReader);
+            }
         } catch (IOException e) {
             throw new RuntimeException("It was not possible to read database build script.", e);
         } finally {

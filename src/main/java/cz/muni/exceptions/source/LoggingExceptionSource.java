@@ -47,7 +47,6 @@ public class LoggingExceptionSource extends Handler {
         try {
             fileWriter = new FileWriter("/tmp/logging.log", true);
         } catch (IOException e) {
-            e.printStackTrace();
         }
         writer = new BufferedWriter(fileWriter);
     }
@@ -84,37 +83,45 @@ public class LoggingExceptionSource extends Handler {
             return;
         }
 
-        try {
-            writer.write(record.getSourceClassName() + ": " + record.getThrown());
-            writer.newLine();
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (writer != null) {
+            try {
+                writer.write(record.getSourceClassName() + ": " + record.getThrown());
+                writer.newLine();
+                writer.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         Throwable thrown = record.getThrown();
         if (thrown == null) {
             return;
         }
 
-        try {
+        if (writer != null) {
+            try {
             if (!initialize()) {
-                writer.write("Handler was not initialized.");
+                    writer.write("Handler was not initialized.");
+                    writer.newLine();
+                    writer.flush();
+                    return;
+                }
+            } catch (IOException e) {
+                // ok
+                e.printStackTrace(System.out);
+            }
+        }
+        
+        ExceptionReport report = createReport(thrown);
+        if (writer != null) {
+            try {
+                writer.write("Reporting ticket. " + report);
                 writer.newLine();
                 writer.flush();
-                return;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            // ok
-            e.printStackTrace(System.out);
         }
-        ExceptionReport report = createReport(thrown);
-        try {
-            writer.write("Reporting ticket. " + report);
-            writer.newLine();
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        
         dispatcher.warnListeners(report);        
     }
 

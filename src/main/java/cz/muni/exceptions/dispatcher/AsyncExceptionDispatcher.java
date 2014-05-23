@@ -116,7 +116,7 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
     public void start() {
         if (!isRunning.get()) {
             isRunning.compareAndSet(false, true);
-            this.executor.execute(new WarnListenersTask());
+            this.executor.execute(new WarnListenersTask(this.exceptionQueue, this.listeners));
         }
     }
 
@@ -140,13 +140,20 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
     /**
      * Tasks, that calls listeners if new exception occurs in exception queue.
      */
-    private class WarnListenersTask implements Runnable {                                
+    private class WarnListenersTask implements Runnable {     
+        
+        private final BlockingQueue<ExceptionReport> processingQueue;
+        
+        private final Set<ExceptionListener> listeners;
+        
+        public WarnListenersTask(BlockingQueue<ExceptionReport> processingQueue, 
+                Set<ExceptionListener> listeners) {
+            this.processingQueue = processingQueue;
+            this.listeners = listeners;
+        }
 
         @Override
-        public void run() {
-            final BlockingQueue<ExceptionReport> processingQueue = AsyncExceptionDispatcher.this.exceptionQueue;
-            final Set<ExceptionListener> listeners = AsyncExceptionDispatcher.this.listeners;
-            
+        public void run() {                        
             while(isRunning.get()) {
                 LOG.info("Processing queue");
                 ExceptionReport toProcess = null;

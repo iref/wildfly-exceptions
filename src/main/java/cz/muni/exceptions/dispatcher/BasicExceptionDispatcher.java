@@ -57,7 +57,7 @@ public class BasicExceptionDispatcher implements ExceptionDispatcher {
 
     @Override
     public void warnListeners(ExceptionReport report) {
-        if (isRunning.get() || report == null || filter.apply(report)) {
+        if (!isRunning.get() || report == null || filter.apply(report)) {
             return;
         }
         

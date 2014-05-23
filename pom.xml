@@ -423,7 +423,7 @@
                         <!--<redirectTestOutputToFile>false</redirectTestOutputToFile>-->
                         <skip>true</skip>
                         <enableAssertions>true</enableAssertions>
-                        <argLine>-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n</argLine>
+                        <!--<argLine>-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n</argLine>-->
                         <systemProperties>
                             <property>
                                 <name>jboss.home</name>

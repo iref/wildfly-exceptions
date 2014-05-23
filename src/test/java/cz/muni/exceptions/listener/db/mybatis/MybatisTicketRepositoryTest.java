@@ -183,6 +183,7 @@ public class MybatisTicketRepositoryTest {
     private void buildDatabase() throws IOException {
         SqlSession sqlSession = configuration.openSession();
         ScriptRunner runner = new ScriptRunner(sqlSession.getConnection());
+        runner.setStopOnError(true);
         runner.runScript(Resources.getResourceAsReader(getClass().getClassLoader(), "sql/database-build.sql"));
         runner.runScript(Resources.getResourceAsReader(getClass().getClassLoader(), "sql/tickets.sql"));
         runner.closeConnection();

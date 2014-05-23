@@ -39,7 +39,7 @@ public class DebuggerExceptionSourceTest {
        source.stop();
    }
     
-   @Test
+  // @Test
    public void testFireException() {
        Logger.getAnonymousLogger().log(Level.INFO, "Test thread id:{0}", Thread.currentThread().getId());
        try {
