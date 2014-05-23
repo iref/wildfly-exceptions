@@ -7,8 +7,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.jboss.logging.Logger;
 
@@ -33,20 +34,20 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
     private final Set<ExceptionListener> listeners;
     
     /** Flag, that indicates if dispatcher should process new throwables. */
-    private final AtomicBoolean isRunning = new AtomicBoolean(false);        
+    private final AtomicBoolean isRunning = new AtomicBoolean(false);
     
-    /** Thread that processes exceptions in queue. */
-    private final Thread warningThread;
+    /** Executor that runs processing tasks. */
+    private ExecutorService executor;
     
     /**
      * Constructor, builds new dispatcher without registered listeners.
      *      
-     * @param threadFactory thread factory, to create processing thread.
-     * @throws IllegalArgumentException if thread factory is {@code null} or cannot
+     * @param executor executor, that runs processing tasks.
+     * @throws IllegalArgumentException if executor is {@code null} or cannot
      *  create new thread
      */
-    public AsyncExceptionDispatcher(ThreadFactory threadFactory, ExceptionFilter filter) {
-        this(threadFactory, filter, Collections.EMPTY_LIST);
+    public AsyncExceptionDispatcher(ExecutorService executor, ExceptionFilter filter) {
+        this(executor, filter, Collections.EMPTY_LIST);
     }
     
     /**
@@ -54,15 +55,16 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
      * If listeners are {@code null}, they are ignored.
      * 
      * @param listeners listeners, that are registered in dispatcher
-     * @param threadFactory thread factory, to create new processing threads.
+     * @param executor executor, that runs processing tasks.
      * @throws IllegalArgumentException if threadFactory is {@code null} or 
      *  cannot create new threads.
      */
-    public AsyncExceptionDispatcher(ThreadFactory threadFactory, ExceptionFilter filter,
+    public AsyncExceptionDispatcher(ExecutorService executor, ExceptionFilter filter,
                                     Collection<ExceptionListener> listeners) {
-        if (threadFactory == null) {
-            throw new IllegalArgumentException("[ThreadFactory] is required and must not be null.");
+        if (executor == null) {
+            throw new IllegalArgumentException("[Executor] is required and must not be null.");
         }
+        this.executor = executor;
         this.filter = filter == null ? ExceptionFilters.ALWAYS_PASSES : filter;
         this.listeners = new HashSet<>();
         if (listeners != null && !listeners.isEmpty()) {
@@ -73,13 +75,7 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
             }
         }
         
-        this.exceptionQueue = new LinkedBlockingQueue<>();
-        
-        this.warningThread = threadFactory.newThread(new WarnListenersTask());
-        
-        if (warningThread == null) {
-            throw new IllegalArgumentException("[ThreadFactory] did not create thread.");
-        }                        
+        this.exceptionQueue = new LinkedBlockingQueue<>();                         
     }
 
     @Override
@@ -90,6 +86,7 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
         
         try {
             exceptionQueue.put(exceptionReport);
+            LOG.error("Report was stored in queue");
         } catch (InterruptedException ex) {
             LOG.error("Throwable was not added to queue because of interruption", ex);
         }        
@@ -99,10 +96,10 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
     public void registerListener(ExceptionListener listener) {
         if (listener == null) {
             return;
-        }
-        synchronized (listeners) {
+        }        
+        synchronized (listeners) {            
             listeners.add(listener);
-        }
+        }        
     }
 
     @Override
@@ -119,13 +116,18 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
     public void start() {
         if (!isRunning.get()) {
             isRunning.compareAndSet(false, true);
-            this.warningThread.start();
+            this.executor.execute(new WarnListenersTask());
         }
     }
 
     @Override
     public void stop() {
         isRunning.compareAndSet(true, false);
+        try {
+            this.executor.awaitTermination(1, TimeUnit.SECONDS);
+        } catch (InterruptedException ex) {
+            LOG.error("It wasn't possible to terminate processing task", ex);
+        }
     }
 
     @Override
@@ -146,16 +148,25 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
             final Set<ExceptionListener> listeners = AsyncExceptionDispatcher.this.listeners;
             
             while(isRunning.get()) {
+                LOG.info("Processing queue");
                 ExceptionReport toProcess = null;
                 try {
                     toProcess = processingQueue.take();
                 } catch (InterruptedException ex) {
                     LOG.error("Taking throwable from queue was interrupted", ex);
-                }
-
+                }                                
+                
+                LOG.info("Got report: " + toProcess);
                 if (toProcess != null) {
+                    LOG.warn(listeners);
                     for (ExceptionListener listener : listeners) {
-                        listener.onThrownException(toProcess);
+                        try {
+                            LOG.info("Sending report to " + listener);
+                            listener.onThrownException(toProcess);
+                        } catch (Exception ex) {
+                            LOG.error("Error while notifying listener:", ex);
+                        }
+                        
                     }
                 }
             }                        

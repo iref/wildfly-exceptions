@@ -31,6 +31,15 @@ public class DatabaseExceptionListener implements ExceptionListener {
 
     public DatabaseExceptionListener(TicketRepository ticketRepository, ExceptionReportClassifier classifier,
                                      SimilarityChecker similarityChecker) {
+        if (ticketRepository == null) {
+            throw new IllegalArgumentException("[TicketRepository] is required and should not be null.");
+        }
+        if (classifier == null) {
+            throw new IllegalArgumentException("[Classifier] is required and should not be null.");
+        }
+        if (similarityChecker == null) {
+            throw new IllegalArgumentException("[Similarity] is required and should not be null.");
+        }
         this.ticketRepository = ticketRepository;
         this.classifier = classifier;
         this.similarityChecker = similarityChecker;
@@ -87,7 +96,7 @@ public class DatabaseExceptionListener implements ExceptionListener {
             List<StackTraceElement> ticketStackTrace = buildStackTrace(ticket.getStackTrace());
             int stackTraceScore = similarityChecker.checkSimilarity(report.getStackTrace(), ticketStackTrace);
 
-            if (stackTraceScore <= 1) {
+            if (messageScore == 0 && stackTraceScore == 0) {
                 result = Optional.of(ticket);
                 break;
             }

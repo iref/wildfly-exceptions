@@ -24,5 +24,8 @@ public class LoggingMockServlet extends HttpServlet {
 
         resp.getWriter().append("Hello World!");
         resp.getWriter().close();
+
+        IllegalStateException exp2 = new IllegalStateException("Some illegal state");
+        LOGGER.error("Error 2 logged", exp2);
     }
 }

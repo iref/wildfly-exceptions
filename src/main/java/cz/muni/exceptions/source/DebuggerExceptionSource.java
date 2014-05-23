@@ -161,7 +161,7 @@ public class DebuggerExceptionSource {
                 if (eventSet == null) {
                     continue;
                 }
-                LOGGER.log(Level.INFO, "Size of event set is {0}.", eventSet.size());
+//                LOGGER.log(Level.INFO, "Size of event set is {0}.", eventSet.size());
 
                 processEventSet(eventSet);
             } catch (InterruptedException ex) {
@@ -191,7 +191,7 @@ public class DebuggerExceptionSource {
             } else if ( event instanceof VMDisconnectEvent) {
                 stopDebuggerFlag.set(true);
             } else if (event instanceof ExceptionEvent) {
-                LOGGER.log(Level.INFO, "Exception event was caught.");
+//                LOGGER.log(Level.INFO, "Exception event was caught.");
                 ExceptionEvent exceptionEvent = (ExceptionEvent) event;
                 LOGGER.info("Creating report");
                 ExceptionReport report = translator.processExceptionEvent(exceptionEvent);

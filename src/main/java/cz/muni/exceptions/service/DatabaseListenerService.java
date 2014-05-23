@@ -16,6 +16,8 @@ import org.jboss.msc.value.InjectedValue;
 
 import javax.transaction.TransactionManager;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Service, that creates and registers DatabaseListener
@@ -24,6 +26,8 @@ import java.io.InputStream;
  */
 public class DatabaseListenerService implements Service<DatabaseExceptionListener> {
 
+    private static final Logger LOGGER = Logger.getLogger(DatabaseListenerService.class.getName());
+    
     /** Name of service. */
     private static final String SERVICE_NAME = "Exceptions-DatabaseListener";
 
@@ -61,17 +65,18 @@ public class DatabaseListenerService implements Service<DatabaseExceptionListene
     @Override
     public void start(StartContext startContext) throws StartException {
         Optional<TransactionManager> userTransactionOptional = Optional.fromNullable(transactionManager.getOptionalValue());
-//        PersistenceUnitCreator creator = new PersistenceUnitCreator(dataSourceJNDIName, userTransactionOptional);
-//        JPATicketRepository repository = new JPATicketRepository(creator);
-        TicketRepository repository = TicketRepositoryFactory.newInstance(dataSourceJNDIName, userTransactionOptional.isPresent());
+        TicketRepository repository = TicketRepositoryFactory.newInstance(//
+                dataSourceJNDIName, userTransactionOptional.isPresent());
 
         ExceptionReportClassifier classifier;
-        try {
+            try {
             classifier = buildClassifier();
         } catch(Exception ex) {
             throw new StartException("Exception while initializing exception classifier", ex);
         }
-
+        LOGGER.log(Level.INFO, "TicketRepository: {0}", repository);
+        LOGGER.log(Level.INFO, "Dispatcher: {0}", getDispatcher().getValue());
+        
         SimilarityChecker checker = new LevenshteinSimilarityChecker();
         listener = new DatabaseExceptionListener(repository, classifier, checker);
         getDispatcher().getValue().registerListener(listener);

@@ -43,6 +43,13 @@ public class LoggingExceptionSource extends Handler {
     private BufferedWriter writer;
 
     public LoggingExceptionSource() {
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter("/tmp/logging.log", true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        writer = new BufferedWriter(fileWriter);
     }
 
     public LoggingExceptionSource(ExceptionDispatcher dispatcher) {
@@ -57,9 +64,6 @@ public class LoggingExceptionSource extends Handler {
         if (dispatcher != null) {
             return true;
         }
-
-        FileWriter fileWriter = new FileWriter("/tmp/logging.log", true);
-        writer = new BufferedWriter(fileWriter);
 
         List<ExceptionListener> listeners = new ArrayList<>();
         if (databaseListenerEnabled) {
@@ -80,6 +84,13 @@ public class LoggingExceptionSource extends Handler {
             return;
         }
 
+        try {
+            writer.write(record.getSourceClassName() + ": " + record.getThrown());
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Throwable thrown = record.getThrown();
         if (thrown == null) {
             return;
@@ -87,13 +98,23 @@ public class LoggingExceptionSource extends Handler {
 
         try {
             if (!initialize()) {
+                writer.write("Handler was not initialized.");
+                writer.newLine();
+                writer.flush();
                 return;
             }
         } catch (IOException e) {
             // ok
+            e.printStackTrace(System.out);
         }
-        
         ExceptionReport report = createReport(thrown);
+        try {
+            writer.write("Reporting ticket. " + report);
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         dispatcher.warnListeners(report);        
     }
 
@@ -107,6 +128,13 @@ public class LoggingExceptionSource extends Handler {
         // switch handler off        
         setLevel(Level.OFF);
         // clear dispatcher for this source, so no more throwables are propagated
+        try {
+            if (writer != null) {
+                writer.write("Reporting ticket");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setAsync(String async) {
@@ -140,7 +168,8 @@ public class LoggingExceptionSource extends Handler {
 
     private ExceptionDispatcher createDispatcher(List<ExceptionListener> listeners, ExceptionFilter blacklistFilter) {
         if (async) {
-            AsyncExceptionDispatcher asyncDispatcher = new AsyncExceptionDispatcher(Executors.defaultThreadFactory(), blacklistFilter);
+            AsyncExceptionDispatcher asyncDispatcher = new AsyncExceptionDispatcher(
+                    Executors.newSingleThreadExecutor(), blacklistFilter);
             asyncDispatcher.start();
             for (ExceptionListener listener : listeners) {
                 asyncDispatcher.registerListener(listener);
@@ -162,7 +191,13 @@ public class LoggingExceptionSource extends Handler {
             throw new RuntimeException("Database Listener cannot be initialize if [dataSourceJNDI] property is not set.");
         }
 
-        TicketRepository ticketRepository = TicketRepositoryFactory.newInstance(dataSourceJNDI, isJta);
+        TicketRepository ticketRepository = null;
+        try {
+            ticketRepository = TicketRepositoryFactory.newInstance(dataSourceJNDI, isJta);
+        } catch (Exception ex) {
+            writer.write(ex.toString());
+        }
+
         return new DatabaseExceptionListener(ticketRepository, classifier, new LevenshteinSimilarityChecker());
     }
 

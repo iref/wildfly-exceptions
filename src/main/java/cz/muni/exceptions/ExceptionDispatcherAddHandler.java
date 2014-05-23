@@ -45,7 +45,7 @@ public class ExceptionDispatcherAddHandler extends AbstractAddStepHandler {
 
         final ExceptionDispatcher dispatcher;
         if (isAsync) {
-            dispatcher = new AsyncExceptionDispatcher(Executors.defaultThreadFactory(), blacklistFilter);
+            dispatcher = new AsyncExceptionDispatcher(Executors.newSingleThreadExecutor(), blacklistFilter);
         } else {
             dispatcher = new BasicExceptionDispatcher(blacklistFilter);
         }

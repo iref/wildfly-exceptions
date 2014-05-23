@@ -3,11 +3,13 @@ package cz.muni.exceptions.source.integration;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.google.common.base.Optional;
-import cz.muni.exceptions.listener.db.JPATicketRepository;
-import cz.muni.exceptions.listener.db.PersistenceUnitCreator;
+import cz.muni.exceptions.listener.db.DatabaseBuilder;
 import cz.muni.exceptions.listener.db.TicketRepository;
 import cz.muni.exceptions.listener.db.model.Ticket;
+import cz.muni.exceptions.listener.db.mybatis.ExceptionDatabaseConfiguration;
+import cz.muni.exceptions.listener.db.mybatis.MybatisTicketRepository;
+import cz.muni.exceptions.listener.db.mybatis.handlers.TicketClassHandler;
+import cz.muni.exceptions.listener.db.mybatis.mappers.TicketMapper;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
@@ -19,10 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.transaction.TransactionManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.Set;
@@ -38,18 +37,24 @@ public class LoggingExceptionSourceIntegrationTest {
     @Deployment
     public static Archive<?> getDeployment() {
         File[] libs = Maven.resolver().loadPomFromFile("pom.xml")
-                .resolve("com.google.guava:guava:16.0.1", "net.sourceforge.htmlunit:htmlunit:2.7")
+                .resolve("com.google.guava:guava:16.0.1", "org.mybatis:mybatis:3.2.3", "cglib:cglib:2.2.2",
+                         "net.sourceforge.htmlunit:htmlunit:2.7")
                 .withTransitivity().asFile();
 
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "loggingSourceTest.war")
                 .setWebXML("deployments/logging/web.xml")
                 .addAsWebInfResource("deployments/logging/jboss-web.xml")
-                .addAsWebInfResource("jbossas-ds.xml")
                 .addClass(LoggingMockServlet.class)
                 .addPackage(Ticket.class.getPackage())
                 .addPackage(TicketRepository.class.getPackage())
-                .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
-                .addAsLibraries(libs);
+                .addPackage(ExceptionDatabaseConfiguration.class.getPackage())
+                .addPackage(TicketMapper.class.getPackage())
+                .addPackage(TicketClassHandler.class.getPackage())
+                .addAsLibraries(libs)
+                .addAsResource("mybatis/database-config.xml")
+                .addAsResource("sql/database-drop.sql")
+                .addAsResource("sql/database-build.sql")
+                .addAsResources(TicketMapper.class.getPackage(), "TicketMapper.xml", "TicketOccurrenceMapper.xml");
         return archive;
     }
 
@@ -57,16 +62,10 @@ public class LoggingExceptionSourceIntegrationTest {
 
     @Before
     public void setUp() throws NamingException {
-        InitialContext initialContext = new InitialContext();
-        TransactionManager ut = (TransactionManager) initialContext.lookup("java:jboss/TransactionManager");
-
-        PersistenceUnitCreator creator = new PersistenceUnitCreator("java:jboss/datasources/ExampleDS", Optional.of(ut));
-        repository = new JPATicketRepository(creator);
-
-        EntityManager entityManager = creator.createEntityManager();
-
-        entityManager.createQuery("DELETE FROM Ticket t").executeUpdate();
-
+        ExceptionDatabaseConfiguration configuration = ExceptionDatabaseConfiguration
+                .createConfiguration("java:jboss/datasources/ExampleDS", false);
+        new DatabaseBuilder(configuration).tryToBuildDatabase();
+        repository = new MybatisTicketRepository(configuration);
     }
 
     @Test
@@ -74,7 +73,7 @@ public class LoggingExceptionSourceIntegrationTest {
         sendRequestToServlet();
 
         Set<Ticket> all = repository.all();
-        Assert.assertEquals(1, all.size());
+        Assert.assertEquals(2, all.size());
     }
 
     private void sendRequestToServlet() throws IOException {
