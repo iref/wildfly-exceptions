@@ -14,7 +14,7 @@ public class ExceptionSubsystemDefinition extends SimpleResourceDefinition {
                 ExceptionExtension.getResourceDescriptionResolver(null),
                 //We always need to add an 'add' operation
                 ExceptionSubsystemAddHandler.INSTANCE,
-                //Every resource that is added, normally needs a remove operation
+                //Every resource that is added, normally needs a delete operation
                 ExceptionSubsystemRemoveHandler.INSTANCE);
     }
 

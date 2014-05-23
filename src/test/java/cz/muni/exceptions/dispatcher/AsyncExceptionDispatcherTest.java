@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +35,12 @@ public class AsyncExceptionDispatcherTest {
     public void setUp() {
         this.executor = Executors.newSingleThreadExecutor();
         dispatcher = new AsyncExceptionDispatcher(executor, ExceptionFilters.ALWAYS_PASSES);
+        dispatcher.start();
+    }
+    
+    @After
+    public void tearDown() {
+        dispatcher.stop();
     }
     
     @Test(expected = IllegalArgumentException.class)
@@ -153,7 +159,7 @@ public class AsyncExceptionDispatcherTest {
         
         dispatcher.warnListeners(mockReport);
         
-        Thread.sleep(TimeUnit.SECONDS.toSeconds(10));
+        Thread.sleep(1000);
         
         for (MockListener listener : listeners) {
             Assert.assertTrue(listener.isNotified());

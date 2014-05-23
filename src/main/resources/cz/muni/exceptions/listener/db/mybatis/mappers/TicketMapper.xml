@@ -19,8 +19,9 @@
     </sql>
 
     <insert id="insert" keyProperty="ticket.id" useGeneratedKeys="true">
-        INSERT INTO ${schema}.tickets (detail_message, stacktrace, ticket_class_id)
-        VALUES (#{ticket.detailMessage}, #{ticket.stackTrace}, #{ticket.ticketClass.id})
+<!--        INSERT INTO ${schema}.tickets (detail_message, stacktrace, ticket_class_id)
+        VALUES (#{ticket.detailMessage}, #{ticket.stackTrace}, #{ticket.ticketClass.id})-->
+        INSERT INTO ${schema}.TICKETS (DETAIL_MESSAGE, STACKTRACE, TICKET_CLASS_ID) VALUES (#{ticket.detailMessage}, #{ticket.stackTrace}, #{ticket.ticketClass.id})
     </insert>
 
     <update id="update">
