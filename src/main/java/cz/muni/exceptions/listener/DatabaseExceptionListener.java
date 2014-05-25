@@ -10,7 +10,6 @@ import cz.muni.exceptions.listener.db.model.TicketOccurence;
 import cz.muni.exceptions.listener.duplication.SimilarityChecker;
 import cz.muni.exceptions.source.ExceptionReport;
 
-
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -126,15 +125,19 @@ public class DatabaseExceptionListener implements ExceptionListener {
             String method = split[split.length - 1];
             String[] classNames = Arrays.copyOfRange(split, 0, split.length - 1);
             StringBuilder classNameBuilder = new StringBuilder();
-            for (String fragment : classNames) {
-                classNameBuilder.append(fragment).append(".");
+            for (int i = 0; i< classNames.length; i++) {
+                String fragment = classNames[i];
+                classNameBuilder.append(fragment);
+                if (i != classNames.length - 1) {
+                    classNameBuilder.append(".");
+                }
             }
 
             String fileName = matcher.group(2);
             String lineNumberValue = matcher.group(3);
             int lineNumber = 0;
             if (!lineNumberValue.isEmpty()) {
-                Integer.parseInt(lineNumberValue);
+                lineNumber = Integer.parseInt(lineNumberValue);
             }
 
             StackTraceElement element = new StackTraceElement(classNameBuilder.toString(), method, fileName, lineNumber);
