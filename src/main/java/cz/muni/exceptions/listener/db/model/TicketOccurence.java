@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  *
@@ -15,10 +17,12 @@ import javax.persistence.Id;
  * @sa.date 2014-04-15T05:57:20+0100
  */
 @Entity
+@Table(name = "ticket_occurrences")
 public class TicketOccurence implements Serializable {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "ticketOccurrenceGenerator", sequenceName = "ticket_occurrences_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ticketOccurrenceGenerator")
     private Long id;
     
     private Timestamp occurenceTimestamp;

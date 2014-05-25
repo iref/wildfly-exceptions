@@ -11,16 +11,22 @@ import java.util.Objects;
  * @sa.date 2014-04-15T05:40:59+0100
  */
 @Entity
+@Table(name = "tickets")
 public class Ticket implements Serializable {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "ticketIdGenerator", sequenceName = "tickets_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
+    @Column(name = "detail_message")
     private String detailMessage;
     
+    @Lob
+    @Column(name = "stack_trace")
     private String stackTrace;
         
+    @Column(name = "ticket_class_id")
     private int ticketClassId;
     
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
