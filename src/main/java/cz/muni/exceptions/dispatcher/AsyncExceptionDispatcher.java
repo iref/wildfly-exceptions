@@ -86,7 +86,6 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
         
         try {
             exceptionQueue.put(exceptionReport);
-            LOG.error("Report was stored in queue");
         } catch (InterruptedException ex) {
             LOG.error("Throwable was not added to queue because of interruption", ex);
         }        
@@ -155,20 +154,17 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
         @Override
         public void run() {                        
             while(isRunning.get()) {
-                LOG.info("Processing queue");
                 ExceptionReport toProcess = null;
                 try {
                     toProcess = processingQueue.take();
                 } catch (InterruptedException ex) {
                     LOG.error("Taking throwable from queue was interrupted", ex);
                 }                                
-                
-                LOG.info("Got report: " + toProcess);
+
                 if (toProcess != null) {
                     LOG.warn(listeners);
                     for (ExceptionListener listener : listeners) {
                         try {
-                            LOG.info("Sending report to " + listener);
                             listener.onThrownException(toProcess);
                         } catch (Exception ex) {
                             LOG.error("Error while notifying listener:", ex);

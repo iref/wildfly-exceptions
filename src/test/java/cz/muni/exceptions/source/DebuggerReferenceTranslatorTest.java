@@ -1,5 +1,6 @@
 package cz.muni.exceptions.source;
 
+import com.google.common.base.Optional;
 import com.sun.jdi.*;
 import com.sun.jdi.event.ExceptionEvent;
 import org.junit.Assert;
@@ -32,9 +33,9 @@ public class DebuggerReferenceTranslatorTest {
         ObjectReference exceptionReference = prepareExceptionReference(exception);
         when(mockEvent.exception()).thenReturn(exceptionReference);
 
-        ExceptionReport actualReport = translator.processExceptionEvent(mockEvent);
+        Optional<ExceptionReport> actualReport = translator.processExceptionEvent(mockEvent);
 
-        compareExceptionAndReport(exception, actualReport);
+        compareExceptionAndReport(exception, actualReport.get());
     }
 
     @Test
@@ -46,9 +47,9 @@ public class DebuggerReferenceTranslatorTest {
         ObjectReference exceptionReference = prepareExceptionReference(nested);
         when(mockEvent.exception()).thenReturn(exceptionReference);
 
-        ExceptionReport actualReport = translator.processExceptionEvent(mockEvent);
+        Optional<ExceptionReport> actualReport = translator.processExceptionEvent(mockEvent);
 
-        compareExceptionAndReport(nested, actualReport);
+        compareExceptionAndReport(nested, actualReport.get());
     }
 
     @Test
@@ -59,9 +60,9 @@ public class DebuggerReferenceTranslatorTest {
         ObjectReference exceptionReference = prepareExceptionReference(root);
         when(mockEvent.exception()).thenReturn(exceptionReference);
 
-        ExceptionReport actualReport = translator.processExceptionEvent(mockEvent);
+        Optional<ExceptionReport> actualReport = translator.processExceptionEvent(mockEvent);
 
-        compareExceptionAndReport(root, actualReport);
+        compareExceptionAndReport(root, actualReport.get());
     }
 
     private ObjectReference prepareExceptionReference(Exception toCreate) {

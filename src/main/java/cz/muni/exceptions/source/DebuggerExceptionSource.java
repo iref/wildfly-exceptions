@@ -1,10 +1,8 @@
 package cz.muni.exceptions.source;
 
+import com.google.common.base.Optional;
+import com.sun.jdi.*;
 import cz.muni.exceptions.dispatcher.ExceptionDispatcher;
-import com.sun.jdi.Bootstrap;
-import com.sun.jdi.VMDisconnectedException;
-import com.sun.jdi.VirtualMachine;
-import com.sun.jdi.VirtualMachineManager;
 import com.sun.jdi.connect.AttachingConnector;
 import com.sun.jdi.connect.Connector;
 import com.sun.jdi.connect.IllegalConnectorArgumentsException;
@@ -16,8 +14,10 @@ import com.sun.jdi.event.VMDeathEvent;
 import com.sun.jdi.event.VMDisconnectEvent;
 import com.sun.jdi.request.EventRequestManager;
 import com.sun.jdi.request.ExceptionRequest;
+import cz.muni.exceptions.listener.ExceptionListener;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -85,8 +85,7 @@ public class DebuggerExceptionSource {
         Runnable listeningTask = new Runnable() {
             @Override
             public void run() {
-                listen(vm);
-                vm.exit(0);
+                listen(vm);                
             }            
         };                
         executor.submit(listeningTask);        
@@ -97,10 +96,10 @@ public class DebuggerExceptionSource {
      */
     public void stop() {
         LOGGER.log(Level.INFO, "Stopping debugger source");
-        stopDebuggerFlag.set(true);
+        stopDebuggerFlag.compareAndSet(false, true);
         
         try {
-            executor.awaitTermination(1, TimeUnit.SECONDS);
+            executor.awaitTermination(100, TimeUnit.MILLISECONDS);
         } catch (InterruptedException ex) {
             LOGGER.log(Level.SEVERE, "Listening task was not stopped before termination timeout", ex);
         }
@@ -149,15 +148,15 @@ public class DebuggerExceptionSource {
     private void listen(VirtualMachine vm) {        
         EventRequestManager requestManager = vm.eventRequestManager();
         LOGGER.info("RequestManager created.");
-
+        
         ExceptionRequest exceptionRequest = createExceptionRequest(requestManager);        
         
         EventQueue eventQueue = vm.eventQueue();
-
+        
         while (!stopDebuggerFlag.get()) {
             EventSet eventSet = null;            
             try {                
-                eventSet = eventQueue.remove(1000L);
+                eventSet = eventQueue.remove();
                 if (eventSet == null) {
                     continue;
                 }
@@ -187,16 +186,27 @@ public class DebuggerExceptionSource {
         for (Event event : eventSet) {
             if (event instanceof VMDeathEvent) {
                 //deathRequest.disable();
-                stopDebuggerFlag.set(true);
+                LOGGER.info("Death event received");
+                stopDebuggerFlag.compareAndSet(false, true);
             } else if ( event instanceof VMDisconnectEvent) {
-                stopDebuggerFlag.set(true);
+                LOGGER.info("Disconnect event received");
+                stopDebuggerFlag.compareAndSet(false, true);
             } else if (event instanceof ExceptionEvent) {
-//                LOGGER.log(Level.INFO, "Exception event was caught.");
                 ExceptionEvent exceptionEvent = (ExceptionEvent) event;
-                LOGGER.info("Creating report");
-                ExceptionReport report = translator.processExceptionEvent(exceptionEvent);
-                LOGGER.info("Sending report");
-                dispatcher.warnListeners(report);
+                try {
+                    Optional<ExceptionReport> report = translator.processExceptionEvent(exceptionEvent);
+                    if (report.isPresent()) {
+                      Set<ExceptionListener> listeners = dispatcher.getListeners();
+                      dispatcher.warnListeners(report.get());
+                    }
+                } catch (ObjectCollectedException e) {
+                    // object was collected on target VM during processing
+                    // we can't do anything about that
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
             }
         }
     }

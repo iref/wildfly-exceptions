@@ -73,7 +73,11 @@ public class DatabaseExceptionListener implements ExceptionListener {
     }
 
     private String prepareStackTrace(ExceptionReport report) {
-        StringBuilder builder = new StringBuilder(report.getMessage()).append("\n");
+        StringBuilder builder = new StringBuilder();
+        if (report.getMessage() != null) {
+            builder.append(report.getMessage()).append("\n");
+        }
+
         for (StackTraceElement elem : report.getStackTrace()) {
             builder.append("at ").append(elem.toString()).append("\n");
         }
@@ -88,8 +92,10 @@ public class DatabaseExceptionListener implements ExceptionListener {
     private Optional<Ticket> findDuplicate(ExceptionReport report, Set<Ticket> existingTickets) {
         Optional<Ticket> result = Optional.absent();
         for (Ticket ticket : existingTickets) {
-            List<Character> reportMessage = Lists.charactersOf(report.getMessage());
-            List<Character> ticketMessage = Lists.charactersOf(ticket.getDetailMessage());
+            List<Character> reportMessage = report.getMessage() == null 
+                    ? Lists.<Character>newArrayList() : Lists.charactersOf(report.getMessage());
+            List<Character> ticketMessage = ticket.getDetailMessage() == null 
+                    ? Lists.<Character>newArrayList() : Lists.charactersOf(ticket.getDetailMessage());
 
             int messageScore = similarityChecker.checkSimilarity(reportMessage, ticketMessage);
 

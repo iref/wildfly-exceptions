@@ -77,7 +77,7 @@ public class MybatisTicketRepositoryTest {
 
     @Test
     public void testGetTicket() {
-        Optional<Ticket> ticketOptional = repository.get(1L);
+        Optional<Ticket> ticketOptional = repository.get(10L);
         Assert.assertTrue(ticketOptional.isPresent());
     }
 
@@ -94,11 +94,11 @@ public class MybatisTicketRepositoryTest {
 
     @Test
     public void testGetTicketById() {
-        Optional<Ticket> ticketOptional = repository.get(1L);
+        Optional<Ticket> ticketOptional = repository.get(10L);
         Assert.assertTrue(ticketOptional.isPresent());
 
         Ticket ticket = ticketOptional.get();
-        Assert.assertEquals(1L, ticket.getId().longValue());
+        Assert.assertEquals(10L, ticket.getId().longValue());
         Assert.assertEquals("Something went horribly wrong", ticket.getDetailMessage());
         Assert.assertEquals("StackTrace1", ticket.getStackTrace());
         Assert.assertEquals(TicketClass.find(1), ticket.getTicketClass());
@@ -137,11 +137,11 @@ public class MybatisTicketRepositoryTest {
         ticketOccurence.setTimestamp(new Timestamp(new Date().getTime()));
         Ticket ticket = new Ticket("NewException", "Stacktrace updated", TicketClass.FILE,
                 Lists.newArrayList(ticketOccurence));
-        ticket.setId(1L);
+        ticket.setId(10L);
 
         repository.update(ticket);
 
-        Optional<Ticket> ticketOptional = repository.get(1L);
+        Optional<Ticket> ticketOptional = repository.get(10L);
         Assert.assertTrue(ticketOptional.isPresent());
 
         Ticket updated = ticketOptional.get();
@@ -168,7 +168,7 @@ public class MybatisTicketRepositoryTest {
 
     @Test
     public void testRemove() {
-        repository.remove(2L);
+        repository.remove(20L);
 
         Set<Ticket> all = repository.all();
         Assert.assertEquals(1, all.size());

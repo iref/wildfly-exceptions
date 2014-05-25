@@ -1,5 +1,6 @@
 package cz.muni.exceptions.source;
 
+import com.google.common.base.Optional;
 import com.sun.jdi.ArrayReference;
 import com.sun.jdi.Field;
 import com.sun.jdi.IntegerValue;
@@ -20,23 +21,21 @@ public class DebuggerReferenceTranslator {
     
     private static final Logger LOGGER = Logger.getLogger(DebuggerReferenceTranslator.class.getSimpleName());
     
-    public ExceptionReport processExceptionEvent(ExceptionEvent exceptionEvent) {
+    public Optional<ExceptionReport> processExceptionEvent(ExceptionEvent exceptionEvent) {
         if (exceptionEvent == null) {
             throw new IllegalArgumentException("[Event] should not be null");
         }
 
-        ObjectReference exception = exceptionEvent.exception();                
+        Optional<ExceptionReport> result = Optional.absent();
 
-        if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.log(Level.INFO, exception.referenceType().name());
-        }
-        
-        return processObjectReference(exception);
+        ObjectReference exception = exceptionEvent.exception();
+
+        result = Optional.fromNullable(processObjectReference(exception));
+        return result;
     }
     
     private ExceptionReport processObjectReference(ObjectReference exception) {
-        String detailMessage = getDetailMessage(exception);
-        LOGGER.info("DetailMessage: " + detailMessage);
+        String detailMessage = getDetailMessage(exception);        
         List<StackTraceElement> stackTrace = getStackTrace(exception);
         String exceptionClass = exception.referenceType().name();
         ExceptionReport cause = getCause(exception);
@@ -47,7 +46,6 @@ public class DebuggerReferenceTranslator {
     private ExceptionReport getCause(ObjectReference exception) {
         Field causeField = exception.referenceType().fieldByName("cause");
         ObjectReference causeValue = (ObjectReference) exception.getValue(causeField);
-        //LOGGER.info("Cause: id=" + causeValue + ", class=" + (causeValue != null ? causeValue.referenceType().name() : null));
         if (causeValue != null && !exception.equals(causeValue)) {
             return processObjectReference(causeValue);
         }
@@ -56,10 +54,14 @@ public class DebuggerReferenceTranslator {
     }
 
     private List<StackTraceElement> getStackTrace(ObjectReference exception) {
+        List<StackTraceElement> stackTraceElements = new ArrayList<>();
+
         Field stackFramesField = exception.referenceType().fieldByName("stackTrace");
         ArrayReference stackTrace = (ArrayReference) exception.getValue(stackFramesField);
-        
-        List<StackTraceElement> stackTraceElements = new ArrayList<>();
+        if (stackTrace == null) {
+            return stackTraceElements;
+        }
+
         
         for (Value v : stackTrace.getValues()) {
             ObjectReference stackTraceReference = (ObjectReference) v;            
@@ -80,7 +82,7 @@ public class DebuggerReferenceTranslator {
         return stackTraceElements;
     }
 
-    private String getDetailMessage(ObjectReference exception) {                
+    private String getDetailMessage(ObjectReference exception) {
         final String detailMessage = getString(exception, "detailMessage");
         return detailMessage;
     }    
@@ -89,12 +91,13 @@ public class DebuggerReferenceTranslator {
         if (object == null || fieldName == null || fieldName.isEmpty()) {
             return null;
         }
-          
-        Field field = object.referenceType().fieldByName(fieldName);
+        LOGGER.log(Level.FINE, "Parsing string for field {0}", fieldName);
+        Field field = object.referenceType().fieldByName(fieldName);        
         if (field == null) {
             return null;
         }
         StringReference fieldValue = (StringReference) object.getValue(field);
-        return fieldValue.value();
+        LOGGER.log(Level.FINE, "String field value: {0}", fieldValue);
+        return fieldValue == null ? null : fieldValue.value();
     }
 }
