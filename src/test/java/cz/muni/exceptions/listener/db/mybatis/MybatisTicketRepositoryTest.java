@@ -100,6 +100,7 @@ public class MybatisTicketRepositoryTest {
         Ticket ticket = ticketOptional.get();
         Assert.assertEquals(10L, ticket.getId().longValue());
         Assert.assertEquals("Something went horribly wrong", ticket.getDetailMessage());
+        Assert.assertEquals("OctocatException", ticket.getClassName());
         Assert.assertEquals("StackTrace1", ticket.getStackTrace());
         Assert.assertEquals(TicketClass.find(1), ticket.getTicketClass());
         Assert.assertEquals(2, ticket.getOccurences().size());
@@ -123,7 +124,7 @@ public class MybatisTicketRepositoryTest {
         TicketOccurence ticketOccurence = new TicketOccurence();
         ticketOccurence.setId(300L);
         ticketOccurence.setTimestamp(new Timestamp(new Date().getTime()));
-        Ticket ticket = new Ticket("OctocatException", "Stacktrace3", TicketClass.DATABASE, Lists.newArrayList(ticketOccurence));
+        Ticket ticket = new Ticket("OctocatException", "OctocatException", "Stacktrace3", TicketClass.DATABASE, Lists.newArrayList(ticketOccurence));
 
         repository.add(ticket);
 
@@ -135,7 +136,7 @@ public class MybatisTicketRepositoryTest {
     public void testUpdateTicket() {
         TicketOccurence ticketOccurence = new TicketOccurence();
         ticketOccurence.setTimestamp(new Timestamp(new Date().getTime()));
-        Ticket ticket = new Ticket("NewException", "Stacktrace updated", TicketClass.FILE,
+        Ticket ticket = new Ticket("NewException", "UnicornException","Stacktrace updated", TicketClass.FILE,
                 Lists.newArrayList(ticketOccurence));
         ticket.setId(10L);
 
@@ -146,6 +147,7 @@ public class MybatisTicketRepositoryTest {
 
         Ticket updated = ticketOptional.get();
         Assert.assertEquals("NewException", updated.getDetailMessage());
+        Assert.assertEquals("UnicornException", updated.getClassName());
         Assert.assertEquals("Stacktrace updated", updated.getStackTrace());
         Assert.assertEquals(TicketClass.FILE, updated.getTicketClass());
         Assert.assertEquals(1, updated.getOccurences().size());

@@ -188,12 +188,13 @@ public class JPATicketRepositoryTest {
     public void testAddNewTicket() {
         TicketOccurence to = new TicketOccurence();
         to.setTimestamp(new Timestamp(new Date().getTime()));
-        Ticket ticket = new Ticket("Hello From Octocat!!", "OctoCat stack", TicketClass.FILE, Arrays.asList(to));
+        Ticket ticket = new Ticket("Hello From Octocat!!", "OctocatException", "OctoCat stack", TicketClass.FILE, Arrays.asList(to));
 
         repository.add(ticket);
 
         Ticket actual = entityManager.find(Ticket.class, ticket.getId());
         Assert.assertEquals(ticket.getDetailMessage(), actual.getDetailMessage());
+        Assert.assertEquals(ticket.getClassName(), actual.getClassName());
         Assert.assertEquals(ticket.getStackTrace(), actual.getStackTrace());
         Assert.assertEquals(ticket.getTicketClass(), ticket.getTicketClass());
         Assert.assertEquals(ticket.getOccurences().size(), actual.getOccurences().size());
@@ -203,7 +204,7 @@ public class JPATicketRepositoryTest {
         TicketOccurence ticketOccurence = new TicketOccurence();
         ticketOccurence.setTimestamp(new Timestamp(new Date().getTime()));
         
-        mockTicket = new Ticket("Something went terribly wrong", "Some long stacktrace", 
+        mockTicket = new Ticket("Something went terribly wrong", "LongException", "Some long stacktrace",
                 TicketClass.DATABASE, Arrays.asList(ticketOccurence));
         
         entityManager.getTransaction().begin();

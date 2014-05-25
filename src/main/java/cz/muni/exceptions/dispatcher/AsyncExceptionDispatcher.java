@@ -162,7 +162,6 @@ public class AsyncExceptionDispatcher implements ExceptionDispatcher {
                 }                                
 
                 if (toProcess != null) {
-                    LOG.warn(listeners);
                     for (ExceptionListener listener : listeners) {
                         try {
                             listener.onThrownException(toProcess);

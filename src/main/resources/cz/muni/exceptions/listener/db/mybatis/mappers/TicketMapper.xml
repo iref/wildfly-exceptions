@@ -4,6 +4,7 @@
     <resultMap id="ticketResultMap" type="Ticket">
         <id     column="ticket_id"                 property="id"/>
         <result column="ticket_detail_message"     property="detailMessage" />
+        <result column="ticket_class_name"         property="className" />
         <result column="ticket_stacktrace"         property="stackTrace" />
         <result column="ticket_class_id"           property="ticketClass"/>
 
@@ -14,13 +15,14 @@
     <sql id="ticketColumns">
         t.id              AS ticket_id,
         t.detail_message  AS ticket_detail_message,
+        t.class_name      AS ticket_class_name,
         t.stacktrace      AS ticket_stacktrace,
         t.ticket_class_id AS ticket_class_id
     </sql>
 
     <insert id="insert" keyProperty="ticket.id" useGeneratedKeys="true">
-        INSERT INTO ${schema}.tickets (detail_message, stacktrace, ticket_class_id)
-        VALUES (#{ticket.detailMessage}, #{ticket.stackTrace}, #{ticket.ticketClass.id})        
+        INSERT INTO ${schema}.tickets (detail_message, class_name, stacktrace, ticket_class_id)
+        VALUES (#{ticket.detailMessage}, #{ticket.className}, #{ticket.stackTrace}, #{ticket.ticketClass.id})
     </insert>
 
     <update id="update">
@@ -28,6 +30,7 @@
             ${schema}.tickets
         SET
             detail_message = #{ticket.detailMessage},
+            class_name = #{ticket.className},
             stacktrace = #{ticket.stackTrace},
             ticket_class_id = #{ticket.ticketClass.id}
         WHERE

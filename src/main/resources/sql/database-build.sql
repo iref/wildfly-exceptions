@@ -4,6 +4,7 @@ CREATE SEQUENCE IF NOT EXISTS ticket_occurrences_id_seq START WITH 1;
 CREATE TABLE public.tickets (
     id BIGINT DEFAULT NEXTVAL('tickets_id_seq') NOT NULL,
     detail_message VARCHAR(1024),
+    class_name VARCHAR(1024),
     stacktrace CLOB,
     ticket_class_id INT NOT NULL DEFAULT 13,
     PRIMARY KEY  (id)

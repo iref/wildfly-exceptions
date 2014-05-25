@@ -63,9 +63,9 @@ public class DatabaseExceptionListener implements ExceptionListener {
             // classify exception here
             TicketClass ticketClass = classifier.classify(report);
             String stackTrace = prepareStackTrace(report);
-
+            String className = report.getExceptionClass();
             // store new ticket or update existing
-            Ticket ticket = new Ticket(detailMessage, stackTrace, ticketClass, Arrays.asList(ticketOccurence));
+            Ticket ticket = new Ticket(detailMessage, className, stackTrace, ticketClass, Arrays.asList(ticketOccurence));
             ticketRepository.add(ticket);
 
         }

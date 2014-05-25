@@ -79,7 +79,7 @@ public class PersistenceUnitCreatorTest {
         TicketOccurence ticketOccurence = new TicketOccurence();
         ticketOccurence.setTimestamp(new Timestamp(new Date().getTime()));
 
-        Ticket ticket = new Ticket("Something went terribly wrong",
+        Ticket ticket = new Ticket("Something went terribly wrong", "java.lang.Exception",
                 "Some awefull stacktrace", TicketClass.DATABASE, Arrays.asList(ticketOccurence));
 
         em.getTransaction().begin();
