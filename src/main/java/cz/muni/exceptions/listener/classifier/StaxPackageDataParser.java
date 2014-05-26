@@ -136,6 +136,9 @@ public final class StaxPackageDataParser implements PackageDataParser {
         return String.format("[%1$d, %2$d]", location.getLineNumber(), location.getColumnNumber());
     }
 
+    /**
+     * Enum of possible elements in packages data set.
+     */
     private enum Element {
         PACKAGES("packages"),
         PACKAGE("package"),

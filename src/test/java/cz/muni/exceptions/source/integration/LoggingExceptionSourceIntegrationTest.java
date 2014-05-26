@@ -16,6 +16,7 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,6 +55,7 @@ public class LoggingExceptionSourceIntegrationTest {
                 .addAsResource("mybatis/database-config.xml")
                 .addAsResource("sql/database-drop.sql")
                 .addAsResource("sql/database-build.sql")
+                .addAsResource("jbossas-ds.xml")
                 .addAsResources(TicketMapper.class.getPackage(), "TicketMapper.xml", "TicketOccurrenceMapper.xml");
         return archive;
     }
@@ -63,7 +65,7 @@ public class LoggingExceptionSourceIntegrationTest {
     @Before
     public void setUp() throws NamingException {
         ExceptionDatabaseConfiguration configuration = ExceptionDatabaseConfiguration
-                .createConfiguration("java:jboss/datasources/ExampleDS", false);
+                .createConfiguration("jdbc/arquillian", false);
         new DatabaseBuilder(configuration).tryToBuildDatabase();
         repository = new MybatisTicketRepository(configuration);
     }

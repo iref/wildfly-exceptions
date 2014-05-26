@@ -14,26 +14,37 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Class translates exception events into reports.
  *
- * @author johnny
+ * @author Jan Ferko
  */
 public class DebuggerReferenceTranslator {
     
     private static final Logger LOGGER = Logger.getLogger(DebuggerReferenceTranslator.class.getSimpleName());
-    
+
+    /**
+     * Creates new report for given event.
+     *
+     * @param exceptionEvent event with exception, that should be used to create report
+     * @return option with created report or empty option if its not possible to create report
+     * @throws java.lang.IllegalArgumentException if event is {@code null}
+     */
     public Optional<ExceptionReport> processExceptionEvent(ExceptionEvent exceptionEvent) {
         if (exceptionEvent == null) {
             throw new IllegalArgumentException("[Event] should not be null");
         }
 
-        Optional<ExceptionReport> result = Optional.absent();
-
         ObjectReference exception = exceptionEvent.exception();
 
-        result = Optional.fromNullable(processObjectReference(exception));
-        return result;
+        return Optional.fromNullable(processObjectReference(exception));
     }
-    
+
+    /**
+     * Creates report from given object reference.
+     *
+     * @param exception reference to exception object on target VM.
+     * @return new exception report
+     */
     private ExceptionReport processObjectReference(ObjectReference exception) {
         String detailMessage = getDetailMessage(exception);        
         List<StackTraceElement> stackTrace = getStackTrace(exception);
@@ -43,6 +54,12 @@ public class DebuggerReferenceTranslator {
         return new ExceptionReport(exceptionClass, detailMessage, stackTrace, cause);
     }
 
+    /**
+     * Creates new report for cause of exception.
+     *
+     * @param exception exception reference, which cause should be created.
+     * @return report of exception cause or {@code null} if exception doesn't have cause or its cause is itself
+     */
     private ExceptionReport getCause(ObjectReference exception) {
         Field causeField = exception.referenceType().fieldByName("cause");
         ObjectReference causeValue = (ObjectReference) exception.getValue(causeField);
@@ -53,6 +70,13 @@ public class DebuggerReferenceTranslator {
         return null;
     }
 
+    /**
+     * Creates list of stack trace elements of given exception.
+     *
+     * @param exception exception, which stack trace should be created
+     * @return list of exception's stack trace elements or empty list if
+     *  it is not possible to access stack trace on target VM
+     */
     private List<StackTraceElement> getStackTrace(ObjectReference exception) {
         List<StackTraceElement> stackTraceElements = new ArrayList<>();
 
@@ -82,11 +106,24 @@ public class DebuggerReferenceTranslator {
         return stackTraceElements;
     }
 
+    /**
+     * Creates detail message of exception.
+     *
+     * @param exception exception, which detail message should be created
+     * @return detail message of exception
+     */
     private String getDetailMessage(ObjectReference exception) {
         final String detailMessage = getString(exception, "detailMessage");
         return detailMessage;
-    }    
-    
+    }
+
+    /**
+     * Gets string value for field with given {@code fieldName} from object reference.
+     *
+     * @param object reference of object on target VM
+     * @param fieldName name of field
+     * @return string value of field in given object.
+     */
     private String getString(ObjectReference object, String fieldName) {
         if (object == null || fieldName == null || fieldName.isEmpty()) {
             return null;
@@ -96,6 +133,7 @@ public class DebuggerReferenceTranslator {
         if (field == null) {
             return null;
         }
+
         StringReference fieldValue = (StringReference) object.getValue(field);
         LOGGER.log(Level.FINE, "String field value: {0}", fieldValue);
         return fieldValue == null ? null : fieldValue.value();

@@ -16,18 +16,32 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Listener, that stores reported exceptions to relational database.
+ *
  * @author Jan Ferko
  */
 public class DatabaseExceptionListener implements ExceptionListener {
 
+    /** Pattern, that matches one line of stacktrace. */
     private static final Pattern STACKTRACE_PATTERN = Pattern.compile("at (.+)\\((.+?)\\:*(\\d*)\\)");
 
+    /** Repository, that provides access to database. */
     private final TicketRepository ticketRepository;
 
+    /** Classifier used to classify exceptions into categories. */
     private final ExceptionReportClassifier classifier;
 
+    /** Checker to find duplicate exceptions. */
     private final SimilarityChecker similarityChecker;
 
+    /**
+     * Constructor creates new listener for given parameters.
+     *
+     * @param ticketRepository repository, that provides access to database.
+     * @param classifier classifier used to classify exceptions into categories
+     * @param similarityChecker checker to find duplicate exceptions.
+     * @throws java.lang.IllegalArgumentException if any of parameters is {@code null}
+     */
     public DatabaseExceptionListener(TicketRepository ticketRepository, ExceptionReportClassifier classifier,
                                      SimilarityChecker similarityChecker) {
         if (ticketRepository == null) {
@@ -71,7 +85,17 @@ public class DatabaseExceptionListener implements ExceptionListener {
         }
     }
 
+    /**
+     * Creates text representation of stack trace for given report.
+     * Returns empty string if report is null.
+     *
+     * @param report report, whose stack trace should be processed
+     * @return text representation of report's stack trace
+     */
     private String prepareStackTrace(ExceptionReport report) {
+        if (report == null) {
+            return "";
+        }
         StringBuilder builder = new StringBuilder();
         if (report.getMessage() != null) {
             builder.append(report.getMessage()).append("\n");
@@ -88,6 +112,13 @@ public class DatabaseExceptionListener implements ExceptionListener {
         return builder.toString();
     }
 
+    /**
+     * Method tries to find duplicate of given report in set of existing tickets.
+     *
+     * @param report report, which duplicate should be found.
+     * @param existingTickets set of existing tickets, that are compared with report
+     * @return option containing found duplicate of report or empty option if duplicate wasn't found
+     */
     private Optional<Ticket> findDuplicate(ExceptionReport report, Set<Ticket> existingTickets) {
         Optional<Ticket> result = Optional.absent();
         for (Ticket ticket : existingTickets) {
@@ -109,6 +140,12 @@ public class DatabaseExceptionListener implements ExceptionListener {
         return result;
     }
 
+    /**
+     * Builds list  of stack trace elements from given text representation.
+     *
+     * @param stackTrace text representation of stack trace elements
+     * @return list of stack trace elements or empty list if {@code stackTrace} is {@code null} or empty.
+     */
     private List<StackTraceElement> buildStackTrace(String stackTrace) {
         List<StackTraceElement> elements = new ArrayList<>();
 
@@ -122,9 +159,12 @@ public class DatabaseExceptionListener implements ExceptionListener {
             String classNameAndMethod = matcher.group(1);
             String[] split = classNameAndMethod.split("\\.");
 
+            // split class and method into fragments
+            // this should probably be simplified with utility method from guava
             String method = split[split.length - 1];
             String[] classNames = Arrays.copyOfRange(split, 0, split.length - 1);
             StringBuilder classNameBuilder = new StringBuilder();
+
             for (int i = 0; i< classNames.length; i++) {
                 String fragment = classNames[i];
                 classNameBuilder.append(fragment);
@@ -134,6 +174,7 @@ public class DatabaseExceptionListener implements ExceptionListener {
             }
 
             String fileName = matcher.group(2);
+
             String lineNumberValue = matcher.group(3);
             int lineNumber = 0;
             if (!lineNumberValue.isEmpty()) {

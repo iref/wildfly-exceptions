@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Simple filter class, that checks if exception is on blaclist and should not be processed.
+ * Simple filter class, that checks if exception is on blacklist and should not be processed.
  *
  * @author Jan Ferko
  */

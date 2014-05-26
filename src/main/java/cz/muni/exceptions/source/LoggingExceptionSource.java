@@ -25,32 +25,39 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 /**
+ * Implements exception source as Logging handler.
  *
  * @author Jan Ferko 
  */
 public class LoggingExceptionSource extends Handler {
 
-    private static final String TRANSACTION_MANAGER_JNDI = "java:jboss/TransactionManager";
-    
+    /** Dispatcher, that handles exception processing. */
     private ExceptionDispatcher dispatcher;
 
+    /** Indicator if exceptions should be processed asynchronously. */
     private boolean async = true;
+
+    /** Indicator if provided data source uses JTA.*/
     private boolean isJta = true;
+
+    /** String containing comma separated list of ignored classes */
     private String blacklist;
+
+    /** Indicator if database listener is enabled. */
     private boolean databaseListenerEnabled;
+
+    /** JNDI name of data source, where exceptions should be stored. */
     private String dataSourceJNDI;
 
-    private BufferedWriter writer;
-
     public LoggingExceptionSource() {
-        FileWriter fileWriter = null;
-        try {
-            fileWriter = new FileWriter("/tmp/logging.log", true);
-        } catch (IOException e) {
-        }
-        writer = new BufferedWriter(fileWriter);
     }
 
+    /**
+     * Creates new instance, that uses given dispatcher to handle caught exceptions.
+     *
+     * @param dispatcher dispatcher to handle caught exceptions
+     * @throws java.lang.IllegalArgumentException if dispatcher is {@code null}
+     */
     public LoggingExceptionSource(ExceptionDispatcher dispatcher) {
         super();
         if (dispatcher == null) {
@@ -59,9 +66,14 @@ public class LoggingExceptionSource extends Handler {
         this.dispatcher = dispatcher;
     }
 
-    private synchronized boolean initialize() throws IOException {
+    /**
+     * Initializes handler.
+     * If dispatcher is already created, it does not create new one.
+     * Otherwise creates new dispatcher based on current configuration.
+     */
+    private synchronized void initialize() {
         if (dispatcher != null) {
-            return true;
+            return;
         }
 
         List<ExceptionListener> listeners = new ArrayList<>();
@@ -73,8 +85,6 @@ public class LoggingExceptionSource extends Handler {
         ExceptionFilter blacklistFilter = new BlacklistFilter(blacklistItems);
 
         this.dispatcher = createDispatcher(listeners, blacklistFilter);
-
-        return true;
     }
 
     @Override
@@ -83,44 +93,13 @@ public class LoggingExceptionSource extends Handler {
             return;
         }
 
-        if (writer != null) {
-            try {
-                writer.write(record.getSourceClassName() + ": " + record.getThrown());
-                writer.newLine();
-                writer.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         Throwable thrown = record.getThrown();
         if (thrown == null) {
             return;
         }
+        initialize();
 
-        if (writer != null) {
-            try {
-            if (!initialize()) {
-                    writer.write("Handler was not initialized.");
-                    writer.newLine();
-                    writer.flush();
-                    return;
-                }
-            } catch (IOException e) {
-                // ok
-                e.printStackTrace(System.out);
-            }
-        }
-        
         ExceptionReport report = createReport(thrown);
-        if (writer != null) {
-            try {
-                writer.write("Reporting ticket. " + report);
-                writer.newLine();
-                writer.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         
         dispatcher.warnListeners(report);        
     }
@@ -135,13 +114,6 @@ public class LoggingExceptionSource extends Handler {
         // switch handler off        
         setLevel(Level.OFF);
         // clear dispatcher for this source, so no more throwables are propagated
-        try {
-            if (writer != null) {
-                writer.write("Reporting ticket");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void setAsync(String async) {
@@ -173,6 +145,13 @@ public class LoggingExceptionSource extends Handler {
         return defaultValue;
     }
 
+    /**
+     * Creates new dispatcher instance and registers listeners.
+     *
+     * @param listeners list of listeners, that should be registered
+     * @param blacklistFilter filter, that should be used by dispatcher to decide which exceptions should be processed.
+     * @return new instance of dispatcher
+     */
     private ExceptionDispatcher createDispatcher(List<ExceptionListener> listeners, ExceptionFilter blacklistFilter) {
         if (async) {
             AsyncExceptionDispatcher asyncDispatcher = new AsyncExceptionDispatcher(
@@ -187,7 +166,12 @@ public class LoggingExceptionSource extends Handler {
         }
     }
 
-    private ExceptionListener createDatabaseListener() throws IOException {
+    /**
+     * Creates new instance of {@link cz.muni.exceptions.listener.DatabaseExceptionListener}
+     *
+     * @return new listener
+     */
+    private ExceptionListener createDatabaseListener() {
         StaxPackageDataParser packageDataParser = new StaxPackageDataParser();
         InputStream packageInput = getClass().getClassLoader().getResourceAsStream("data/packages.xml");
         Node packageTree = packageDataParser.parseInput(packageInput);
@@ -202,7 +186,7 @@ public class LoggingExceptionSource extends Handler {
         try {
             ticketRepository = TicketRepositoryFactory.newInstance(dataSourceJNDI, isJta);
         } catch (Exception ex) {
-            writer.write(ex.toString());
+            ex.printStackTrace();
         }
 
         return new DatabaseExceptionListener(ticketRepository, classifier, new LevenshteinSimilarityChecker());

@@ -1,7 +1,6 @@
 
 package cz.muni.exceptions.dispatcher;
 
-import cz.muni.exceptions.listener.DatabaseExceptionListener;
 import cz.muni.exceptions.listener.ExceptionListener;
 import cz.muni.exceptions.source.ExceptionReport;
 import java.util.Set;
