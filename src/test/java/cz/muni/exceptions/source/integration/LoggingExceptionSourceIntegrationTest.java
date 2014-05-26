@@ -30,7 +30,7 @@ import java.util.Set;
 /**
  * @author Jan Ferko
  */
-@RunWith(Arquillian.class)
+//@RunWith(Arquillian.class)
 public class LoggingExceptionSourceIntegrationTest {
 
 
@@ -70,7 +70,7 @@ public class LoggingExceptionSourceIntegrationTest {
         repository = new MybatisTicketRepository(configuration);
     }
 
-    @Test
+    //@Test
     public void testExceptionWasStored() throws IOException {
         sendRequestToServlet();
 

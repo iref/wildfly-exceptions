@@ -5,7 +5,7 @@
 
     <xsl:output method="xml" indent="yes"/>
 
-    <xsl:template match="//as:subsystem[@xmlns='urn:jboss:domain:logging:2.0']/log:custom-handler[@class='cz.muni.exceptions.source.LoggingExceptionSource']" />
+    <xsl:template match="//log:subsystem[@xmlns='urn:jboss:domain:logging:2.0']/log:custom-handler[@class='cz.muni.exceptions.source.LoggingExceptionSource']" />
 
     <xsl:template match="//log:subsystem">
         <subsystem xmlns="urn:jboss:domain:logging:2.0">
@@ -15,8 +15,10 @@
     </xsl:template>
 
     <xsl:template match="//log:root-logger/log:handlers">
-        <xsl:apply-templates select="@* | *" />
-        <handler name="ExceptionHandler" />
+        <handlers>
+            <xsl:apply-templates select="@* | *" />
+            <handler name="ExceptionHandler" />
+        </handlers>
     </xsl:template>
 
     <!-- Copy everything else. -->
